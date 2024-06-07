@@ -1,0 +1,51 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "buy coffe and milk",
+      "category": "erruns",
+      "completed": false,
+      "points": 2
+    },
+    {
+      "id": 2,
+      "title": "make reservation of instruments",
+      "category": "logistics",
+      "completed": false,
+      "points": 6
+    },
+    {
+      "id": 3,
+      "title": "deliver concert posters to draussenwerber",
+      "category": "logistics",
+      "completed": false,
+      "points": 3
+    },
+    {
+      "id": 4,
+      "title": "create concert poster designs",
+      "category": "design",
+      "completed": false,
+      "points": 10
+    },
+    {
+      "id": 5,
+        "title": "find team of volunteers for concert",
+        "category": "people",
+        "completed": false,
+        "points": 10
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Ryan Florence",
+      "todos": [1, 2]
+    },
+    {
+      "id": 2,
+      "name": "Michael Jackson",
+      "todos": [3]
+    }
+  ]
+}

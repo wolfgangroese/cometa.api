@@ -1,0 +1,52 @@
+/* src/app/features/todo-list/todo-list.component.scss */
+
+/* Grundlegendes Styling für die Todo-Liste */
+
+.todo-list {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.todo-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  font-family: 'Avenir Next', serif;
+  color: #333; /* Beispiel Textfarbe */
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.todo-description {
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.todo-points {
+  font-weight: bold;
+  color: #333;
+}
+
+.todo-status {
+  font-style: italic;
+  color: #999;
+}
+
+/* Beispiel für abwechselnde Farben für abgeschlossene und nicht abgeschlossene Todos */
+.todo-item.completed {
+  background-color: #e0ffe0;
+}
+
+.todo-item.not-completed {
+  background-color: #ffe0e0;
+}

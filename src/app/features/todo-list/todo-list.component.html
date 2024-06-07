@@ -1,0 +1,6 @@
+<div *ngFor="let todo of todos" class="todo-item">
+  <h3 class="todo-title">{{ todo.title }}</h3>
+  <p class="todo-description">{{ todo.description }}</p>
+  <p class="todo-points">Punkte: {{ todo.points }}</p>
+  <p class="todo-status">Status: {{ todo.isCompleted ? 'Completed' : 'Not Completed' }}</p>
+</div>
