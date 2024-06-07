@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/wolf/RiderProjects/COMET.API/COMET.API/COMET.API.csproj",
+      "projectUniqueName": "/Users/wolf/RiderProjects/comet.API/COMET.API/COMET.API.csproj",
       "projectName": "COMET.API",
-      "projectPath": "/Users/wolf/RiderProjects/COMET.API/COMET.API/COMET.API.csproj",
+      "projectPath": "/Users/wolf/RiderProjects/comet.API/COMET.API/COMET.API.csproj",
       "packagesPath": "/Users/wolf/.nuget/packages/",
-      "outputPath": "/Users/wolf/RiderProjects/COMET.API/COMET.API/obj/",
+      "outputPath": "/Users/wolf/RiderProjects/comet.API/COMET.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/wolf/.nuget/NuGet/NuGet.Config"
@@ -62,7 +62,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
