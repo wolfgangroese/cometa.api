@@ -4,12 +4,11 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  text-align: center; // optional, falls du auch Text zentrieren möchtest
-  margin: 0;
+  text-align: center;
 }
 
 router-outlet {
-  width: 100%;
+  flex: 1;
 }
 
 main {
@@ -18,4 +17,9 @@ main {
   align-items: center;
   justify-content: center;
   flex: 1;
+}
+app-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }

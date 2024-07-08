@@ -1,0 +1,40 @@
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px; // oder eine andere Höhe
+  background-color: #2196F3; // Beispielhintergrundfarbe
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 10px;
+  text-decoration: none;
+  color: white;
+  flex: 1; // lässt die Items gleichmäßig verteilen
+}
+
+.footer-item i {
+  font-size: 24px;
+  margin-bottom: 5px; // optionaler Abstand zwischen Icon und Text
+
+}
+
+.footer-item span {
+  font-size: 12px;
+}
