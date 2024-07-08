@@ -2,49 +2,71 @@
   "todos": [
     {
       "id": 1,
-      "title": "buy coffe and milk",
+      "title": "buy tea and milk",
       "category": "erruns",
       "completed": false,
-      "points": 2
+      "points": 2,
+      "skills": ["driver license"],
+      "startDate": "2022-10-01",
+      "endDate": "2022-10-02",
+      "dependendingTaskId": null
     },
     {
       "id": 2,
       "title": "make reservation of instruments",
       "category": "logistics",
       "completed": false,
-      "points": 6
+      "points": 6,
+      "skills": ["percussion-know-how"],
+      "startDate": "2022-10-01",
+      "endDate": "2022-10-02",
+      "dependendingTaskId": null
     },
     {
       "id": 3,
       "title": "deliver concert posters to draussenwerber",
       "category": "logistics",
       "completed": false,
-      "points": 3
+      "points": 3,
+      "skills": ["NONE"],
+      "startDate": "2022-10-01",
+      "endDate": "2022-10-02",
+      "dependendingTaskId": 4
     },
     {
       "id": 4,
       "title": "create concert poster designs",
       "category": "design",
       "completed": false,
-      "points": 10
+      "points": 5,
+      "skills": ["Affinity", "Adobe InDesign", "MacOS"],
+      "startDate": "2022-10-01",
+      "endDate": "2022-10-02",
+      "dependendingTaskId": null
     },
     {
       "id": 5,
         "title": "find team of volunteers for concert",
         "category": "people",
         "completed": false,
-        "points": 10
+        "points": 5,
+        "skills": ["kommunikativ"],
+        "startDate": "2022-10-01",
+        "endDate": "2022-10-02",
+        "dependendingTaskId": null
     }
   ],
   "users": [
     {
       "id": 1,
-      "name": "Ryan Florence",
+      "name": "Max Mustermann",
+      "role": "admin",
       "todos": [1, 2]
     },
     {
       "id": 2,
-      "name": "Michael Jackson",
+      "name": "Erna Musterfrau",
+      "role": "user",
       "todos": [3]
     }
   ]

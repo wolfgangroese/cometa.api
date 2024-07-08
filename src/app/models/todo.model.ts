@@ -5,6 +5,9 @@ export interface Todo {
   title: string;
   description: string;
   points: number;
+  skills: string[];
+  startDate: Date;
+  endDate: Date;
   isCompleted: boolean;
   parentTodoId?: number; // optional
   subTodos?: Todo[]; // optional

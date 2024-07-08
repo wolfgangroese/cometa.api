@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+p-menubar {
+  background: #2196F3; /* Primärfarbe, kannst du anpassen */
+  color: white;
+}
+
+.pi {
+  margin-right: 8px;
+}
