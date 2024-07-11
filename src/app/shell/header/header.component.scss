@@ -2,7 +2,14 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px; // oder eine andere Höhe
-  background-color: #2196F3; // Beispielhintergrundfarbe
-  color: white;
+  height: 40px;
+  background-color: #2196F3;
+  color: black;
+}
+.header-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px; // oder eine andere Höhe
+  color: grey;
 }
