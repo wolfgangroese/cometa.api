@@ -7,6 +7,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cometa.Domain", "Cometa.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cometa.Persistence", "Cometa.Persistence\Cometa.Persistence.csproj", "{F7A35807-E933-45B0-8426-354E4F72683F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cometa.Api", "Cometa.Api\Cometa.Api.csproj", "{23BEFFC1-FAD2-4270-8376-B792B3B2586B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BB86F51F-9B92-451A-ACCE-303E2DD45949}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cometa.Api.Tests", "Tests\Cometa.Api.Tests\Cometa.Api.Tests.csproj", "{C23BCA0A-CF19-4D54-B5BC-40AFD1976448}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cometa.Domain.Tests", "Tests\Cometa.Domain.Tests\Cometa.Domain.Tests.csproj", "{4526F7CC-F4F8-4D22-A97D-27759906590F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cometa.Persistence.Tests", "Tests\Cometa.Persistence.Tests\Cometa.Persistence.Tests.csproj", "{1A8E6403-B828-4ADE-94AD-3A2182DF22A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +34,26 @@ Global
 		{F7A35807-E933-45B0-8426-354E4F72683F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7A35807-E933-45B0-8426-354E4F72683F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7A35807-E933-45B0-8426-354E4F72683F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23BEFFC1-FAD2-4270-8376-B792B3B2586B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23BEFFC1-FAD2-4270-8376-B792B3B2586B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23BEFFC1-FAD2-4270-8376-B792B3B2586B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23BEFFC1-FAD2-4270-8376-B792B3B2586B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C23BCA0A-CF19-4D54-B5BC-40AFD1976448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C23BCA0A-CF19-4D54-B5BC-40AFD1976448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C23BCA0A-CF19-4D54-B5BC-40AFD1976448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C23BCA0A-CF19-4D54-B5BC-40AFD1976448}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4526F7CC-F4F8-4D22-A97D-27759906590F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4526F7CC-F4F8-4D22-A97D-27759906590F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4526F7CC-F4F8-4D22-A97D-27759906590F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4526F7CC-F4F8-4D22-A97D-27759906590F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A8E6403-B828-4ADE-94AD-3A2182DF22A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A8E6403-B828-4ADE-94AD-3A2182DF22A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A8E6403-B828-4ADE-94AD-3A2182DF22A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A8E6403-B828-4ADE-94AD-3A2182DF22A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C23BCA0A-CF19-4D54-B5BC-40AFD1976448} = {BB86F51F-9B92-451A-ACCE-303E2DD45949}
+		{4526F7CC-F4F8-4D22-A97D-27759906590F} = {BB86F51F-9B92-451A-ACCE-303E2DD45949}
+		{1A8E6403-B828-4ADE-94AD-3A2182DF22A0} = {BB86F51F-9B92-451A-ACCE-303E2DD45949}
 	EndGlobalSection
 EndGlobal
