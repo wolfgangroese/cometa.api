@@ -5,6 +5,6 @@ namespace Cometa.Persistence;
 public class CometaDbContext:DbContext
 {
     public CometaDbContext(DbContextOptions options) : base(options) { }   
-    public DbSet<Task>Tasks { get; set; }
+    public DbSet<Todo>Todos { get; set; }
 }
 
