@@ -7,6 +7,7 @@ public class CometaDbContext:DbContext
 {
     public CometaDbContext(DbContextOptions options) : base(options) { }   
     public DbSet<Todo>Todos { get; set; }
+    public DbSet<Skill>Skills { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,6 +36,14 @@ public class CometaDbContext:DbContext
             .WithOne()
             .HasForeignKey<Todo>(t => t.PreviousTodoId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Todo>()
+            .HasMany(t => t.Skills)
+            .WithMany(s => s.Todos)
+            .UsingEntity<Dictionary<string, object>>(
+                "TodoSkill",
+                j => j.HasOne<Skill>().WithMany().HasForeignKey("SkillId"),
+                j => j.HasOne<Todo>().WithMany().HasForeignKey("TodoId"));
     }
 }
 

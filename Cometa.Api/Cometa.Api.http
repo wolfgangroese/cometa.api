@@ -1,6 +1,4 @@
 @cometa_HostAddress = http://localhost:5092
 
-GET {{cometa_HostAddress}}/weatherforecast/
+GET {{cometa_HostAddress}}/
 Accept: application/json
-
-###

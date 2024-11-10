@@ -9,12 +9,10 @@ namespace Cometa.Api.Controllers;
 [Route("[controller]")]
 public class Todos : ControllerBase
 {
-    private readonly ILogger<Todos> _logger;
     private readonly CometaDbContext _context;
 
-    public Todos(ILogger<Todos> logger, CometaDbContext context)
+    public Todos(CometaDbContext context)
     {
-        _logger = logger;
         _context = context;
     }
     

@@ -7,15 +7,15 @@ public class Todo : BaseEntity
 {
     [Required]
     [MaxLength(120)]
-    public string? Name { get; set; }
+    public string? Name { get; init; }
     
     [MaxLength(500)]
-    public string? Description { get; set; }
+    public string? Description { get; init; }
 
     public TodoStatus TodoStatus { get; init; } = TodoStatus.Waiting;
     public Priority Priority { get; init; } = Priority.Medium;
     public Complexity Complexity { get; init; } = Complexity.Medium;
-    public Skill? Skills { get; init; }
+    public ICollection<Skill> Skills { get; init; } = new List<Skill>();
     public int Rewards { get; init; }
     public int EstimatedTime { get; init; }
     public int SpentTime { get; init; }
@@ -42,5 +42,13 @@ public class Todo : BaseEntity
     {
         EndDate = DueDate?.AddDays(-1);
     }   
-    
+    public void AddSkill(Skill skill)
+    {
+        Skills.Add(skill);
+    }
+
+    public void RemoveSkill(Skill skill)
+    {
+        Skills.Remove(skill);
+    }
 }
