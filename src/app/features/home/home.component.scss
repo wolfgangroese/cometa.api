@@ -11,6 +11,14 @@
   border-bottom: 1px solid #ddd;
   font-family: 'Avenir Next', serif;
   color: #333;
+  text-align: left;
+}
+
+.todo-total-count {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: olivedrab;
 }
 
 .todo-item:last-child {
@@ -18,7 +26,7 @@
 }
 
 .todo-title {
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 5px;
 }

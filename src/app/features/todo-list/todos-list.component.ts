@@ -15,15 +15,15 @@ export class TodoListComponent implements OnInit {
 
   constructor(private todoService: TodoService) { }
 
-  ngOnInit(): void {
-    this.loadTodos();
+  async ngOnInit(): Promise<void> {
+   await this.loadTodos();
   }
 
-  loadTodos(): void {
-    this.todoService.getTodos().subscribe((todos) => {
-      this.todos = todos;
-    }, (error) => {
+  async loadTodos(): Promise<void> {
+    try {
+      this.todos = await this.todoService.getTodos();
+    } catch (error) {
       console.error('Failed to load todos', error);
-    });
+    }
   }
 }

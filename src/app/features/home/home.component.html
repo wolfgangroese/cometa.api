@@ -1,12 +1,7 @@
 <h2>Dashboard</h2>
+<div>
+  <p class="todo-total-count">{{ taskCount }}</p>
+</div>
 <div *ngFor="let todo of todos" class="todo-item">
-  <h3 class="todo-title">{{ todo.title }}</h3>
-  <p class="todo-description">{{ todo.description }}</p>
-  <p class="todo-points">Reward: {{ todo.points }} coins</p>
-  <p class="todo-skills">Skills: {{ todo.skills }}</p>
-  <p class="todo-date">Start: {{ todo.startDate }}</p>
-  <p class="todo-date">Deadline: {{ todo.endDate }}</p>
-
-
-  <p class="todo-status">Status: {{ todo.isCompleted ? 'Completed' : 'Not Completed' }}</p>
+  <h5 class="todo-title">{{ todo.title }}</h5>
 </div>

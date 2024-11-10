@@ -9,7 +9,7 @@ export const environment = {
   },
   api: {
     protocol: 'http',
-    baseUrl: 'localhost:5000/api',
+    baseUrl: 'localhost:5092/api',
   },
 
   web: {
