@@ -63,3 +63,12 @@
 .todo-item.not-completed {
   background-color: #ffe0e0;
 }
+.todo-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.todo-link:hover {
+  text-decoration: underline;
+}

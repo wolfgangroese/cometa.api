@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {Todo} from "../../models/todo.model";
 import {TodoService} from "../../services/todo.service";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ CommonModule ],
+  imports: [CommonModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

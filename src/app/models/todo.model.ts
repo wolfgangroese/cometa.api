@@ -1,14 +1,13 @@
-// src/app/models/todo.model.ts
-
 export interface Todo {
-  id: number;
-  title: string;
-  description: string;
-  points: number;
-  skills: string[];
+  id: string;
+  name: string;
+  description?: string;
   startDate: Date;
-  endDate: Date;
+  dueDate: Date;
+  endDate?: Date;
+  rewards: number;
+  skills: string[];
   isCompleted: boolean;
-  parentTodoId?: number; // optional
-  subTodos?: Todo[]; // optional
+  parentTodoId?: number;
+  subTodos?: Todo[];
 }

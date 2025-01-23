@@ -1,12 +1,13 @@
 <h2>TodoList</h2>
 <div *ngFor="let todo of todos" class="todo-item">
-  <h3 class="todo-title">{{ todo.title }}</h3>
+  <a [routerLink]="['/todo', todo.id]" class="todo-link">
+  <p class="todo-title">{{ todo.name }}</p>
   <p class="todo-description">{{ todo.description }}</p>
-  <p class="todo-points">Reward: {{ todo.points }} coins</p>
+  <p class="todo-points">Reward: {{ todo.rewards }} coins</p>
   <p class="todo-skills">Skills: {{ todo.skills }}</p>
   <p class="todo-date">Start: {{ todo.startDate }}</p>
   <p class="todo-date">Deadline: {{ todo.endDate }}</p>
 
-
+  </a>
   <p class="todo-status">Status: {{ todo.isCompleted ? 'Completed' : 'Not Completed' }}</p>
 </div>

@@ -16,6 +16,7 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
     this.items = [
       { label: 'Home', icon: 'pi pi-home', routerLink: ['/home'] },
+      { label: 'New Todo', icon: 'pi pi-plus', routerLink: ['/todo/new'] },
       { label: 'Todos', icon: 'pi pi-check-circle', routerLink: ['/todos'] },
       { label: 'Search', icon: 'pi pi-search', routerLink: ['/search'] },
       { label: 'Nachrichten', icon: 'pi pi-envelope', routerLink: ['/nachrichten'] },

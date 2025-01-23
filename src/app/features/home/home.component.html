@@ -3,5 +3,7 @@
   <p class="todo-total-count">{{ taskCount }}</p>
 </div>
 <div *ngFor="let todo of todos" class="todo-item">
-  <h5 class="todo-title">{{ todo.title }}</h5>
+  <a [routerLink]="['/todo', todo.id]" class="todo-link">
+    <h5 class="todo-title">{{ todo.name }}</h5>
+  </a>
 </div>

@@ -1,1 +1,14 @@
-<p>todo-detail works!</p>
+<div *ngIf="todo; else loading">
+  <h2>Todo Details</h2>
+  <h3>{{ todo.name }}</h3>
+  <p>Description: {{ todo.description }}</p>
+  <p>Reward: {{ todo.rewards }} coins</p>
+  <p>Skills: {{ todo.skills ? todo.skills.join(', ') : 'None' }}</p>
+  <p>Start: {{ todo.startDate | date }}</p>
+  <p>Deadline: {{ todo.endDate | date }}</p>
+  <p>Status: {{ todo.isCompleted ? 'Completed' : 'Not Completed' }}</p>
+</div>
+
+<ng-template #loading>
+  <p>Loading Todo Details...</p>
+</ng-template>

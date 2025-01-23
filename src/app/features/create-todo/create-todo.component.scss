@@ -1,0 +1,14 @@
+.grid {
+  gap: 1rem; /* Abstand zwischen den Elementen */
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+textarea,
+p-inputText,
+p-calendar {
+  width: 100%; /* Elemente nehmen volle Breite ein */
+}

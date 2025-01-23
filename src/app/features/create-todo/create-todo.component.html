@@ -1,0 +1,56 @@
+<form (ngSubmit)="onSubmit()" #todoForm="ngForm">
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <label for="name">Name:</label>
+      <p-inputText
+        id="name"
+        name="name"
+        [(ngModel)]="todo.name"
+        required
+        placeholder="Enter todo name"
+      ></p-inputText>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        [(ngModel)]="todo.description"
+        name="description"
+        rows="3"
+        placeholder="Enter todo description"
+      ></textarea>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <label for="startDate">Start Date:</label>
+      <p-calendar
+        id="startDate"
+        [(ngModel)]="todo.startDate"
+        name="startDate"
+        required
+        showIcon="true"
+      ></p-calendar>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <label for="dueDate">Due Date:</label>
+      <p-calendar
+        id="dueDate"
+        [(ngModel)]="todo.dueDate"
+        name="dueDate"
+        required
+        showIcon="true"
+      ></p-calendar>
+    </div>
+
+    <div class="col-12">
+      <p-button
+        type="submit"
+        label="Create Todo"
+        icon="pi pi-check"
+        class="mt-3"
+      ></p-button>
+    </div>
+  </div>
+</form>
