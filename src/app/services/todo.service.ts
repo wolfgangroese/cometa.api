@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {lastValueFrom, Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { Todo } from '../models/todo.model';
 
 @Injectable({
@@ -12,11 +12,11 @@ export class TodoService {
   constructor(private http: HttpClient) { }
 
 
-  async getTodos(): Promise<Todo[]> {
-    return lastValueFrom(this.http.get<Todo[]>(this.apiUrl));
+  getTodos(): Observable<Todo[]> {
+    return this.http.get<Todo[]>(this.apiUrl);
   }
-  async getTodoById(id: string): Promise<Todo> {
-    return lastValueFrom(this.http.get<Todo>(`${this.apiUrl}/${id}`));
+  getTodoById(id: string): Observable<Todo> {
+    return this.http.get<Todo>(`${this.apiUrl}/${id}`);
   }
 
   addTodo(todo: Todo): Observable<any> {
@@ -25,4 +25,9 @@ export class TodoService {
   updateTodo(todo: Todo): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${todo.id}`, { updatedTodo: todo });
   }
+
+  deleteTodo(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
 }

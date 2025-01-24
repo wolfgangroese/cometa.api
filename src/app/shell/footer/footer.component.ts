@@ -4,11 +4,11 @@ import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss'],
-  standalone: true,
-  imports: [CommonModule, RouterModule, MenubarModule]
+    selector: 'app-footer',
+    standalone: true,
+    templateUrl: './footer.component.html',
+    styleUrls: ['./footer.component.scss'],
+    imports: [CommonModule, RouterModule, MenubarModule]
 })
 export class FooterComponent implements OnInit {
   items: any[] | undefined;
@@ -16,10 +16,10 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
     this.items = [
       { label: 'Home', icon: 'pi pi-home', routerLink: ['/home'] },
-      { label: 'New Todo', icon: 'pi pi-plus', routerLink: ['/todo/new'] },
       { label: 'Todos', icon: 'pi pi-check-circle', routerLink: ['/todos'] },
-      { label: 'Search', icon: 'pi pi-search', routerLink: ['/search'] },
+      { label: 'New Todo', icon: 'pi pi-plus', routerLink: ['/todo/new'] },
       { label: 'Nachrichten', icon: 'pi pi-envelope', routerLink: ['/nachrichten'] },
+      { label: 'Search', icon: 'pi pi-search', routerLink: ['/search'] },
       { label: 'Account', icon: 'pi pi-user', routerLink: ['/account'] }
     ];
   }

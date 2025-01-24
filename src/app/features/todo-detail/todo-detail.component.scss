@@ -1,0 +1,39 @@
+/* Gesamtcontainer */
+.todo-item {
+  display: flex;
+  flex-direction: column; /* Inhalt wird vertikal gestapelt */
+  align-items: stretch; /* Container bleibt linksbündig */
+  padding: 20px; /* Innenabstand für den Inhalt */
+}
+
+/* Inhalt oberhalb der Buttons */
+.todo-content {
+  text-align: left; /* Links ausrichten */
+  margin-bottom: 20px; /* Abstand nach unten zu den Buttons */
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.button-group p-button {
+  display: block;
+  width: 100%;
+}
+
+:host ::ng-deep {
+  .p-button {
+    width: 100%;
+  }
+
+  .p-button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}

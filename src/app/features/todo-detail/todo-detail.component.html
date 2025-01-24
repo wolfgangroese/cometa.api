@@ -1,12 +1,21 @@
-<div *ngIf="todo; else loading">
-  <h2>Todo Details</h2>
-  <h3>{{ todo.name }}</h3>
-  <p>Description: {{ todo.description }}</p>
-  <p>Reward: {{ todo.rewards }} coins</p>
-  <p>Skills: {{ todo.skills ? todo.skills.join(', ') : 'None' }}</p>
-  <p>Start: {{ todo.startDate | date }}</p>
-  <p>Deadline: {{ todo.endDate | date }}</p>
-  <p>Status: {{ todo.isCompleted ? 'Completed' : 'Not Completed' }}</p>
+<div *ngIf="todo; else loading" class="todo-item">
+  <!-- Textinhalte linksbündig -->
+  <div class="todo-content">
+    <h3>{{ todo.name }}</h3>
+    <p class="todo-description">Description: {{ todo.description }}</p>
+    <p class="todo-points">Reward: {{ todo.rewards }} coins</p>
+    <p class="todo-skills">Skills: {{ todo.skills ? todo.skills.join(', ') : 'None' }}</p>
+    <p class="todo-date">Start: {{ todo.startDate | date }}</p>
+    <p class="todo-date">Deadline: {{ todo.endDate | date }}</p>
+    <p class="todo-status">Status: {{ todo.isCompleted ? 'Completed' : 'Not Completed' }}</p>
+  </div>
+
+  <!-- Buttons zentriert -->
+  <div class="button-group">
+    <p-button (click)="deleteTodo(todo.id)" styleClass="p-button-danger">Delete Todo</p-button>
+    <p-button (click)="goBack()" styleClass="p-button-info">Back to Todo List</p-button>
+    <p-button (click)="addTodo()" styleClass="p-button-success">Create New Todo</p-button>
+  </div>
 </div>
 
 <ng-template #loading>

@@ -1,68 +1,23 @@
 .todo-list {
-  padding: 20px;
+  padding: 10px;
   background-color: #f9f9f9;
-  border-radius: 5px;
+  border-radius: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .todo-item {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ddd;
   font-family: 'Avenir Next', serif;
-  color: #333;
+  font-size: 1.2rem;
   text-align: left;
 }
 
 .todo-total-count {
-  font-size: 2.5em;
+  font-size: 2em;
   font-weight: bold;
   margin-bottom: 5px;
   color: olivedrab;
 }
 
-.todo-item:last-child {
-  border-bottom: none;
-}
-
-.todo-title {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.todo-description {
-  margin-bottom: 5px;
-  color: #666;
-}
-
-.todo-points {
-  font-weight: bold;
-  color: #333;
-}
-
-.todo-skills {
-  font-weight: lighter;
-  color: #333;
-}
-
-.todo-date {
-  font-weight: normal;
-  color: #333;
-}
-
-.todo-status {
-  font-style: italic;
-  color: #999;
-}
-
-.todo-item.completed {
-  background-color: #e0ffe0;
-}
-
-.todo-item.not-completed {
-  background-color: #ffe0e0;
-}
 .todo-link {
   text-decoration: none;
   color: inherit;
@@ -71,4 +26,5 @@
 
 .todo-link:hover {
   text-decoration: underline;
+  color: #2f88e1;
 }

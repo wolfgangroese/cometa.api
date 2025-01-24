@@ -21,7 +21,9 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "zone.js/testing",
+              "src/polyfills.ts"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -32,10 +34,10 @@
               }
             ],
             "styles": [
-              "node_modules/primeng/resources/themes/saga-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
+              "src/styles.scss",
               "node_modules/primeicons/primeicons.css",
-              "src/styles.scss"
+              "node_modules/primeng/resources/themes/saga-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
@@ -99,11 +101,10 @@
               }
             ],
             "styles": [
-              "node_modules/primeng/resources/themes/saga-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
+              "src/styles.scss",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/primeflex/primeflex.css",
-              "src/styles.scss"
+              "node_modules/primeng/resources/themes/saga-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": []
           }
@@ -112,6 +113,6 @@
     }
   },
   "cli": {
-    "analytics": "0ce21836-371a-4c1c-a399-7a8d83952f18",
+    "analytics": "0ce21836-371a-4c1c-a399-7a8d83952f18"
   }
 }

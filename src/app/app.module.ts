@@ -12,8 +12,10 @@ import { SearchComponent } from "./features/search/search.component";
 import { AccountComponent } from "./features/account/account.component";
 import { MenubarModule } from "primeng/menubar";
 import { provideHttpClient } from "@angular/common/http";
-import { FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { FormsModule} from "@angular/forms";
 import { InputTextModule } from "primeng/inputtext";
+import { CalendarModule } from "primeng/calendar";
+import { NewTodoComponent } from "./features/new-todo/new-todo.component";
 
 @NgModule({
   declarations: [
@@ -32,11 +34,13 @@ import { InputTextModule } from "primeng/inputtext";
     AccountComponent,
     MenubarModule,
     FormsModule,
-    ReactiveFormsModule,
     InputTextModule,
+    CalendarModule,
+    NewTodoComponent
   ],
   providers: [
     TodoService,
-  provideHttpClient()],
+  provideHttpClient()
+  ],
 })
 export class AppModule { }

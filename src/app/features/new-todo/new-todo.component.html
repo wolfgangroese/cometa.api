@@ -1,0 +1,33 @@
+<div class="todo-form" [formGroup]="todoForm">
+  <h4>Neues Todo erstellen</h4>
+
+  <div class="form-group">
+    <div class="input-container">
+      <input id="name" type="text" placeholder=" " formControlName="name" />
+      <label for="name">Name</label>
+    </div>
+    <p class="error-message" *ngIf="todoForm.get('name')?.invalid && todoForm.get('name')?.touched">
+      Der Name ist erforderlich und muss mindestens 3 Zeichen lang sein.
+    </p>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+      <textarea id="description" placeholder=" " formControlName="description"></textarea>
+      <label for="description">Beschreibung</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+      <input id="startDate" type="date" placeholder=" " formControlName="startDate" />
+      <label for="startDate">Startdatum</label>
+    </div>
+  </div>
+
+  <button (click)="onSubmit()" class="submit-button" [disabled]="todoForm.invalid">Todo erstellen</button>
+  <button (click)="goBack()" class="back-button">Back to Todo List</button>
+</div>
+
+<p-toast></p-toast>
+

@@ -6,13 +6,13 @@ import { NewsComponent} from './features/news/news.component';
 import { AccountComponent } from './features/account/account.component';
 import { TodoListComponent } from "./features/todo-list/todos-list.component";
 import { TodoDetailComponent } from "./features/todo-detail/todo-detail.component";
-import { CreateTodoComponent } from "./features/create-todo/create-todo.component";
+import { NewTodoComponent } from "./features/new-todo/new-todo.component";
 
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'todos', component: TodoListComponent },
-  { path: 'todo/new', component: CreateTodoComponent },
+  { path: 'todo/new', component: NewTodoComponent },
   { path: 'todo/:id', component: TodoDetailComponent },
   { path: 'search', component: SearchComponent },
   { path: 'nachrichten', component: NewsComponent },

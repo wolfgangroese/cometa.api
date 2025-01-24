@@ -1,4 +1,3 @@
-<h2>TodoList</h2>
 <div *ngFor="let todo of todos" class="todo-item">
   <a [routerLink]="['/todo', todo.id]" class="todo-link">
   <p class="todo-title">{{ todo.name }}</p>

@@ -1,15 +1,21 @@
-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  background-color: #2196F3;
-  color: black;
+.header.header {
+  width: 100vw; /* Deckt die gesamte Fensterbreite ab */
+  background-color: #f8f9fa; /* Farbe des Headers */
+  border-bottom: 1px solid #ddd;
+  position: relative; /* Optional, falls du den Header fixieren willst */
+  left: 0; /* Start an der linken Seite */
 }
-.header-logo {
+
+.header-content {
+  max-width: 1200px; /* Breite des Inhalts, z. B. wie dein Main-Container */
+  margin: 0 auto; /* Zentriert den Inhalt */
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 30px; // oder eine andere Höhe
-  color: grey;
+  padding: 10px 20px; /* Abstand für den Content */
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: normal;
 }

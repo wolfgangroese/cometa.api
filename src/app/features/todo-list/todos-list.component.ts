@@ -5,26 +5,30 @@ import { Todo } from '../../models/todo.model';
 import {RouterLink} from "@angular/router";
 
 @Component({
-  selector: 'app-todo-list',
-  templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.scss'],
-  standalone: true,
-  imports: [CommonModule, RouterLink]
+    selector: 'app-todo-list',
+    standalone: true,
+    templateUrl: './todo-list.component.html',
+    styleUrls: ['./todo-list.component.scss'],
+    imports: [CommonModule, RouterLink]
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
 
   constructor(private todoService: TodoService) { }
 
-  async ngOnInit(): Promise<void> {
-   await this.loadTodos();
+  ngOnInit(): void {
+    this.loadTodos();
   }
 
-  async loadTodos(): Promise<void> {
-    try {
-      this.todos = await this.todoService.getTodos();
-    } catch (error) {
-      console.error('Failed to load todos', error);
-    }
+  loadTodos(): void {
+    this.todoService.getTodos().subscribe({
+      next: (todos) => {
+        this.todos = todos;
+        console.log('Todos erfolgreich geladen:', this.todos);
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Todos:', err);
+      }
+    });
   }
 }
