@@ -1,39 +1,86 @@
-/* Gesamtcontainer */
-.todo-item {
-  display: flex;
-  flex-direction: column; /* Inhalt wird vertikal gestapelt */
-  align-items: stretch; /* Container bleibt linksbündig */
-  padding: 20px; /* Innenabstand für den Inhalt */
-}
-
-/* Inhalt oberhalb der Buttons */
-.todo-content {
-  text-align: left; /* Links ausrichten */
-  margin-bottom: 20px; /* Abstand nach unten zu den Buttons */
-}
-
-.button-group {
+.todo-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  width: 80%;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.button-group p-button {
-  display: block;
+.form-group {
+  margin-bottom: 20px;
+}
+
+.input-container {
+  position: relative;
   width: 100%;
 }
 
-:host ::ng-deep {
-  .p-button {
-    width: 100%;
-  }
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
 
-  .p-button-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0 5px;
+  font-size: 14px;
+  color: #aaa;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label,
+textarea:focus + label,
+textarea:not(:placeholder-shown) + label {
+  top: -10px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+.error-message {
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
+}
+
+button {
+  padding: 10px 15px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.back-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
 }

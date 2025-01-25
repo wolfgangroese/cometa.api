@@ -1,20 +1,55 @@
-<div *ngIf="todo; else loading" class="todo-item">
-  <!-- Textinhalte linksbündig -->
+<div *ngIf="todoForm; else loading" xmlns="http://www.w3.org/1999/html" class="todo-item" [formGroup]="todoForm">
   <div class="todo-content">
-    <h3>{{ todo.name }}</h3>
-    <p class="todo-description">Description: {{ todo.description }}</p>
-    <p class="todo-points">Reward: {{ todo.rewards }} coins</p>
-    <p class="todo-skills">Skills: {{ todo.skills ? todo.skills.join(', ') : 'None' }}</p>
-    <p class="todo-date">Start: {{ todo.startDate | date }}</p>
-    <p class="todo-date">Deadline: {{ todo.endDate | date }}</p>
-    <p class="todo-status">Status: {{ todo.isCompleted ? 'Completed' : 'Not Completed' }}</p>
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input id="name" type="text" placeholder=" " formControlName="name" />
+      <p class="error-message" *ngIf="todoForm.get('name')?.invalid && todoForm.get('name')?.touched">
+        Der Name ist erforderlich.
+      </p>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea id="description" placeholder="Description" formControlName="description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="rewards">Reward:</label>
+      <p-inputNumber id="rewards" formControlName="rewards" placeholder="coins"></p-inputNumber>
+    </div>
+
+    <div class="form-group">
+      <label for="skills">Skills (comma-separated):</label>
+      <input id="skills" type="text" placeholder="Skills" formControlName="skills" />
+    </div>
+
+    <div class="form-group">
+      <label for="startDate">Start Date:</label>
+      <p-calendar id="startDate" formControlName="startDate" dateFormat="yy-mm-dd"></p-calendar>
+    </div>
+
+    <div class="form-group">
+      <label for="endDate">Deadline:</label>
+      <p-calendar id="endDate" formControlName="endDate" dateFormat="yy-mm-dd"></p-calendar>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <p-dropdown
+        id="status"
+        formControlName="isCompleted"
+        [options]="statusOptions"
+        placeholder="Select Status"
+      ></p-dropdown>
+    </div>
   </div>
 
-  <!-- Buttons zentriert -->
+  <!-- Buttons -->
   <div class="button-group">
-    <p-button (click)="deleteTodo(todo.id)" styleClass="p-button-danger">Delete Todo</p-button>
-    <p-button (click)="goBack()" styleClass="p-button-info">Back to Todo List</p-button>
-    <p-button (click)="addTodo()" styleClass="p-button-success">Create New Todo</p-button>
+    <p-button label="Update Todo" (click)="updateTodo()" styleClass="p-button-warn" [disabled]="todoForm.invalid"></p-button>
+    <p-button label="Delete Todo" (click)="deleteTodo()" styleClass="p-button-danger"></p-button>
+    <p-button label="Back to Todo List" (click)="goBack()" styleClass="p-button-info"></p-button>
+    <p-button label="Create New Todo" (click)="addTodo()" styleClass="p-button-success"></p-button>
   </div>
 </div>
 

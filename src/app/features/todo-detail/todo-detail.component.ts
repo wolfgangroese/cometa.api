@@ -1,101 +1,186 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TodoService } from '../../services/todo.service';
-import { Todo } from '../../models/todo.model';
-import { Button } from "primeng/button";
-import { ToastModule } from "primeng/toast";
-import { MessageService } from "primeng/api";
+import { CreateTodoDto, UpdateTodoDto } from '../../models/todo.model';
+import { Button, ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { CalendarModule } from 'primeng/calendar';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
-    selector: 'app-todo-detail',
-    standalone: true,
-    templateUrl: './todo-detail.component.html',
-    styleUrls: ['./todo-detail.component.scss'],
-    imports: [CommonModule, Button, ToastModule],
+  selector: 'app-todo-detail',
+  standalone: true,
+  templateUrl: './todo-detail.component.html',
+  styleUrls: ['./todo-detail.component.scss'],
+  imports: [
+    CommonModule,
+    Button,
+    ToastModule,
+    CalendarModule,
+    InputNumberModule,
+    ButtonModule,
+    InputTextModule,
+    DropdownModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
 export class TodoDetailComponent implements OnInit {
-  todoId: string | undefined ;
-  todo: Todo | undefined;
+  todoForm!: FormGroup;
+  todoId: string | undefined;
+  statusOptions = [
+    { label: 'Completed', value: true },
+    { label: 'Not Completed', value: false },
+  ];
 
   constructor(
+    private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private todoService: TodoService,
-    private messageService: MessageService)
-{}
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
+    this.todoForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      description: [''],
+      rewards: [0],
+      skills: [[]], // Initialisiere Skills als leeres Array
+      startDate: [null],
+      endDate: [null],
+      isCompleted: [null],
+    });
+
     this.todoId = this.route.snapshot.paramMap.get('id') || '';
-    console.log('Route Param ID:', this.todoId); // Debug: ID prüfen
     if (this.todoId) {
-      this.todoService.getTodoById(this.todoId).subscribe({
-        next: (todo) => {
-          this.todo = todo;
-          console.log('Loaded Todo:', this.todo); // Debug: Daten prüfen
+      this.loadTodo();
+    }
+  }
+
+  loadTodo(): void {
+    this.todoService.getTodoById(this.todoId!).subscribe({
+      next: (todo) => {
+        this.todoForm.patchValue({
+          name: todo.name,
+          description: todo.description,
+          rewards: todo.rewards,
+          skills: todo.skills || [], // Skills als Array initialisieren
+          startDate: todo.startDate ? new Date(todo.startDate) : null,
+          endDate: todo.endDate ? new Date(todo.endDate) : null,
+          isCompleted: todo.isCompleted,
+        });
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Todo:', err);
+      },
+    });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/todos']).catch((error) =>
+      console.error('Fehler beim Navigieren zur Todo-Liste:', error)
+    );
+  }
+
+  addTodo(): void {
+    if (this.todoForm.valid) {
+      const newTodo: CreateTodoDto = this.prepareCreateTodoData();
+      this.todoService.addTodo(newTodo).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Erfolg',
+            detail: 'Neues Todo erfolgreich erstellt!',
+          });
+          this.goBack();
         },
         error: (err) => {
-          console.error('Fehler beim Laden der Todo:', err);
-        }
+          console.error('Fehler beim Erstellen des Todos:', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Fehler',
+            detail: 'Das Todo konnte nicht erstellt werden.',
+          });
+        },
       });
     }
   }
 
-  goBack(): void {
-    this.router.navigate(['/todos']).then(success => {
-      if (success) {
-        console.log('Navigation to Todo List successful.');
-      } else {
-        console.error('Navigation to Todo List failed.');
-      }
-    }).catch(error => {
-      console.error('Error during navigation to Todo List:', error);
-    });
+  updateTodo(): void {
+    if (this.todoForm.valid) {
+      const updatedTodo: UpdateTodoDto = this.prepareUpdateTodoData();
+      this.todoService.updateTodo(this.todoId!, updatedTodo).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Erfolg',
+            detail: 'Todo erfolgreich aktualisiert!',
+          });
+          this.goBack();
+        },
+        error: (err) => {
+          console.error('Fehler beim Aktualisieren des Todos:', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Fehler',
+            detail: 'Das Todo konnte nicht aktualisiert werden.',
+          });
+        },
+      });
+    }
   }
 
-  addTodo(): void {
-    this.router.navigate(['/todo/new']).then(success => {
-      if (success) {
-        console.log('Navigation to New Todo successful.');
-      } else {
-        console.error('Navigation to New Todo failed.');
-      }
-    }).catch(error => {
-      console.error('Error during navigation to New Todo:', error);
-    });
+  deleteTodo(): void {
+    if (this.todoId) {
+      this.todoService.deleteTodo(this.todoId).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Erfolg',
+            detail: 'Todo erfolgreich gelöscht!',
+          });
+          this.goBack();
+        },
+        error: (err) => {
+          console.error('Fehler beim Löschen des Todos:', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Fehler',
+            detail: 'Das Todo konnte nicht gelöscht werden.',
+          });
+        },
+      });
+    }
   }
 
-  deleteTodo(todoId: string): void {
-    console.log('deleteTodo gestartet. ID:', todoId);
-
-    this.todoService.deleteTodo(todoId).subscribe({
-      next: () => {
-        const todoName = this.todo?.name || 'Unbekannt';
-
-        console.log('Füge Toast hinzu.'); // Debug-Log
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Erfolg',
-          detail: `Todo "${todoName}" erfolgreich gelöscht!`,
-          life: 3000
-        });
-        console.log('Toast wurde hinzugefügt. Navigiere jetzt zurück.'); // Debug-Log
-
-        this.goBack(); // Navigation
-      },
-      error: (err) => {
-        console.error(`Fehler beim Löschen der Todo mit ID ${todoId}:`, err);
-
-        console.log('Füge Fehler-Toast hinzu.'); // Debug-Log
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Fehler',
-          detail: `Das Todo mit ID ${todoId} konnte nicht gelöscht werden.`
-        });
-      }
-    });
+  private prepareCreateTodoData(): CreateTodoDto {
+    const formData = this.todoForm.value;
+    return {
+      name: formData.name,
+      description: formData.description,
+      rewards: formData.rewards,
+      skills: formData.skills || [], // Skills-Array verwenden oder leerlassen
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+    };
   }
 
-
-
+  private prepareUpdateTodoData(): UpdateTodoDto {
+    const formData = this.todoForm.value;
+    return {
+      name: formData.name,
+      description: formData.description,
+      rewards: formData.rewards,
+      skills: formData.skills || [],
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      isCompleted: formData.isCompleted,
+    };
+  }
 }

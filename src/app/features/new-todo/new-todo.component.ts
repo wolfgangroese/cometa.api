@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/api';
 import { PanelModule } from "primeng/panel";
 import { Todo } from "../../models/todo.model";
 import { TodoService } from "../../services/todo.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { InputTextareaModule } from "primeng/inputtextarea";
 
 @Component({
@@ -28,58 +28,75 @@ import { InputTextareaModule } from "primeng/inputtextarea";
     ToastModule,
     PanelModule,
     InputTextareaModule,
-
   ],
   providers: [
     MessageService,
-    TodoService,],
+    TodoService,
+  ],
 })
 export class NewTodoComponent {
   todoForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private routes: ActivatedRoute,  private todoService: TodoService, private messageService: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private todoService: TodoService,
+    private messageService: MessageService
+  ) {
     this.todoForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       startDate: [null],
       dueDate: [null],
-      rewards: [0, ],
+      rewards: [0],
       isCompleted: [false],
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.todoForm.valid) {
-      const newTodo: Todo = this.todoForm.value; // Neue Task erstellen
+      const newTodo: Todo = this.prepareTodoData(); // Daten vorbereiten
+      console.log('Gesendete Daten:', newTodo); // Debug: Zu sendende Daten prüfen
+
       this.todoService.addTodo(newTodo).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Erfolg',
-            detail: 'Todo wurde erfolgreich erstellt!'
+            detail: 'Todo wurde erfolgreich erstellt!',
           });
-          this.todoForm.reset(); // Formular zurücksetzen
+          this.todoForm.reset({
+            name: '',
+            description: '',
+            startDate: null,
+            dueDate: null,
+            rewards: 0,
+            isCompleted: false,
+          }); // Standardwerte nach Reset
         },
         error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Fehler',
-            detail: 'Das Todo konnte nicht gespeichert werden.'
+            detail: 'Das Todo konnte nicht gespeichert werden.',
           });
-        }
+        },
       });
     }
   }
 
   goBack(): void {
-    this.router.navigate(['/todos']).then(success => {
-      if (success) {
-        console.log('Navigation to Todo List successful.');
-      } else {
-        console.error('Navigation to Todo List failed.');
-      }
-    }).catch(error => {
-      console.error('Error during navigation to Todo List:', error);
-    });
+    this.router.navigate(['/todos']).catch((error) =>
+      console.error('Fehler beim Navigieren zur Todo-Liste:', error)
+    );
+  }
+
+  private prepareTodoData(): Todo {
+    const formData = this.todoForm.value;
+    return {
+      ...formData,
+      startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
+      dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
+    };
   }
 }
