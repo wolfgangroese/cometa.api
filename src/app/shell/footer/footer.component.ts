@@ -3,6 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 
+interface MenuItem {
+  label: string;
+  icon: string;
+  routerLink: string[];
+}
+
+
 @Component({
     selector: 'app-footer',
     standalone: true,
@@ -11,7 +18,7 @@ import { MenubarModule } from 'primeng/menubar';
     imports: [CommonModule, RouterModule, MenubarModule]
 })
 export class FooterComponent implements OnInit {
-  items: any[] | undefined;
+  items: MenuItem[] | undefined;
 
   ngOnInit() {
     this.items = [

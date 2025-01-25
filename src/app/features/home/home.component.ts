@@ -13,7 +13,7 @@ import { RouterLink } from "@angular/router";
 })
 export class HomeComponent implements OnInit {
   todos: Todo[] = [];
-  taskCount: number = 0;
+  taskCount = 0;
 
   constructor(private todoService: TodoService) { }
 

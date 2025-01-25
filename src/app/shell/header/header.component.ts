@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
+interface MenuItem {
+  label: string;
+  icon: string;
+  routerLink: string[];
+}
+
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -9,8 +16,8 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  currentLabel: string = 'COMETA';
-  items: any[] = [
+  currentLabel= 'COMETA';
+  items: MenuItem[] = [
     { label: 'Home', icon: 'pi pi-home', routerLink: ['/home'] },
     { label: 'List', icon: 'pi pi-check-circle', routerLink: ['/todos'] },
     { label: 'Add', icon: 'pi pi-plus', routerLink: ['/todo/new'] },
