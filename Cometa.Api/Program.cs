@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp",
-        builder =>
+        policyBuilder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            policyBuilder.WithOrigins("http://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials(); // Falls Cookies oder Authentifizierung nötig sind
@@ -17,20 +17,24 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+// Configure DbContext
 builder.Services.AddDbContext<CometaDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("CometaDbContext"))
-        .UseSnakeCaseNamingConvention();
+    // Verbindung zur Datenbank herstellen
+    options.UseNpgsql(builder.Configuration.GetConnectionString("CometaDbContext"),
+        b => b.MigrationsAssembly("Cometa.Persistence")); // Hier wird die Migrations-Assembly angegeben
+
+    // Entwicklungsumgebung: Zusätzliche Logging-Optionen aktivieren
     if (builder.Environment.IsDevelopment())
     {
-        _ = options.EnableSensitiveDataLogging();
-        _ = options.EnableDetailedErrors();
+        options.EnableSensitiveDataLogging();
+        options.EnableDetailedErrors();
     }
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Swagger/OpenAPI konfigurieren
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
