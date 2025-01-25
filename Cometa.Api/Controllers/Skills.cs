@@ -7,6 +7,7 @@ namespace Cometa.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+
 public class Skills : ControllerBase
 {
     private readonly CometaDbContext _context;

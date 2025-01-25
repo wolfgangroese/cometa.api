@@ -5,16 +5,16 @@ namespace Cometa.Persistence.Model;
 
 public class Skill : BaseEntity
 {
-    [Required]
     [MaxLength(100)]
-    public string? Name { get; init; }
-    
-    [MaxLength(500)]
-    public string? Description { get; init; }
-    
-    public Prevalence Prevalence { get; init; }
+    public string? Name { get; set; }
 
-    public ICollection<Todo> Todos { get; init; } = new List<Todo>();
+    [MaxLength(500)]
+    public string? Description { get; set; }
+
+    public Prevalence Prevalence { get; set; } = Prevalence.None; // Standardwert
+
+    public ICollection<Todo> Todos { get; set; } = new List<Todo>();
+
     public void AddTodo(Todo todo)
     {
         Todos.Add(todo);

@@ -2,12 +2,12 @@ using Cometa.Persistence;
 using Cometa.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Cometa.Api.DTOs;
 
 namespace Cometa.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class Todos : ControllerBase
 {
     private readonly CometaDbContext _context;
@@ -16,94 +16,114 @@ public class Todos : ControllerBase
     {
         _context = context;
     }
-    
-    [HttpGet( Name = "Todos")]
-    public async Task<IEnumerable<Todo>> GetTodos()
+
+    [HttpGet(Name = "Todos")]
+    public async Task<ActionResult<IEnumerable<TodoDto>>> GetTodos()
     {
-        return await _context.Todos.ToListAsync();
+        var todos = await _context.Todos
+            .Include(t => t.Skills)
+            .ToListAsync();
+
+        var todoDtos = todos.Select(todo => new TodoDto
+        {
+            Id = todo.Id,
+            Name = todo.Name,
+            Description = todo.Description,
+            StartDate = todo.StartDate,
+            DueDate = todo.DueDate,
+            Skills = todo.Skills.Select(s => s.Name).ToList() // Nur Skill-Namen zurückgeben
+        });
+
+        return Ok(todoDtos);
     }
-    
+
     [HttpGet("{id}", Name = "GetTodoById")]
-    public async Task<ActionResult<Todo>> GetTodoById(Guid id)
+    public async Task<ActionResult<TodoDto>> GetTodoById(Guid id)
     {
-        var todo = await _context.Todos.FindAsync(id);
+        var todo = await _context.Todos
+            .Include(t => t.Skills)
+            .FirstOrDefaultAsync(t => t.Id == id);
 
         if (todo == null)
         {
-            return NotFound(); // Gibt einen 404-Fehler zurück, wenn das Todo nicht existiert
+            return NotFound();
         }
 
-        return Ok(todo); // Gibt das gefundene Todo zurück
+        var todoDto = new TodoDto
+        {
+            Id = todo.Id,
+            Name = todo.Name,
+            Description = todo.Description,
+            StartDate = todo.StartDate,
+            DueDate = todo.DueDate,
+            Skills = todo.Skills.Select(s => s.Name).ToList()
+        };
+
+        return Ok(todoDto);
     }
-    
+
     [HttpPost(Name = "CreateTodo")]
-    public async Task<ActionResult<Todo>> CreateTodo([FromBody] Todo newTodo)
+    public async Task<ActionResult<TodoDto>> CreateTodo([FromBody] TodoDto newTodoDto)
     {
-        if (newTodo == null)
+        if (newTodoDto == null || string.IsNullOrEmpty(newTodoDto.Name))
         {
             return BadRequest("Invalid Todo object.");
         }
-        Console.WriteLine($"Received Todo: {System.Text.Json.JsonSerializer.Serialize(newTodo)}");
 
-        if (string.IsNullOrEmpty(newTodo.Name))
+        var newTodo = new Todo
         {
-            return BadRequest("The 'Name' field is required.");
-        }
-        
-
-        // Todo-Objekt in die Datenbank einfügen
-        var todoToSave = new Todo
-        {
-            Name = newTodo.Name,
-            Description = newTodo.Description,
-            StartDate = newTodo.StartDate,
-            DueDate = newTodo.DueDate,
-            EndDate = newTodo.DueDate?.AddDays(-1),
-            TodoStatus = newTodo.TodoStatus,
-            Priority = newTodo.Priority,
-            Complexity = newTodo.Complexity,
-            Rewards = newTodo.Rewards,
-            Notes = newTodo.Notes
+            Name = newTodoDto.Name,
+            Description = newTodoDto.Description,
+            StartDate = newTodoDto.StartDate,
+            DueDate = newTodoDto.DueDate,
+            Skills = newTodoDto.Skills.Select(skillName => new Skill { Name = skillName }).ToList()
         };
 
-        _context.Todos.Add(todoToSave);
+        _context.Todos.Add(newTodo);
         await _context.SaveChangesAsync();
 
-        return CreatedAtRoute("GetTodoById", new { id = todoToSave.Id }, todoToSave);
+        newTodoDto.Id = newTodo.Id; // ID vom gespeicherten Todo setzen
+
+        return CreatedAtRoute("GetTodoById", new { id = newTodo.Id }, newTodoDto);
     }
-    
+
     [HttpPut("{id}", Name = "UpdateTodo")]
-    public async Task<IActionResult> UpdateTodo(Guid id, [FromBody] Todo updatedTodo)
+    public async Task<IActionResult> UpdateTodo(Guid id, [FromBody] TodoDto updatedTodoDto)
     {
-        if (updatedTodo == null || id == Guid.Empty)
+        if (updatedTodoDto == null || id == Guid.Empty)
         {
             return BadRequest("Invalid request.");
         }
 
-        var existingTodo = await _context.Todos.FindAsync(id);
+        var existingTodo = await _context.Todos
+            .Include(t => t.Skills)
+            .FirstOrDefaultAsync(t => t.Id == id);
 
         if (existingTodo == null)
         {
             return NotFound(new { message = $"Todo with ID {id} not found." });
         }
 
-        // Aktualisiere die Felder des bestehenden Todos
-        existingTodo.Name = !string.IsNullOrEmpty(updatedTodo.Name) ? updatedTodo.Name : existingTodo.Name;
-        existingTodo.Description = !string.IsNullOrEmpty(updatedTodo.Description) ? updatedTodo.Description : existingTodo.Description;
-        existingTodo.StartDate = updatedTodo.StartDate != default ? updatedTodo.StartDate : existingTodo.StartDate;
-        existingTodo.DueDate = updatedTodo.DueDate != default ? updatedTodo.DueDate : existingTodo.DueDate;
-        existingTodo.EndDate = updatedTodo.DueDate != default ? updatedTodo.DueDate?.AddDays(-1) : existingTodo.EndDate;
-        existingTodo.TodoStatus = updatedTodo.TodoStatus != default ? updatedTodo.TodoStatus : existingTodo.TodoStatus;
-        existingTodo.Priority = updatedTodo.Priority != default ? updatedTodo.Priority : existingTodo.Priority;
-        existingTodo.Complexity = updatedTodo.Complexity != default ? updatedTodo.Complexity : existingTodo.Complexity;
-        existingTodo.Rewards = updatedTodo.Rewards != default ? updatedTodo.Rewards : existingTodo.Rewards;
-        existingTodo.Notes = !string.IsNullOrEmpty(updatedTodo.Notes) ? updatedTodo.Notes : existingTodo.Notes;
+        // Aktualisieren der Felder
+        existingTodo.Name = updatedTodoDto.Name;
+        existingTodo.Description = updatedTodoDto.Description;
+        existingTodo.StartDate = updatedTodoDto.StartDate;
+        existingTodo.DueDate = updatedTodoDto.DueDate;
 
+        // Skills aktualisieren
+        if (updatedTodoDto.Skills != null)
+        {
+            existingTodo.Skills.Clear(); // Alte Skills entfernen
+            foreach (var skillName in updatedTodoDto.Skills)
+            {
+                existingTodo.Skills.Add(new Skill { Name = skillName });
+            }
+        }
 
         try
         {
             await _context.SaveChangesAsync();
-            return Ok(new { message = $"Todo with ID {id} updated successfully.", todo = existingTodo });
+            return Ok(new { message = "Todo updated successfully." });
         }
         catch (Exception ex)
         {
@@ -111,44 +131,18 @@ public class Todos : ControllerBase
         }
     }
 
-    
-    
     [HttpDelete("{id}", Name = "DeleteTodo")]
-    public async Task<IActionResult> DeleteTodo(string id)
+    public async Task<IActionResult> DeleteTodo(Guid id)
     {
-        if (string.IsNullOrWhiteSpace(id))
+        var todo = await _context.Todos.FindAsync(id);
+        if (todo == null)
         {
-            return BadRequest(new { message = "Invalid ID. The ID cannot be null or empty." });
+            return NotFound(new { message = $"Todo with ID {id} not found." });
         }
 
-        if (!Guid.TryParse(id, out Guid todoId))
-        {
-            return BadRequest(new { message = "Invalid ID format. The ID must be a valid UUID." });
-        }
+        _context.Todos.Remove(todo);
+        await _context.SaveChangesAsync();
 
-        try
-        {
-            var todo = await _context.Todos.FindAsync(todoId);
-            if (todo == null)
-            {
-                return NotFound(new { message = $"Todo with ID {id} not found." });
-            }
-
-            _context.Todos.Remove(todo);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = $"Todo with ID {id} deleted successfully." });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while deleting the Todo.", details = ex.Message });
-        }
+        return Ok(new { message = $"Todo with ID {id} deleted successfully." });
     }
-
-
-
-
-
-
-
 }

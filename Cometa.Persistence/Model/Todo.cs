@@ -7,24 +7,23 @@ public class Todo : BaseEntity
 {
     [Required]
     [MaxLength(120)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     
     [MaxLength(500)]
     public string? Description { get; set; }
-
     public TodoStatus TodoStatus { get; set; } = TodoStatus.Waiting;
     public int? Priority { get; set; } 
     public int? Complexity { get; set; } 
     public ICollection<Skill> Skills { get; set; } = new List<Skill>();
     
     [Range(0, int.MaxValue)]
-    public int Rewards { get; set; }
+    public int? Rewards { get; set; }
 
     [Range(0, int.MaxValue)]
-    public int EstimatedTime { get; set; }
+    public int? EstimatedTime { get; set; }
 
     [Range(0, int.MaxValue)]
-    public int SpentTime { get; set; }
+    public int? SpentTime { get; set; }
 
     public DateTime? DueDate { get; set; }
     public DateTime? StartDate { get; set; }
@@ -49,7 +48,7 @@ public class Todo : BaseEntity
     
     public CreationStatus CreationStatus { get; set; } = CreationStatus.Draft;
 
-    public bool IsCompleted { get; set; } = false;
+    public bool? IsCompleted { get; set; } = false;
 
     public Todo()
     {

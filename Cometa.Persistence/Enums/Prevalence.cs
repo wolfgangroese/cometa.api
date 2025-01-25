@@ -1,6 +1,10 @@
-namespace Cometa.Persistence.Enums;
-
-public enum Prevalence
+namespace Cometa.Persistence.Enums
 {
-   Everyone, Widely, Common, Rare, VeryRare
+    public enum Prevalence
+    {
+        None = -1,
+        Low = 0,
+        Medium = 1,
+        High = 2
+    }
 }
