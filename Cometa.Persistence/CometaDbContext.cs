@@ -15,6 +15,9 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Todo> Todos { get; set; }
     public DbSet<Skill> Skills { get; set; }
 
+    // Füge ApplicationUser als DbSet hinzu
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Identity-Tabellen konfigurieren
@@ -91,5 +94,5 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
 // Benutzerklasse erweitern für zusätzliche Felder
 public class ApplicationUser : IdentityUser
 {
-    public string FullName { get; set; } // Beispiel für ein benutzerdefiniertes Feld
+    public string FullName { get; set; } = "Initial Admin"; // Beispiel für ein benutzerdefiniertes Feld
 }

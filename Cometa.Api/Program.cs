@@ -1,5 +1,9 @@
 using Cometa.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,20 +23,38 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Configure DbContext
+// Configure DbContext for Identity
 builder.Services.AddDbContext<CometaDbContext>(options =>
-{
-    // Verbindung zur Datenbank herstellen
     options.UseNpgsql(builder.Configuration.GetConnectionString("CometaDbContext"),
-        b => b.MigrationsAssembly("Cometa.Persistence")); // Hier wird die Migrations-Assembly angegeben
+        b => b.MigrationsAssembly("Cometa.Persistence"))); 
 
-    // Entwicklungsumgebung: Zusätzliche Logging-Optionen aktivieren
-    if (builder.Environment.IsDevelopment())
+// Add Identity services for ApplicationUser
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<CometaDbContext>()
+    .AddDefaultTokenProviders();
+
+// Überprüfung des SecretKeys, um null zu vermeiden
+var secretKey = builder.Configuration["Jwt:SecretKey"];
+if (string.IsNullOrEmpty(secretKey))
+{
+    throw new InvalidOperationException("JWT SecretKey ist in der Konfiguration nicht gesetzt.");
+}
+
+// Authentifizierung und JWT Token (optional, falls du JWT verwenden möchtest)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        options.EnableSensitiveDataLogging();
-        options.EnableDetailedErrors();
-    }
-});
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) // Hier wird der SecretKey jetzt sicher verwendet
+        };
+    });
 
 // Swagger/OpenAPI konfigurieren
 builder.Services.AddEndpointsApiExplorer();
@@ -40,7 +62,45 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Initialisiere Rollen und Admin-Benutzer bei App-Start
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(); // Verwende hier ApplicationUser
+
+    string[] roles = new[] { "Admin", "Staff", "Performer" };
+
+    // Erstelle die Rollen, falls noch nicht vorhanden
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    var adminUser = await userManager.FindByEmailAsync("admin@example.com");
+    if (adminUser == null)
+    {
+        adminUser = new ApplicationUser
+        {
+            UserName = "admin@example.com",
+            Email = "admin@example.com",
+            FullName = "Admin User"
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "Admin123!");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+        else
+        {
+            throw new InvalidOperationException("Admin-Benutzer konnte nicht erstellt werden.");
+        }
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -51,6 +111,8 @@ app.UseCors("AllowAngularApp");
 
 app.UseHttpsRedirection();
 
+// Authentifizierung und Autorisierung in der Middleware einfügen
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
