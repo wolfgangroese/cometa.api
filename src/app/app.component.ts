@@ -29,7 +29,6 @@ export class AppComponent implements OnInit { // ✅ OnInit implementieren
   constructor(private messageService: MessageService, private authService: AuthService) {} // ✅ AuthService injizieren
 
   ngOnInit(): void {
-    console.log('🔄 Lade Benutzer aus Token...');
     this.authService.loadUserFromToken(); // ✅ Benutzer nach Seiten-Reload wiederherstellen
   }
 
