@@ -9,7 +9,7 @@ import { RouterLink } from "@angular/router";
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'] // Korrektur: styleUrls im Plural
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   todos: Todo[] = [];
@@ -18,15 +18,14 @@ export class HomeComponent implements OnInit {
   constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
-    this.loadTodos(); // Todos laden
+    this.loadTodos();
   }
 
-  // Todos laden
   loadTodos(): void {
     this.todoService.getTodos().subscribe({
       next: (data) => {
-        this.todos = data; // Daten in die lokale Variable speichern
-        this.updateTaskCount(); // Aufgabe zählen
+        this.todos = data;
+        this.updateTaskCount();
       },
       error: (err) => {
         console.error('Failed to load todos', err);
@@ -36,8 +35,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // Aufgaben zählen
   private updateTaskCount(): void {
-    this.taskCount = this.todos.length;
+    this.taskCount = this.todos.filter(todo => !todo.isCompleted).length;
   }
 }

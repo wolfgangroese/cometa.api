@@ -28,3 +28,8 @@
   text-decoration: underline;
   color: #2f88e1;
 }
+.completed-icon {
+  color: green; // Icon-Farbe für abgeschlossene Todos
+  margin-left: 8px; // Abstand zum Text
+  font-size: 1.2rem; // Größe anpassen
+}
