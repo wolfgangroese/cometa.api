@@ -89,6 +89,40 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
             .HasIndex(t => t.PreviousTodoId)
             .HasDatabaseName("IX_Todos_PreviousTodoId");
     }
+    
+    public override int SaveChanges()
+    {
+        ConvertDatesToUtc();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        ConvertDatesToUtc();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void ConvertDatesToUtc()
+    {
+        foreach (var entry in ChangeTracker.Entries()
+                     .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
+        {
+            foreach (var property in entry.Properties)
+            {
+                if (property.Metadata.ClrType == typeof(DateTime) || property.Metadata.ClrType == typeof(DateTime?))
+                {
+                    var currentValue = property.CurrentValue as DateTime?;
+
+                    if (currentValue.HasValue)
+                    {
+                        // Konvertiere ALLE DateTime-Werte zu UTC, auch wenn sie schon Local sind
+                        property.CurrentValue = currentValue.Value.ToUniversalTime();
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 // Benutzerklasse erweitern für zusätzliche Felder
@@ -96,3 +130,6 @@ public class ApplicationUser : IdentityUser
 {
     public string FullName { get; set; } = "Initial Admin"; // Beispiel für ein benutzerdefiniertes Feld
 }
+
+
+

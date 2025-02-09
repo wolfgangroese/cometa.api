@@ -26,7 +26,7 @@ public class Todo : BaseEntity
     public int? SpentTime { get; set; }
 
     public DateTime? DueDate { get; set; }
-    public DateTime? StartDate { get; set; }
+    public DateTime? StartDate { get; set; } 
     public DateTime? EndDate { get; set; }
     public DateTime? CompletedDate { get; set; }
     public DateTime? EarliestStartDate { get; set; }
@@ -49,13 +49,6 @@ public class Todo : BaseEntity
     public CreationStatus CreationStatus { get; set; } = CreationStatus.Draft;
 
     public bool? IsCompleted { get; set; } = false;
-
-    public Todo()
-    {
-        StartDate = DateTime.UtcNow;
-        DueDate = DateTime.UtcNow.AddDays(5);
-        EndDate = DueDate?.AddDays(-1);
-    }
     
     public void AddSkill(Skill skill)
     {
