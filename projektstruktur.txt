@@ -1,0 +1,672 @@
+.
+├── Cometa.API.sln
+├── Cometa.Api
+│   ├── Cometa.Api.csproj
+│   ├── Cometa.Api.http
+│   ├── Cometa.Persistence
+│   │   └── obj
+│   │       └── Cometa.Persistence.csproj.EntityFrameworkCore.targets
+│   ├── Controllers
+│   │   ├── Skills.cs
+│   │   └── Todos.cs
+│   ├── DTOs
+│   │   ├── SkillDto.cs
+│   │   └── TodoDto.cs
+│   ├── Program.cs
+│   ├── Properties
+│   │   └── launchSettings.json
+│   ├── appsettings.Development.json
+│   ├── appsettings.json
+│   ├── bin
+│   │   └── Debug
+│   │       └── net8.0
+│   │           ├── Cometa.Api
+│   │           ├── Cometa.Api.deps.json
+│   │           ├── Cometa.Api.dll
+│   │           ├── Cometa.Api.pdb
+│   │           ├── Cometa.Api.runtimeconfig.json
+│   │           ├── Cometa.Api.staticwebassets.endpoints.json
+│   │           ├── Cometa.Domain.dll
+│   │           ├── Cometa.Domain.pdb
+│   │           ├── Cometa.Persistence.dll
+│   │           ├── Cometa.Persistence.pdb
+│   │           ├── EFCore.NamingConventions.dll
+│   │           ├── Humanizer.dll
+│   │           ├── Microsoft.Bcl.AsyncInterfaces.dll
+│   │           ├── Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+│   │           ├── Microsoft.CodeAnalysis.CSharp.dll
+│   │           ├── Microsoft.CodeAnalysis.Workspaces.dll
+│   │           ├── Microsoft.CodeAnalysis.dll
+│   │           ├── Microsoft.EntityFrameworkCore.Abstractions.dll
+│   │           ├── Microsoft.EntityFrameworkCore.Design.dll
+│   │           ├── Microsoft.EntityFrameworkCore.Relational.dll
+│   │           ├── Microsoft.EntityFrameworkCore.dll
+│   │           ├── Microsoft.Extensions.DependencyModel.dll
+│   │           ├── Microsoft.OpenApi.dll
+│   │           ├── Mono.TextTemplating.dll
+│   │           ├── Npgsql.EntityFrameworkCore.PostgreSQL.dll
+│   │           ├── Npgsql.dll
+│   │           ├── Swashbuckle.AspNetCore.Swagger.dll
+│   │           ├── Swashbuckle.AspNetCore.SwaggerGen.dll
+│   │           ├── Swashbuckle.AspNetCore.SwaggerUI.dll
+│   │           ├── System.CodeDom.dll
+│   │           ├── System.Composition.AttributedModel.dll
+│   │           ├── System.Composition.Convention.dll
+│   │           ├── System.Composition.Hosting.dll
+│   │           ├── System.Composition.Runtime.dll
+│   │           ├── System.Composition.TypedParts.dll
+│   │           ├── appsettings.Development.json
+│   │           ├── appsettings.json
+│   │           ├── cs
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── de
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── es
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── fr
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── it
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── ja
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── ko
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── pl
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── pt-BR
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── ru
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── tr
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           ├── zh-Hans
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │           │   ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │           │   └── Microsoft.CodeAnalysis.resources.dll
+│   │           └── zh-Hant
+│   │               ├── Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+│   │               ├── Microsoft.CodeAnalysis.CSharp.resources.dll
+│   │               ├── Microsoft.CodeAnalysis.Workspaces.resources.dll
+│   │               └── Microsoft.CodeAnalysis.resources.dll
+│   └── obj
+│       ├── Cometa.Api.csproj.EntityFrameworkCore.targets
+│       ├── Cometa.Api.csproj.nuget.dgspec.json
+│       ├── Cometa.Api.csproj.nuget.g.props
+│       ├── Cometa.Api.csproj.nuget.g.targets
+│       ├── Debug
+│       │   └── net8.0
+│       │       ├── Cometa.Api.AssemblyInfo.cs
+│       │       ├── Cometa.Api.AssemblyInfoInputs.cache
+│       │       ├── Cometa.Api.GeneratedMSBuildEditorConfig.editorconfig
+│       │       ├── Cometa.Api.GlobalUsings.g.cs
+│       │       ├── Cometa.Api.MvcApplicationPartsAssemblyInfo.cache
+│       │       ├── Cometa.Api.MvcApplicationPartsAssemblyInfo.cs
+│       │       ├── Cometa.Api.assets.cache
+│       │       ├── Cometa.Api.csproj.AssemblyReference.cache
+│       │       ├── Cometa.Api.csproj.CoreCompileInputs.cache
+│       │       ├── Cometa.Api.csproj.FileListAbsolute.txt
+│       │       ├── Cometa.Api.csproj.Up2Date
+│       │       ├── Cometa.Api.dll
+│       │       ├── Cometa.Api.genruntimeconfig.cache
+│       │       ├── Cometa.Api.pdb
+│       │       ├── Cometa.Api.sourcelink.json
+│       │       ├── apphost
+│       │       ├── ref
+│       │       │   └── Cometa.Api.dll
+│       │       ├── refint
+│       │       │   └── Cometa.Api.dll
+│       │       ├── staticwebassets
+│       │       │   ├── msbuild.build.Cometa.Api.props
+│       │       │   ├── msbuild.buildMultiTargeting.Cometa.Api.props
+│       │       │   └── msbuild.buildTransitive.Cometa.Api.props
+│       │       ├── staticwebassets.build.endpoints.json
+│       │       └── staticwebassets.build.json
+│       ├── cometa.csproj.nuget.dgspec.json
+│       ├── cometa.csproj.nuget.g.props
+│       ├── cometa.csproj.nuget.g.targets
+│       ├── project.assets.json
+│       ├── project.nuget.cache
+│       ├── project.packagespec.json
+│       ├── rider.project.model.nuget.info
+│       └── rider.project.restore.info
+├── Cometa.Domain
+│   ├── Class1.cs
+│   ├── Cometa.Domain.csproj
+│   ├── bin
+│   │   └── Debug
+│   │       └── net8.0
+│   │           ├── Cometa.Domain.deps.json
+│   │           ├── Cometa.Domain.dll
+│   │           └── Cometa.Domain.pdb
+│   └── obj
+│       ├── Cometa.Domain.csproj.nuget.dgspec.json
+│       ├── Cometa.Domain.csproj.nuget.g.props
+│       ├── Cometa.Domain.csproj.nuget.g.targets
+│       ├── Debug
+│       │   └── net8.0
+│       │       ├── Cometa.Domain.AssemblyInfo.cs
+│       │       ├── Cometa.Domain.AssemblyInfoInputs.cache
+│       │       ├── Cometa.Domain.GeneratedMSBuildEditorConfig.editorconfig
+│       │       ├── Cometa.Domain.GlobalUsings.g.cs
+│       │       ├── Cometa.Domain.assets.cache
+│       │       ├── Cometa.Domain.csproj.CoreCompileInputs.cache
+│       │       ├── Cometa.Domain.csproj.FileListAbsolute.txt
+│       │       ├── Cometa.Domain.dll
+│       │       ├── Cometa.Domain.pdb
+│       │       ├── Cometa.Domain.sourcelink.json
+│       │       ├── ref
+│       │       │   └── Cometa.Domain.dll
+│       │       └── refint
+│       │           └── Cometa.Domain.dll
+│       ├── project.assets.json
+│       ├── project.nuget.cache
+│       ├── project.packagespec.json
+│       ├── rider.project.model.nuget.info
+│       └── rider.project.restore.info
+├── Cometa.Persistence
+│   ├── Cometa.Persistence
+│   │   └── obj
+│   ├── Cometa.Persistence.csproj
+│   ├── CometaDbContext.cs
+│   ├── EntityConfigurations
+│   ├── Enums
+│   │   ├── Complexity.cs
+│   │   ├── CreationStatus.cs
+│   │   ├── Prevalence.cs
+│   │   ├── Priority.cs
+│   │   └── TodoStatus.cs
+│   ├── Migrations
+│   │   ├── 20240901142605_InitialCreate.Designer.cs
+│   │   ├── 20240901142605_InitialCreate.cs
+│   │   ├── 20240901201758_Enums.Designer.cs
+│   │   ├── 20240901201758_Enums.cs
+│   │   ├── 20240901213533_MoreEnumsAndGUIDrelations.Designer.cs
+│   │   ├── 20240901213533_MoreEnumsAndGUIDrelations.cs
+│   │   ├── 20241110202607_SkillsTodosCollections.Designer.cs
+│   │   ├── 20241110202607_SkillsTodosCollections.cs
+│   │   ├── 20250119155018_IsCompleted.Designer.cs
+│   │   ├── 20250119155018_IsCompleted.cs
+│   │   ├── 20250125150504_MigrationName.Designer.cs
+│   │   ├── 20250125150504_MigrationName.cs
+│   │   └── CometaDbContextModelSnapshot.cs
+│   ├── Model
+│   │   ├── BaseEntity.cs
+│   │   ├── Skill.cs
+│   │   └── Todo.cs
+│   ├── bin
+│   │   └── Debug
+│   │       └── net8.0
+│   │           ├── Cometa.Persistence.deps.json
+│   │           ├── Cometa.Persistence.dll
+│   │           ├── Cometa.Persistence.pdb
+│   │           └── Cometa.Persistence.runtimeconfig.json
+│   └── obj
+│       ├── Cometa.Persistence.csproj.EntityFrameworkCore.targets
+│       ├── Cometa.Persistence.csproj.nuget.dgspec.json
+│       ├── Cometa.Persistence.csproj.nuget.g.props
+│       ├── Cometa.Persistence.csproj.nuget.g.targets
+│       ├── Debug
+│       │   └── net8.0
+│       │       ├── Cometa.Persistence.AssemblyInfo.cs
+│       │       ├── Cometa.Persistence.AssemblyInfoInputs.cache
+│       │       ├── Cometa.Persistence.GeneratedMSBuildEditorConfig.editorconfig
+│       │       ├── Cometa.Persistence.GlobalUsings.g.cs
+│       │       ├── Cometa.Persistence.assets.cache
+│       │       ├── Cometa.Persistence.csproj.AssemblyReference.cache
+│       │       ├── Cometa.Persistence.csproj.CoreCompileInputs.cache
+│       │       ├── Cometa.Persistence.csproj.FileListAbsolute.txt
+│       │       ├── Cometa.Persistence.dll
+│       │       ├── Cometa.Persistence.genruntimeconfig.cache
+│       │       ├── Cometa.Persistence.pdb
+│       │       ├── Cometa.Persistence.sourcelink.json
+│       │       ├── ref
+│       │       │   └── Cometa.Persistence.dll
+│       │       └── refint
+│       │           └── Cometa.Persistence.dll
+│       ├── project.assets.json
+│       ├── project.nuget.cache
+│       ├── project.packagespec.json
+│       ├── rider.project.model.nuget.info
+│       └── rider.project.restore.info
+├── EUPL-1.2 license
+├── README.md
+├── Tests
+│   ├── Cometa.Api.Tests
+│   │   ├── Cometa.Api.Tests.csproj
+│   │   ├── UnitTest1.cs
+│   │   ├── bin
+│   │   │   └── Debug
+│   │   │       └── net8.0
+│   │   │           ├── Cometa.Api.Tests.deps.json
+│   │   │           ├── Cometa.Api.Tests.dll
+│   │   │           ├── Cometa.Api.Tests.pdb
+│   │   │           ├── Cometa.Api.Tests.runtimeconfig.json
+│   │   │           ├── Microsoft.TestPlatform.CommunicationUtilities.dll
+│   │   │           ├── Microsoft.TestPlatform.CoreUtilities.dll
+│   │   │           ├── Microsoft.TestPlatform.CrossPlatEngine.dll
+│   │   │           ├── Microsoft.TestPlatform.PlatformAbstractions.dll
+│   │   │           ├── Microsoft.TestPlatform.Utilities.dll
+│   │   │           ├── Microsoft.VisualStudio.CodeCoverage.Shim.dll
+│   │   │           ├── Microsoft.VisualStudio.TestPlatform.Common.dll
+│   │   │           ├── Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
+│   │   │           ├── NUnit3.TestAdapter.dll
+│   │   │           ├── NUnit3.TestAdapter.pdb
+│   │   │           ├── Newtonsoft.Json.dll
+│   │   │           ├── NuGet.Frameworks.dll
+│   │   │           ├── cs
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── de
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── es
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── fr
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── it
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── ja
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── ko
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── nunit.engine.api.dll
+│   │   │           ├── nunit.engine.core.dll
+│   │   │           ├── nunit.engine.dll
+│   │   │           ├── nunit.framework.dll
+│   │   │           ├── pl
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── pt-BR
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── ru
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── testcentric.engine.metadata.dll
+│   │   │           ├── testhost.dll
+│   │   │           ├── tr
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── zh-Hans
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           └── zh-Hant
+│   │   │               ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │               ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │               ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │               ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │               └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   └── obj
+│   │       ├── Cometa.Api.Tests.csproj.nuget.dgspec.json
+│   │       ├── Cometa.Api.Tests.csproj.nuget.g.props
+│   │       ├── Cometa.Api.Tests.csproj.nuget.g.targets
+│   │       ├── Debug
+│   │       │   └── net8.0
+│   │       │       ├── Cometa.A.2C3F0C64.Up2Date
+│   │       │       ├── Cometa.Api.Tests.AssemblyInfo.cs
+│   │       │       ├── Cometa.Api.Tests.AssemblyInfoInputs.cache
+│   │       │       ├── Cometa.Api.Tests.GeneratedMSBuildEditorConfig.editorconfig
+│   │       │       ├── Cometa.Api.Tests.GlobalUsings.g.cs
+│   │       │       ├── Cometa.Api.Tests.assets.cache
+│   │       │       ├── Cometa.Api.Tests.csproj.AssemblyReference.cache
+│   │       │       ├── Cometa.Api.Tests.csproj.CoreCompileInputs.cache
+│   │       │       ├── Cometa.Api.Tests.csproj.FileListAbsolute.txt
+│   │       │       ├── Cometa.Api.Tests.dll
+│   │       │       ├── Cometa.Api.Tests.genruntimeconfig.cache
+│   │       │       ├── Cometa.Api.Tests.pdb
+│   │       │       ├── Cometa.Api.Tests.sourcelink.json
+│   │       │       ├── ref
+│   │       │       │   └── Cometa.Api.Tests.dll
+│   │       │       └── refint
+│   │       │           └── Cometa.Api.Tests.dll
+│   │       ├── project.assets.json
+│   │       ├── project.nuget.cache
+│   │       ├── project.packagespec.json
+│   │       ├── rider.project.model.nuget.info
+│   │       └── rider.project.restore.info
+│   ├── Cometa.Domain.Tests
+│   │   ├── Cometa.Domain.Tests.csproj
+│   │   ├── UnitTest1.cs
+│   │   ├── bin
+│   │   │   └── Debug
+│   │   │       └── net8.0
+│   │   │           ├── Cometa.Domain.Tests.deps.json
+│   │   │           ├── Cometa.Domain.Tests.dll
+│   │   │           ├── Cometa.Domain.Tests.pdb
+│   │   │           ├── Cometa.Domain.Tests.runtimeconfig.json
+│   │   │           ├── Microsoft.TestPlatform.CommunicationUtilities.dll
+│   │   │           ├── Microsoft.TestPlatform.CoreUtilities.dll
+│   │   │           ├── Microsoft.TestPlatform.CrossPlatEngine.dll
+│   │   │           ├── Microsoft.TestPlatform.PlatformAbstractions.dll
+│   │   │           ├── Microsoft.TestPlatform.Utilities.dll
+│   │   │           ├── Microsoft.VisualStudio.CodeCoverage.Shim.dll
+│   │   │           ├── Microsoft.VisualStudio.TestPlatform.Common.dll
+│   │   │           ├── Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
+│   │   │           ├── NUnit3.TestAdapter.dll
+│   │   │           ├── NUnit3.TestAdapter.pdb
+│   │   │           ├── Newtonsoft.Json.dll
+│   │   │           ├── NuGet.Frameworks.dll
+│   │   │           ├── cs
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── de
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── es
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── fr
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── it
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── ja
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── ko
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── nunit.engine.api.dll
+│   │   │           ├── nunit.engine.core.dll
+│   │   │           ├── nunit.engine.dll
+│   │   │           ├── nunit.framework.dll
+│   │   │           ├── pl
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── pt-BR
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── ru
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── testcentric.engine.metadata.dll
+│   │   │           ├── testhost.dll
+│   │   │           ├── tr
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           ├── zh-Hans
+│   │   │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   │           └── zh-Hant
+│   │   │               ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│   │   │               ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│   │   │               ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│   │   │               ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│   │   │               └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│   │   └── obj
+│   │       ├── Cometa.Domain.Tests.csproj.nuget.dgspec.json
+│   │       ├── Cometa.Domain.Tests.csproj.nuget.g.props
+│   │       ├── Cometa.Domain.Tests.csproj.nuget.g.targets
+│   │       ├── Debug
+│   │       │   └── net8.0
+│   │       │       ├── Cometa.D.FF7863B9.Up2Date
+│   │       │       ├── Cometa.Domain.Tests.AssemblyInfo.cs
+│   │       │       ├── Cometa.Domain.Tests.AssemblyInfoInputs.cache
+│   │       │       ├── Cometa.Domain.Tests.GeneratedMSBuildEditorConfig.editorconfig
+│   │       │       ├── Cometa.Domain.Tests.GlobalUsings.g.cs
+│   │       │       ├── Cometa.Domain.Tests.assets.cache
+│   │       │       ├── Cometa.Domain.Tests.csproj.AssemblyReference.cache
+│   │       │       ├── Cometa.Domain.Tests.csproj.CoreCompileInputs.cache
+│   │       │       ├── Cometa.Domain.Tests.csproj.FileListAbsolute.txt
+│   │       │       ├── Cometa.Domain.Tests.dll
+│   │       │       ├── Cometa.Domain.Tests.genruntimeconfig.cache
+│   │       │       ├── Cometa.Domain.Tests.pdb
+│   │       │       ├── Cometa.Domain.Tests.sourcelink.json
+│   │       │       ├── ref
+│   │       │       │   └── Cometa.Domain.Tests.dll
+│   │       │       └── refint
+│   │       │           └── Cometa.Domain.Tests.dll
+│   │       ├── project.assets.json
+│   │       ├── project.nuget.cache
+│   │       ├── project.packagespec.json
+│   │       ├── rider.project.model.nuget.info
+│   │       └── rider.project.restore.info
+│   └── Cometa.Persistence.Tests
+│       ├── Cometa.Persistence.Tests.csproj
+│       ├── UnitTest1.cs
+│       ├── bin
+│       │   └── Debug
+│       │       └── net8.0
+│       │           ├── Cometa.Persistence.Tests.deps.json
+│       │           ├── Cometa.Persistence.Tests.dll
+│       │           ├── Cometa.Persistence.Tests.pdb
+│       │           ├── Cometa.Persistence.Tests.runtimeconfig.json
+│       │           ├── Microsoft.TestPlatform.CommunicationUtilities.dll
+│       │           ├── Microsoft.TestPlatform.CoreUtilities.dll
+│       │           ├── Microsoft.TestPlatform.CrossPlatEngine.dll
+│       │           ├── Microsoft.TestPlatform.PlatformAbstractions.dll
+│       │           ├── Microsoft.TestPlatform.Utilities.dll
+│       │           ├── Microsoft.VisualStudio.CodeCoverage.Shim.dll
+│       │           ├── Microsoft.VisualStudio.TestPlatform.Common.dll
+│       │           ├── Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
+│       │           ├── NUnit3.TestAdapter.dll
+│       │           ├── NUnit3.TestAdapter.pdb
+│       │           ├── Newtonsoft.Json.dll
+│       │           ├── NuGet.Frameworks.dll
+│       │           ├── cs
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── de
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── es
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── fr
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── it
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── ja
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── ko
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── nunit.engine.api.dll
+│       │           ├── nunit.engine.core.dll
+│       │           ├── nunit.engine.dll
+│       │           ├── nunit.framework.dll
+│       │           ├── pl
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── pt-BR
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── ru
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── testcentric.engine.metadata.dll
+│       │           ├── testhost.dll
+│       │           ├── tr
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           ├── zh-Hans
+│       │           │   ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │           │   ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │           │   ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │           │   └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       │           └── zh-Hant
+│       │               ├── Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+│       │               ├── Microsoft.TestPlatform.CoreUtilities.resources.dll
+│       │               ├── Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+│       │               ├── Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+│       │               └── Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+│       └── obj
+│           ├── Cometa.Persistence.Tests.csproj.nuget.dgspec.json
+│           ├── Cometa.Persistence.Tests.csproj.nuget.g.props
+│           ├── Cometa.Persistence.Tests.csproj.nuget.g.targets
+│           ├── Debug
+│           │   └── net8.0
+│           │       ├── Cometa.P.7B235373.Up2Date
+│           │       ├── Cometa.Persistence.Tests.AssemblyInfo.cs
+│           │       ├── Cometa.Persistence.Tests.AssemblyInfoInputs.cache
+│           │       ├── Cometa.Persistence.Tests.GeneratedMSBuildEditorConfig.editorconfig
+│           │       ├── Cometa.Persistence.Tests.GlobalUsings.g.cs
+│           │       ├── Cometa.Persistence.Tests.assets.cache
+│           │       ├── Cometa.Persistence.Tests.csproj.AssemblyReference.cache
+│           │       ├── Cometa.Persistence.Tests.csproj.CoreCompileInputs.cache
+│           │       ├── Cometa.Persistence.Tests.csproj.FileListAbsolute.txt
+│           │       ├── Cometa.Persistence.Tests.dll
+│           │       ├── Cometa.Persistence.Tests.genruntimeconfig.cache
+│           │       ├── Cometa.Persistence.Tests.pdb
+│           │       ├── Cometa.Persistence.Tests.sourcelink.json
+│           │       ├── ref
+│           │       │   └── Cometa.Persistence.Tests.dll
+│           │       └── refint
+│           │           └── Cometa.Persistence.Tests.dll
+│           ├── project.assets.json
+│           ├── project.nuget.cache
+│           ├── project.packagespec.json
+│           ├── rider.project.model.nuget.info
+│           └── rider.project.restore.info
+└── projektstruktur.txt
+
+120 directories, 550 files
