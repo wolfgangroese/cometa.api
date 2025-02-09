@@ -8,8 +8,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { PanelModule } from "primeng/panel";
-import { Todo } from "../../models/todo.model";
-import { TodoService } from "../../services/todo.service";
+import { Todo } from "../../../models/todo.model";
+import { TodoService } from "../../../services/todo.service";
 import { Router } from "@angular/router";
 import { InputTextareaModule } from "primeng/inputtextarea";
 
@@ -46,9 +46,9 @@ export class NewTodoComponent {
     this.todoForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
-      startDate: [null],
-      dueDate: [null],
-      rewards: [0],
+      startDate: [this.getTodayDate()],  // Standardwert: Heute
+      dueDate: [this.getFutureDate(5)], // Standardwert: Heute + 5 Tage
+      rewards: [1],
       isCompleted: [false],
     });
   }
@@ -56,7 +56,7 @@ export class NewTodoComponent {
   onSubmit(): void {
     if (this.todoForm.valid) {
       const newTodo: Todo = this.prepareTodoData(); // Daten vorbereiten
-      console.log('Gesendete Daten:', newTodo); // Debug: Zu sendende Daten prüfen
+      console.log('📤 Gesendete Daten:', newTodo); // Debugging
 
       this.todoService.addTodo(newTodo).subscribe({
         next: () => {
@@ -65,14 +65,16 @@ export class NewTodoComponent {
             summary: 'Erfolg',
             detail: 'Todo wurde erfolgreich erstellt!',
           });
+
+          // Formular zurücksetzen und Standardwerte beibehalten
           this.todoForm.reset({
             name: '',
             description: '',
-            startDate: null,
-            dueDate: null,
-            rewards: 0,
+            startDate: this.getTodayDate(),
+            dueDate: this.getFutureDate(5),
+            rewards: [1],
             isCompleted: false,
-          }); // Standardwerte nach Reset
+          });
         },
         error: () => {
           this.messageService.add({
@@ -95,8 +97,22 @@ export class NewTodoComponent {
     const formData = this.todoForm.value;
     return {
       ...formData,
-      startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
-      dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
+      startDate: this.convertDate(formData.startDate),
+      dueDate: this.convertDate(formData.dueDate),
     };
+  }
+
+  private getTodayDate(): string {
+    return new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD für <input type="date">
+  }
+
+  private getFutureDate(days: number): string {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + days);
+    return futureDate.toISOString().split('T')[0];
+  }
+
+  private convertDate(date: any): string | null {
+    return date ? new Date(date).toISOString() : null;
   }
 }

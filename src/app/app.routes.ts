@@ -4,9 +4,9 @@ import { HomeComponent } from './features/home/home.component';
 import { SearchComponent } from './features/search/search.component';
 import { NewsComponent} from './features/news/news.component';
 import { AccountComponent } from './features/account/account.component';
-import { TodoListComponent } from "./features/todo-list/todos-list.component";
-import { TodoDetailComponent } from "./features/todo-detail/todo-detail.component";
-import { NewTodoComponent } from "./features/new-todo/new-todo.component";
+import { TodoListComponent } from "./features/todos/todo-list/todos-list.component";
+import { TodoDetailComponent } from "./features/todos/todo-detail/todo-detail.component";
+import { NewTodoComponent } from "./features/todos/new-todo/new-todo.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 

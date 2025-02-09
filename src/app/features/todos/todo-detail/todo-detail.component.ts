@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TodoService } from '../../services/todo.service';
-import { CreateTodoDto, UpdateTodoDto } from '../../models/todo.model';
+import { TodoService } from '../../../services/todo.service';
+import { CreateTodoDto, UpdateTodoDto } from '../../../models/todo.model';
 import { Button, ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -13,6 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from "primeng/checkbox";
 import { InputTextareaModule } from "primeng/inputtextarea";
+import {ButtonGroupModule} from "primeng/buttongroup";
+import {FloatLabelModule} from "primeng/floatlabel";
 
 @Component({
   selector: 'app-todo-detail',
@@ -32,6 +34,8 @@ import { InputTextareaModule } from "primeng/inputtextarea";
     ReactiveFormsModule,
     CheckboxModule,
     InputTextareaModule,
+    ButtonGroupModule,
+    FloatLabelModule,
   ],
 })
 export class TodoDetailComponent implements OnInit {
@@ -53,7 +57,7 @@ export class TodoDetailComponent implements OnInit {
       rewards: [0],
       skills: [[]], // Initialisiere Skills als leeres Array
       startDate: [null],
-      endDate: [null],
+      dueDate: [null],
       isCompleted: [false],
     });
 
@@ -71,8 +75,8 @@ export class TodoDetailComponent implements OnInit {
           description: todo.description,
           rewards: todo.rewards ?? 0,
           skills: todo.skills ?? [],
-          startDate: todo.startDate ? new Date(todo.startDate) : null,
-          endDate: todo.endDate ? new Date(todo.endDate) : null,
+          startDate: todo.startDate ? this.formatDate(todo.startDate) : null,
+          dueDate: todo.dueDate ? this.formatDate(todo.dueDate) : null,
           isCompleted: todo.isCompleted,
         });
       },
@@ -170,7 +174,7 @@ export class TodoDetailComponent implements OnInit {
       rewards: formData.rewards,
       skills: formData.skills || [], // Skills-Array verwenden oder leerlassen
       startDate: formData.startDate,
-      endDate: formData.endDate,
+      dueDate: formData.dueDate,
     };
   }
 
@@ -182,8 +186,24 @@ export class TodoDetailComponent implements OnInit {
       rewards: formData.rewards ?? 0,
       skills: formData.skills ?? [],
       startDate: formData.startDate,
-      endDate: formData.endDate,
+      dueDate: formData.dueDate,
       isCompleted: formData.isCompleted ?? false,
     };
   }
+
+  private formatDate(date: string | Date): string {
+    if (!date) return ''; // Falls `null` oder `undefined`, gibt es einen leeren String zurück
+
+    // Falls es schon ein Date-Objekt ist, direkt umwandeln
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0]; // Konvertiert in "YYYY-MM-DD"
+    }
+
+    // Falls es ein String ist, zuerst in ein Date-Objekt umwandeln
+    const parsedDate = new Date(date);
+    return parsedDate.toISOString().split('T')[0];
+  }
+
+
+
 }
