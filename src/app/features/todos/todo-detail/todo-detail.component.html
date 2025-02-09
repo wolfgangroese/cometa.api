@@ -1,0 +1,64 @@
+<div class="todo-form" [formGroup]="todoForm">
+  <h4>Todolist</h4>
+
+  <div class="form-group">
+    <div class="input-container">
+    <p-floatLabel>
+      <input pInputText id="name" type="text"  formControlName="name" required />
+      <label for="name">Name</label>
+    </p-floatLabel>
+    </div>
+    <p class="error-message" *ngIf="todoForm.get('name')?.invalid && todoForm.get('name')?.touched">
+      Der Name ist erforderlich.
+    </p>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+    <p-floatLabel>
+      <textarea id="description" type="text" placeholder=" " formControlName="description"></textarea>
+      <label for="description">Description</label>
+    </p-floatLabel>
+    </div>
+  </div>
+
+
+
+  <div class="form-group">
+    <div class="input-container">
+    <p-floatLabel>
+      <input id="startDate" formControlName="startDate" type="date"/>
+      <label for="startDate">Start Date</label>
+    </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+    <p-floatLabel>
+      <input  id="dueDate" formControlName="dueDate" placeholder="" type="date"/>
+      <label for="dueDate">Due Date</label>
+    </p-floatLabel>
+  </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+      <p-floatLabel>
+        <input id="rewards" formControlName="rewards"/>
+        <label for="rewards">Rewards</label>
+      </p-floatLabel>
+    </div>
+    <div class="input-container">
+      <p-checkbox id="isCompleted" formControlName="isCompleted" [binary]="true"></p-checkbox>
+      <label for="isCompleted" class="checkbox-label">Completed</label>
+    </div>
+  </div>
+
+<p-buttonGroup>
+  <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTodo()" severity="help" [disabled]="todoForm.invalid"></p-button>
+  <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTodo()" severity="success"></p-button>
+  <p-button label="List" icon="pi pi-list" [rounded]="true" (click)="goBack()" severity="secondary"></p-button>
+  <p-button label="Delete" icon="pi pi-trash" [rounded]="true" (click)="deleteTodo()" severity="danger"></p-button>
+</p-buttonGroup>
+</div>
