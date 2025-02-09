@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Cometa.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,14 @@ builder.Services.AddDbContext<CometaDbContext>(options =>
         b => b.MigrationsAssembly("Cometa.Persistence"))); 
 
 // Add Identity services for ApplicationUser
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+    })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CometaDbContext>()
     .AddDefaultTokenProviders();
+
 
 // Überprüfung des SecretKeys, um null zu vermeiden
 var secretKey = builder.Configuration["Jwt:SecretKey"];
@@ -41,7 +47,11 @@ if (string.IsNullOrEmpty(secretKey))
 }
 
 // Authentifizierung und JWT Token (optional, falls du JWT verwenden möchtest)
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false;
@@ -52,9 +62,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) // Hier wird der SecretKey jetzt sicher verwendet
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+            NameClaimType = ClaimTypes.NameIdentifier
         };
     });
+
 
 // Swagger/OpenAPI konfigurieren
 builder.Services.AddEndpointsApiExplorer();
@@ -107,14 +119,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
+
 app.UseCors("AllowAngularApp");
 
-app.UseHttpsRedirection();
-
-// Authentifizierung und Autorisierung in der Middleware einfügen
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseHttpsRedirection();
+
 app.MapControllers();
+
 
 app.Run();
