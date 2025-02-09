@@ -1,47 +1,45 @@
-<div *ngIf="todoForm; else loading" xmlns="http://www.w3.org/1999/html" class="todo-item" [formGroup]="todoForm">
+<div *ngIf="todoForm; else loading" class="todo-item" [formGroup]="todoForm">
   <div class="todo-content">
+
     <div class="form-group">
-      <label for="name">Name:</label>
-      <input id="name" type="text" placeholder=" " formControlName="name" />
+      <input id="name" type="text" formControlName="name" pInputText required />
+      <label for="name">Name</label>
       <p class="error-message" *ngIf="todoForm.get('name')?.invalid && todoForm.get('name')?.touched">
         Der Name ist erforderlich.
       </p>
     </div>
 
     <div class="form-group">
-      <label for="description">Description:</label>
-      <textarea id="description" placeholder="Description" formControlName="description"></textarea>
+      <textarea id="description" formControlName="description"  ></textarea>
+      <label for="description">Description</label>
     </div>
 
     <div class="form-group">
-      <label for="rewards">Reward:</label>
-      <p-inputNumber id="rewards" formControlName="rewards" placeholder="coins"></p-inputNumber>
+      <p-inputNumber id="rewards" formControlName="rewards" required></p-inputNumber>
+      <label for="rewards">Reward (Coins)</label>
     </div>
 
     <div class="form-group">
-      <label for="skills">Skills (comma-separated):</label>
-      <input id="skills" type="text" placeholder="Skills" formControlName="skills" />
+      <input id="skills" type="text" formControlName="skills" />
+      <label for="skills">Skills (comma-separated)</label>
     </div>
 
     <div class="form-group">
-      <label for="startDate">Start Date:</label>
       <p-calendar id="startDate" formControlName="startDate" dateFormat="yy-mm-dd"></p-calendar>
+      <label for="startDate">Start Date</label>
     </div>
 
     <div class="form-group">
-      <label for="endDate">Deadline:</label>
       <p-calendar id="endDate" formControlName="endDate" dateFormat="yy-mm-dd"></p-calendar>
+      <label for="endDate">Deadline</label>
     </div>
 
-    <div class="form-group">
-      <label for="status">Status:</label>
-      <p-dropdown
-        id="status"
-        formControlName="isCompleted"
-        [options]="statusOptions"
-        placeholder="Select Status"
-      ></p-dropdown>
+    <div class="form-group checkbox-group">
+      <p-checkbox id="isCompleted" formControlName="isCompleted" [binary]="true"></p-checkbox>
+      <label for="isCompleted" class="checkbox-label">Completed</label>
     </div>
+
+
   </div>
 
   <!-- Buttons -->

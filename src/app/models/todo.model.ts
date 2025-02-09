@@ -1,6 +1,5 @@
 export type UUID = string;
 
-// Modell für das Erstellen eines neuen Todos
 export interface CreateTodoDto {
   name: string; // Name ist erforderlich
   description?: string;
@@ -11,7 +10,6 @@ export interface CreateTodoDto {
   endDate?: Date | null;
 }
 
-// Modell für das Aktualisieren eines bestehenden Todos
 export interface UpdateTodoDto {
   name: string;
   description?: string;
@@ -20,10 +18,9 @@ export interface UpdateTodoDto {
   endDate?: Date | null;
   rewards?: number;
   skills?: string[]; // Array von Skill-Namen
-  isCompleted: boolean;
+  isCompleted?: boolean;
 }
 
-// Modell für ein vollständiges Todo (z. B. das, was du vom Backend empfängst)
 export interface Todo {
   id: UUID; // Einzigartige ID des Todos
   name: string;
@@ -33,7 +30,7 @@ export interface Todo {
   endDate?: Date | null;
   rewards?: number;
   skills?: string[]; // Array von Skill-Namen
-  isCompleted: boolean;
+  isCompleted?: boolean;
   parentTodoId?: UUID;
   subTodos?: Todo[]; // Verschachtelte Todos
 }

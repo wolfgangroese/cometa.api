@@ -11,6 +11,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from "primeng/checkbox";
+import { InputTextareaModule } from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-todo-detail',
@@ -28,15 +30,13 @@ import { DropdownModule } from 'primeng/dropdown';
     DropdownModule,
     FormsModule,
     ReactiveFormsModule,
+    CheckboxModule,
+    InputTextareaModule,
   ],
 })
 export class TodoDetailComponent implements OnInit {
   todoForm!: FormGroup;
   todoId: string | undefined;
-  statusOptions = [
-    { label: 'Completed', value: true },
-    { label: 'Not Completed', value: false },
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -54,7 +54,7 @@ export class TodoDetailComponent implements OnInit {
       skills: [[]], // Initialisiere Skills als leeres Array
       startDate: [null],
       endDate: [null],
-      isCompleted: [null],
+      isCompleted: [false],
     });
 
     this.todoId = this.route.snapshot.paramMap.get('id') || '';
@@ -69,8 +69,8 @@ export class TodoDetailComponent implements OnInit {
         this.todoForm.patchValue({
           name: todo.name,
           description: todo.description,
-          rewards: todo.rewards,
-          skills: todo.skills || [], // Skills als Array initialisieren
+          rewards: todo.rewards ?? 0,
+          skills: todo.skills ?? [],
           startDate: todo.startDate ? new Date(todo.startDate) : null,
           endDate: todo.endDate ? new Date(todo.endDate) : null,
           isCompleted: todo.isCompleted,
@@ -112,8 +112,11 @@ export class TodoDetailComponent implements OnInit {
     }
   }
 
+
   updateTodo(): void {
     if (this.todoForm.valid) {
+      console.log("✅ Formular-Werte vor dem Speichern:", this.todoForm.value);
+      console.log("🛑 Hat das Formular 'isCompleted'?", this.todoForm.contains('isCompleted'));
       const updatedTodo: UpdateTodoDto = this.prepareUpdateTodoData();
       this.todoService.updateTodo(this.todoId!, updatedTodo).subscribe({
         next: () => {
@@ -176,11 +179,11 @@ export class TodoDetailComponent implements OnInit {
     return {
       name: formData.name,
       description: formData.description,
-      rewards: formData.rewards,
-      skills: formData.skills || [],
+      rewards: formData.rewards ?? 0,
+      skills: formData.skills ?? [],
       startDate: formData.startDate,
       endDate: formData.endDate,
-      isCompleted: formData.isCompleted,
+      isCompleted: formData.isCompleted ?? false,
     };
   }
 }
