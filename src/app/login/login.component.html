@@ -1,0 +1,38 @@
+<div class="login-form" [formGroup]="loginForm">
+  <p-card header="Login" class="p-mb-4">
+    <div class="form-group">
+      <div class="input-container">
+        <input
+          id="email"
+          type="email"
+          placeholder=""
+          formControlName="email"
+        />
+        <label for="email">E-Mail-Adresse</label>
+      </div>
+      <p class="error-message" *ngIf="email?.invalid && email?.touched">
+        Geben Sie bitte eine gültige E-Mail-Adresse ein.
+      </p>
+    </div>
+
+    <div class="form-group">
+      <div class="input-container">
+        <input
+          id="password"
+          type="password"
+          placeholder=" "
+          formControlName="password"
+        />
+        <label for="password">Passwort</label>
+      </div>
+      <p class="error-message" *ngIf="password?.invalid && password?.touched">
+        Passwort muss mindestens 6 Zeichen enthalten.
+      </p>
+    </div>
+
+    <button (click)="login()" class="submit-button" [disabled]="loginForm.invalid">
+      Anmelden
+    </button>
+  </p-card>
+  <p-toast></p-toast>
+</div>

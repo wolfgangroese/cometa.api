@@ -16,6 +16,7 @@ import { FormsModule} from "@angular/forms";
 import { InputTextModule } from "primeng/inputtext";
 import { CalendarModule } from "primeng/calendar";
 import { NewTodoComponent } from "./features/new-todo/new-todo.component";
+import {AuthService} from "./services/auth.service";
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { NewTodoComponent } from "./features/new-todo/new-todo.component";
   ],
   providers: [
     TodoService,
+    AuthService,
   provideHttpClient()
   ],
 })

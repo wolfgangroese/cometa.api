@@ -1,1 +1,7 @@
-<p>account works! yeah</p>
+<div *ngIf="currentUser">
+  <p>Willkommen, {{ currentUser?.userName }}!</p>
+</div>
+<div *ngIf="!currentUser">
+  <p>Bitte melde dich erst an.</p>
+  <a routerLink="/login">Login</a>
+</div>
