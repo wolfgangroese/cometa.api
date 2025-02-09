@@ -31,7 +31,10 @@ public class Todos : ControllerBase
             Description = todo.Description,
             StartDate = todo.StartDate,
             DueDate = todo.DueDate,
-            Skills = todo.Skills.Select(s => s.Name).ToList() // Nur Skill-Namen zurückgeben
+            Skills = todo.Skills.Select(s => s.Name).ToList(), // Nur Skill-Namen zurückgeben
+            IsCompleted = todo.IsCompleted ?? false,
+            Rewards = todo.Rewards ?? 0
+
         });
 
         return Ok(todoDtos);
@@ -56,7 +59,10 @@ public class Todos : ControllerBase
             Description = todo.Description,
             StartDate = todo.StartDate,
             DueDate = todo.DueDate,
-            Skills = todo.Skills.Select(s => s.Name).ToList()
+            Skills = todo.Skills.Select(s => s.Name).ToList(),
+            IsCompleted = todo.IsCompleted ?? false,
+            Rewards = todo.Rewards ?? 0
+
         };
 
         return Ok(todoDto);
@@ -76,7 +82,10 @@ public class Todos : ControllerBase
             Description = newTodoDto.Description,
             StartDate = newTodoDto.StartDate,
             DueDate = newTodoDto.DueDate,
-            Skills = newTodoDto.Skills.Select(skillName => new Skill { Name = skillName }).ToList()
+            IsCompleted = newTodoDto.IsCompleted,
+            Skills = newTodoDto.Skills.Select(skillName => new Skill { Name = skillName }).ToList(),
+            Rewards = newTodoDto.Rewards
+
         };
 
         _context.Todos.Add(newTodo);
@@ -104,11 +113,16 @@ public class Todos : ControllerBase
             return NotFound(new { message = $"Todo with ID {id} not found." });
         }
 
+        Console.WriteLine($"🔄 UpdateTodo: isCompleted = {updatedTodoDto.IsCompleted}");
+
+        
         // Aktualisieren der Felder
         existingTodo.Name = updatedTodoDto.Name;
         existingTodo.Description = updatedTodoDto.Description;
         existingTodo.StartDate = updatedTodoDto.StartDate;
         existingTodo.DueDate = updatedTodoDto.DueDate;
+        existingTodo.IsCompleted = updatedTodoDto.IsCompleted;
+        existingTodo.Rewards = updatedTodoDto.Rewards;
 
         // Skills aktualisieren
         if (updatedTodoDto.Skills != null)
