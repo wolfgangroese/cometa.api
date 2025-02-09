@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError, ReplaySubject } from 'rxjs';
+import { Observable, throwError, ReplaySubject } from 'rxjs';
 import { environment } from '../../environments/environment.dev';
 import { catchError, tap } from 'rxjs/operators';
 import { RegisterDto } from '../models/dtos/register.dto';
@@ -26,7 +26,6 @@ export class AuthService {
   login(loginData: LoginDto): Observable<{ token: string; user: User }> {
     return this.http.post<{ token: string; user: User }>(`${this.apiUrl}/login`, loginData).pipe(
       tap((response) => {
-        console.log('API-Login-response:', response);
         this.saveToken(response.token);
         this.setCurrentUser(response.user);
       }),
@@ -35,40 +34,42 @@ export class AuthService {
   }
 
   setCurrentUser(user: User | null): void {
-    console.log('🔍 setCurrentUser speichert:', user);
+    if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user)); // 🛠 Speichert User in localStorage
+    } else {
+      localStorage.removeItem('currentUser'); // Löscht User, wenn ausgeloggt
+    }
     this.currentUserSubject.next(user);
-    console.log('🟢 Aktueller Wert in BehaviorSubject:', this.currentUserSubject.asObservable());
   }
+
 
 
   saveToken(token: string): void {
     localStorage.setItem('jwtToken', token);
   }
 
-  getCurrentUser(): Observable<User | null> {
-    return this.currentUserSubject.asObservable();
-  }
-
   loadUserFromToken(): void {
     const token = localStorage.getItem('jwtToken');
+
     if (token) {
-      this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+      const headers = { Authorization: `Bearer ${token}` };
+
+      this.http.get<User>(`${this.apiUrl}/me`, { headers }).subscribe({
         next: (user) => {
           this.setCurrentUser(user);
         },
-        error: () => {
+        error: (err) => {
+          console.error('Fehler beim Laden des Benutzers:', err);
           this.logout();
         },
       });
     }
   }
 
-
   logout(): void {
     localStorage.removeItem('jwtToken');
     this.setCurrentUser(null);
   }
-
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     return throwError(() => new Error(error.message || 'Fehler beim Authentifizieren.'));

@@ -1,6 +1,7 @@
 <div *ngIf="currentUser">
-  <p>Willkommen, {{ currentUser.username }}!</p>
+  <p>Willkommen, {{ currentUser?.userName }}!</p>
 </div>
 <div *ngIf="!currentUser">
-  <p>Bitte melden Sie sich an.</p>
+  <p>Bitte melde dich erst an.</p>
+  <a routerLink="/login">Login</a>
 </div>

@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
 import {NgIf} from "@angular/common";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
   imports: [
-    NgIf
+    NgIf,
+    RouterLink
   ],
   standalone: true
 })
@@ -19,7 +21,6 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe((user) => {
-      console.log('📥 AccountComponent empfängt Benutzer:', user);
       this.currentUser = user;
     });
   }
