@@ -25,7 +25,7 @@ export class FooterComponent implements OnInit {
       { label: 'Home', icon: 'pi pi-home', routerLink: ['/home'] },
       { label: 'Todos', icon: 'pi pi-check-circle', routerLink: ['/todos'] },
       { label: 'New Todo', icon: 'pi pi-plus', routerLink: ['/todo/new'] },
-      { label: 'Nachrichten', icon: 'pi pi-envelope', routerLink: ['/nachrichten'] },
+      { label: 'News', icon: 'pi pi-envelope', routerLink: ['/news'] },
       { label: 'Search', icon: 'pi pi-search', routerLink: ['/search'] },
       { label: 'Account', icon: 'pi pi-user', routerLink: ['/account'] }
     ];

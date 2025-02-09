@@ -1,1 +1,6 @@
-<p>account works! yeah</p>
+<div *ngIf="currentUser">
+  <p>Willkommen, {{ currentUser.username }}!</p>
+</div>
+<div *ngIf="!currentUser">
+  <p>Bitte melden Sie sich an.</p>
+</div>

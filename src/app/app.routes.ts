@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: 'todo/new', component: NewTodoComponent },
   { path: 'todo/:id', component: TodoDetailComponent },
   { path: 'search', component: SearchComponent },
-  { path: 'nachrichten', component: NewsComponent },
+  { path: 'news', component: NewsComponent },
   { path: 'account', component: AccountComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];

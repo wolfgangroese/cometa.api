@@ -1,52 +1,76 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { environment } from '../../environments/environment.dev'; // Umgebungsvariablen für die API-URL
-import { catchError } from 'rxjs/operators';
-import { RegisterDto } from '../models/dtos/register.dto'; // Importiere die Modelle für die Authentifizierung
+import { Observable, BehaviorSubject, throwError, ReplaySubject } from 'rxjs';
+import { environment } from '../../environments/environment.dev';
+import { catchError, tap } from 'rxjs/operators';
+import { RegisterDto } from '../models/dtos/register.dto';
 import { LoginDto } from '../models/dtos/login.dto';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = `${environment.api.baseUrl}/auth`; // Endpunkt für Auth (Login und Registrierung)
+  private apiUrl = `${environment.api.baseUrl}/auth`;
+  private currentUserSubject = new ReplaySubject<User | null>(1);
+  currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  // Registrierung
   register(registerData: RegisterDto): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, registerData).pipe(
-      catchError(this.handleError) // Fehlerbehandlung
+      catchError(this.handleError)
     );
   }
 
-  // Anmeldung
-  login(loginData: LoginDto): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
-      catchError(this.handleError) // Fehlerbehandlung
+  login(loginData: LoginDto): Observable<{ token: string; user: User }> {
+    return this.http.post<{ token: string; user: User }>(`${this.apiUrl}/login`, loginData).pipe(
+      tap((response) => {
+        console.log('API-Login-response:', response);
+        this.saveToken(response.token);
+        this.setCurrentUser(response.user);
+      }),
+      catchError(this.handleError)
     );
   }
 
-  // Token speichern
+  setCurrentUser(user: User | null): void {
+    console.log('🔍 setCurrentUser speichert:', user);
+    this.currentUserSubject.next(user);
+    console.log('🟢 Aktueller Wert in BehaviorSubject:', this.currentUserSubject.asObservable());
+  }
+
+
   saveToken(token: string): void {
     localStorage.setItem('jwtToken', token);
   }
 
-  // Token abrufen
-  getToken(): string | null {
-    return localStorage.getItem('jwtToken');
+  getCurrentUser(): Observable<User | null> {
+    return this.currentUserSubject.asObservable();
   }
 
-  // Token löschen (Logout)
+  loadUserFromToken(): void {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+        next: (user) => {
+          this.setCurrentUser(user);
+        },
+        error: () => {
+          this.logout();
+        },
+      });
+    }
+  }
+
+
   logout(): void {
     localStorage.removeItem('jwtToken');
+    this.setCurrentUser(null);
   }
 
-  // Fehlerbehandlung
+
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('Ein Fehler ist aufgetreten:', error); // Fehlerausgabe im Debugging
-    const errorMessage = error?.message || 'Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut.';
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => new Error(error.message || 'Fehler beim Authentifizieren.'));
   }
 }

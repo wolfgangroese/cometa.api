@@ -60,13 +60,13 @@ export class LoginComponent {
     this.authService.login(loginData).subscribe({
       next: (response: any) => {
         this.authService.saveToken(response.token);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/home']);
       },
       error: (error) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Login fehlgeschlagen',
-          detail: error?.message || 'Ungültige Anmeldedaten',
+          summary: 'Login failed',
+          detail: error?.message || 'Invalid credentials',
           life: 3000,
         });
       },
