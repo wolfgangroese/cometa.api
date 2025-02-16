@@ -64,3 +64,22 @@ textarea:not(:placeholder-shown) + label {
 }
 
 
+.custom-label {
+  display: block;  /* Macht das Label zu einem Blockelement */
+  font-weight: normal;
+  margin-bottom: 5px;  /* Abstand zwischen Label und Dropdown */
+  color: #007bff;  /* Falls du die gleiche Farbe für alle Labels willst */
+}
+
+.custom-dropdown {
+  width: 100%;  /* Damit das Dropdown die gleiche Breite hat wie die anderen Felder */
+}
+.date-group {
+  display: flex;
+  gap: 20px; /* Abstand zwischen den Feldern */
+}
+
+.date-group .input-container {
+  flex: 1;  /* Beide Felder bekommen die gleiche Breite */
+  min-width: 150px; /* Damit sie nicht zu schmal werden */
+}

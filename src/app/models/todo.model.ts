@@ -1,5 +1,10 @@
 export type UUID = string;
-
+export enum TodoStatus {
+  Done = 0,
+  InProgress = 1,
+  Blocked = 2,
+  Waiting = 3,
+}
 export interface CreateTodoDto {
   name: string; // Name ist erforderlich
   description?: string;
@@ -8,6 +13,7 @@ export interface CreateTodoDto {
   rewards?: number;
   skills?: string[]; // Array von Skill-Namen
   endDate?: Date | null;
+  status?: TodoStatus;
 }
 
 export interface UpdateTodoDto {
@@ -19,6 +25,7 @@ export interface UpdateTodoDto {
   rewards?: number;
   skills?: string[]; // Array von Skill-Namen
   isCompleted?: boolean;
+  status?: TodoStatus;
 }
 
 export interface Todo {
@@ -33,4 +40,5 @@ export interface Todo {
   isCompleted?: boolean;
   parentTodoId?: UUID;
   subTodos?: Todo[]; // Verschachtelte Todos
+  status?: TodoStatus;
 }
