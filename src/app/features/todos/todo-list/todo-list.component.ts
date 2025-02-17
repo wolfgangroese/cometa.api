@@ -7,13 +7,16 @@ import {CheckboxModule} from "primeng/checkbox";
 import {TableModule} from "primeng/table";
 import {TagModule} from "primeng/tag";
 import {Button} from "primeng/button";
+import {DropdownModule} from "primeng/dropdown";
+import {PaginatorModule} from "primeng/paginator";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-todo-list',
     standalone: true,
     templateUrl: './todo-list.component.html',
     styleUrls: ['./todo-list.component.scss'],
-  imports: [CommonModule, RouterLink, CheckboxModule, TableModule, TagModule, Button]
+  imports: [CommonModule, RouterLink, CheckboxModule, TableModule, TagModule, Button, DropdownModule, PaginatorModule, ReactiveFormsModule]
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
@@ -34,4 +37,17 @@ export class TodoListComponent implements OnInit {
       }
     });
   }
+
+  getStatusLabel(status: number): string {
+    const statusMap: Record<number, string> = {
+      0: 'Done',
+      1: 'In Progress',
+      2: 'Blocked',
+      3: 'Waiting'
+    };
+
+    return statusMap[status] ?? 'Unknown';
+  }
+
+
 }

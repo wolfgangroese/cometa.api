@@ -6,6 +6,7 @@
       <th scope="col">Start Date</th>
       <th scope="col">Deadline</th>
       <th scope="col">Completed</th>
+      <th scope="col">Status</th>
     </tr>
   </ng-template>
 
@@ -21,6 +22,7 @@
         <p-tag *ngIf="todo.isCompleted" severity="success" value="Yes"></p-tag>
         <p-tag *ngIf="!todo.isCompleted" severity="warning" value="No"></p-tag>
       </td>
+      <td>{{ getStatusLabel(todo.status) }}</td>
     </tr>
   </ng-template>
 </p-table>

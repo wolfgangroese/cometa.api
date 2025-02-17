@@ -190,7 +190,7 @@ export class TodoDetailComponent implements OnInit {
       skills: formData.skills || [], // Skills-Array verwenden oder leerlassen
       startDate: formData.startDate,
       dueDate: formData.dueDate,
-      status: formData.status || TodoStatus.Waiting,
+      status: formData.status ? Object.keys(TodoStatus).indexOf(formData.status) : 0,
     };
   }
 
