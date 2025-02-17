@@ -15,31 +15,31 @@ export class TodoService {
 
   getTodos(): Observable<Todo[]> {
     return this.http.get<Todo[]>(this.apiUrl).pipe(
-      catchError(this.handleError) // Fehlerbehandlung
+      catchError(this.handleError)
     );
   }
 
   getTodoById(id: string): Observable<Todo> {
     return this.http.get<Todo>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError) // Fehlerbehandlung
+      catchError(this.handleError)
     );
   }
 
   addTodo(todo: CreateTodoDto): Observable<Todo> {
     return this.http.post<Todo>(this.apiUrl, todo).pipe(
-      catchError(this.handleError) // Fehlerbehandlung
+      catchError(this.handleError)
     );
   }
 
   updateTodo(id: string, todo: UpdateTodoDto): Observable<Todo> {
     return this.http.put<Todo>(`${this.apiUrl}/${id}`, todo).pipe(
-      catchError(this.handleError) // Fehlerbehandlung
+      catchError(this.handleError)
     );
   }
 
   deleteTodo(id: string): Observable<null> {
     return this.http.delete<null>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError) // Fehlerbehandlung
+      catchError(this.handleError)
     );
   }
 

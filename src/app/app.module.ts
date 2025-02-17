@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { TodoListComponent } from './features/todos/todo-list/todos-list.component';
+import { TodoListComponent } from './features/todos/todo-list/todo-list.component';
 import { TodoService } from './services/todo.service';
 import { AppRoutingModule } from './app.routes';
 import { HeaderComponent } from './shell/header/header.component';

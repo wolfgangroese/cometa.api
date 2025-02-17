@@ -16,6 +16,14 @@ import { InputTextareaModule } from "primeng/inputtextarea";
 import {ButtonGroupModule} from "primeng/buttongroup";
 import {FloatLabelModule} from "primeng/floatlabel";
 
+
+enum TodoStatus {
+  Done = 'Done',
+  InProgress = 'InProgress',
+  Blocked = 'Blocked',
+  Waiting = 'Waiting',
+}
+
 @Component({
   selector: 'app-todo-detail',
   standalone: true,
@@ -41,6 +49,7 @@ import {FloatLabelModule} from "primeng/floatlabel";
 export class TodoDetailComponent implements OnInit {
   todoForm!: FormGroup;
   todoId: string | undefined;
+  statusOptions = Object.values(TodoStatus);
 
   constructor(
     private fb: FormBuilder,
@@ -54,6 +63,7 @@ export class TodoDetailComponent implements OnInit {
     this.todoForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
+      status: [''],
       rewards: [0],
       skills: [[]], // Initialisiere Skills als leeres Array
       startDate: [null],
@@ -78,6 +88,11 @@ export class TodoDetailComponent implements OnInit {
           startDate: todo.startDate ? this.formatDate(todo.startDate) : null,
           dueDate: todo.dueDate ? this.formatDate(todo.dueDate) : null,
           isCompleted: todo.isCompleted,
+          status: todo.status !== undefined && todo.status !== null
+            ? Object.values(TodoStatus)[todo.status]
+            : TodoStatus.Waiting,
+
+
         });
       },
       error: (err) => {
@@ -175,6 +190,7 @@ export class TodoDetailComponent implements OnInit {
       skills: formData.skills || [], // Skills-Array verwenden oder leerlassen
       startDate: formData.startDate,
       dueDate: formData.dueDate,
+      status: formData.status ? Object.keys(TodoStatus).indexOf(formData.status) : 0,
     };
   }
 
@@ -188,6 +204,7 @@ export class TodoDetailComponent implements OnInit {
       startDate: formData.startDate,
       dueDate: formData.dueDate,
       isCompleted: formData.isCompleted ?? false,
+      status: formData.status ? Object.keys(TodoStatus).indexOf(formData.status) : 0,
     };
   }
 
