@@ -1,35 +1,35 @@
-.todo-list {
+.task-list {
   padding: 10px;
   background-color: #f9f9f9;
   border-radius: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.todo-item {
+.task-item {
   font-family: 'Avenir Next', serif;
   font-size: 1.2rem;
   text-align: left;
 }
 
-.todo-total-count {
+.task-total-count {
   font-size: 2em;
   font-weight: bold;
   margin-bottom: 5px;
   color: olivedrab;
 }
 
-.todo-link {
+.task-link {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
 }
 
-.todo-link:hover {
+.task-link:hover {
   text-decoration: underline;
   color: #2f88e1;
 }
 .completed-icon {
-  color: green; // Icon-Farbe für abgeschlossene Todos
+  color: green; // Icon-Farbe für abgeschlossene Tasks
   margin-left: 8px; // Abstand zum Text
   font-size: 1.2rem; // Größe anpassen
 }

@@ -4,9 +4,9 @@ import { HomeComponent } from './features/home/home.component';
 import { SearchComponent } from './features/search/search.component';
 import { NewsComponent} from './features/news/news.component';
 import { AccountComponent } from './features/account/account.component';
-import { TodoListComponent } from "./features/todos/todo-list/todo-list.component";
-import { TodoDetailComponent } from "./features/todos/todo-detail/todo-detail.component";
-import { NewTodoComponent } from "./features/todos/new-todo/new-todo.component";
+import { TaskListComponent } from "./features/tasks/task-list/task-list.component";
+import { TaskDetailComponent } from "./features/tasks/task-detail/task-detail.component";
+import { NewTaskComponent } from "./features/tasks/new-task/new-task.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 
@@ -15,9 +15,9 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'todos', component: TodoListComponent },
-  { path: 'todo/new', component: NewTodoComponent },
-  { path: 'todo/:id', component: TodoDetailComponent },
+  { path: 'tasks', component: TaskListComponent },
+  { path: 'task/new', component: NewTaskComponent },
+  { path: 'task/:id', component: TaskDetailComponent },
   { path: 'search', component: SearchComponent },
   { path: 'news', component: NewsComponent },
   { path: 'account', component: AccountComponent },

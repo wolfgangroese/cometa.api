@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TodoService } from '../../../services/todo.service';
-import { CreateTodoDto, UpdateTodoDto } from '../../../models/todo.model';
+import { TaskService } from '../../../services/task.service';
+import { CreateTaskDto, UpdateTaskDto } from '../../../models/task.model';
 import { Button, ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -17,7 +17,7 @@ import {ButtonGroupModule} from "primeng/buttongroup";
 import {FloatLabelModule} from "primeng/floatlabel";
 
 
-enum TodoStatus {
+enum TaskStatus {
   Done = 'Done',
   InProgress = 'InProgress',
   Blocked = 'Blocked',
@@ -25,10 +25,10 @@ enum TodoStatus {
 }
 
 @Component({
-  selector: 'app-todo-detail',
+  selector: 'app-task-detail',
   standalone: true,
-  templateUrl: './todo-detail.component.html',
-  styleUrls: ['./todo-detail.component.scss'],
+  templateUrl: './task-detail.component.html',
+  styleUrls: ['./task-detail.component.scss'],
   imports: [
     CommonModule,
     Button,
@@ -46,21 +46,21 @@ enum TodoStatus {
     FloatLabelModule,
   ],
 })
-export class TodoDetailComponent implements OnInit {
-  todoForm!: FormGroup;
-  todoId: string | undefined;
-  statusOptions = Object.values(TodoStatus);
+export class TaskDetailComponent implements OnInit {
+  taskForm!: FormGroup;
+  taskId: string | undefined;
+  statusOptions = Object.values(TaskStatus);
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private todoService: TodoService,
+    private taskService: TaskService,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
-    this.todoForm = this.fb.group({
+    this.taskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       status: [''],
@@ -71,60 +71,60 @@ export class TodoDetailComponent implements OnInit {
       isCompleted: [false],
     });
 
-    this.todoId = this.route.snapshot.paramMap.get('id') || '';
-    if (this.todoId) {
-      this.loadTodo();
+    this.taskId = this.route.snapshot.paramMap.get('id') || '';
+    if (this.taskId) {
+      this.loadTask();
     }
   }
 
-  loadTodo(): void {
-    this.todoService.getTodoById(this.todoId!).subscribe({
-      next: (todo) => {
-        this.todoForm.patchValue({
-          name: todo.name,
-          description: todo.description,
-          rewards: todo.rewards ?? 0,
-          skills: todo.skills ?? [],
-          startDate: todo.startDate ? this.formatDate(todo.startDate) : null,
-          dueDate: todo.dueDate ? this.formatDate(todo.dueDate) : null,
-          isCompleted: todo.isCompleted,
-          status: todo.status !== undefined && todo.status !== null
-            ? Object.values(TodoStatus)[todo.status]
-            : TodoStatus.Waiting,
+  loadTask(): void {
+    this.taskService.getTaskById(this.taskId!).subscribe({
+      next: (task) => {
+        this.taskForm.patchValue({
+          name: task.name,
+          description: task.description,
+          rewards: task.rewards ?? 0,
+          skills: task.skills ?? [],
+          startDate: task.startDate ? this.formatDate(task.startDate) : null,
+          dueDate: task.dueDate ? this.formatDate(task.dueDate) : null,
+          isCompleted: task.isCompleted,
+          status: task.status !== undefined && task.status !== null
+            ? Object.values(TaskStatus)[task.status]
+            : TaskStatus.Waiting,
 
 
         });
       },
       error: (err) => {
-        console.error('Fehler beim Laden der Todo:', err);
+        console.error('Fehler beim Laden der Task:', err);
       },
     });
   }
 
   goBack(): void {
-    this.router.navigate(['/todos']).catch((error) =>
-      console.error('Fehler beim Navigieren zur Todo-Liste:', error)
+    this.router.navigate(['/tasks']).catch((error) =>
+      console.error('Fehler beim Navigieren zur Task-Liste:', error)
     );
   }
 
-  addTodo(): void {
-    if (this.todoForm.valid) {
-      const newTodo: CreateTodoDto = this.prepareCreateTodoData();
-      this.todoService.addTodo(newTodo).subscribe({
+  addTask(): void {
+    if (this.taskForm.valid) {
+      const newTask: CreateTaskDto = this.prepareCreateTaskData();
+      this.taskService.addTask(newTask).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Erfolg',
-            detail: 'Neues Todo erfolgreich erstellt!',
+            detail: 'Neues Task erfolgreich erstellt!',
           });
           this.goBack();
         },
         error: (err) => {
-          console.error('Fehler beim Erstellen des Todos:', err);
+          console.error('Fehler beim Erstellen des Tasks:', err);
           this.messageService.add({
             severity: 'error',
             summary: 'Fehler',
-            detail: 'Das Todo konnte nicht erstellt werden.',
+            detail: 'Das Task konnte nicht erstellt werden.',
           });
         },
       });
@@ -132,57 +132,57 @@ export class TodoDetailComponent implements OnInit {
   }
 
 
-  updateTodo(): void {
-    if (this.todoForm.valid) {
-      console.log("✅ Formular-Werte vor dem Speichern:", this.todoForm.value);
-      console.log("🛑 Hat das Formular 'isCompleted'?", this.todoForm.contains('isCompleted'));
-      const updatedTodo: UpdateTodoDto = this.prepareUpdateTodoData();
-      this.todoService.updateTodo(this.todoId!, updatedTodo).subscribe({
+  updateTask(): void {
+    if (this.taskForm.valid) {
+      console.log("✅ Formular-Werte vor dem Speichern:", this.taskForm.value);
+      console.log("🛑 Hat das Formular 'isCompleted'?", this.taskForm.contains('isCompleted'));
+      const updatedTask: UpdateTaskDto = this.prepareUpdateTaskData();
+      this.taskService.updateTask(this.taskId!, updatedTask).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Erfolg',
-            detail: 'Todo erfolgreich aktualisiert!',
+            detail: 'Task erfolgreich aktualisiert!',
           });
           this.goBack();
         },
         error: (err) => {
-          console.error('Fehler beim Aktualisieren des Todos:', err);
+          console.error('Fehler beim Aktualisieren des Tasks:', err);
           this.messageService.add({
             severity: 'error',
             summary: 'Fehler',
-            detail: 'Das Todo konnte nicht aktualisiert werden.',
+            detail: 'Das Task konnte nicht aktualisiert werden.',
           });
         },
       });
     }
   }
 
-  deleteTodo(): void {
-    if (this.todoId) {
-      this.todoService.deleteTodo(this.todoId).subscribe({
+  deleteTask(): void {
+    if (this.taskId) {
+      this.taskService.deleteTask(this.taskId).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Erfolg',
-            detail: 'Todo erfolgreich gelöscht!',
+            detail: 'Task erfolgreich gelöscht!',
           });
           this.goBack();
         },
         error: (err) => {
-          console.error('Fehler beim Löschen des Todos:', err);
+          console.error('Fehler beim Löschen des Tasks:', err);
           this.messageService.add({
             severity: 'error',
             summary: 'Fehler',
-            detail: 'Das Todo konnte nicht gelöscht werden.',
+            detail: 'Das Task konnte nicht gelöscht werden.',
           });
         },
       });
     }
   }
 
-  private prepareCreateTodoData(): CreateTodoDto {
-    const formData = this.todoForm.value;
+  private prepareCreateTaskData(): CreateTaskDto {
+    const formData = this.taskForm.value;
     return {
       name: formData.name,
       description: formData.description,
@@ -190,12 +190,12 @@ export class TodoDetailComponent implements OnInit {
       skills: formData.skills || [], // Skills-Array verwenden oder leerlassen
       startDate: formData.startDate,
       dueDate: formData.dueDate,
-      status: formData.status ? Object.keys(TodoStatus).indexOf(formData.status) : 0,
+      status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
     };
   }
 
-  private prepareUpdateTodoData(): UpdateTodoDto {
-    const formData = this.todoForm.value;
+  private prepareUpdateTaskData(): UpdateTaskDto {
+    const formData = this.taskForm.value;
     return {
       name: formData.name,
       description: formData.description,
@@ -204,7 +204,7 @@ export class TodoDetailComponent implements OnInit {
       startDate: formData.startDate,
       dueDate: formData.dueDate,
       isCompleted: formData.isCompleted ?? false,
-      status: formData.status ? Object.keys(TodoStatus).indexOf(formData.status) : 0,
+      status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
     };
   }
 

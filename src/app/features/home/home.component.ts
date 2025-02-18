@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { Todo } from "../../models/todo.model";
-import { TodoService } from "../../services/todo.service";
+import { Task } from "../../models/task.model";
+import { TaskService } from "../../services/task.service";
 import { RouterLink } from "@angular/router";
 
 @Component({
@@ -12,30 +12,30 @@ import { RouterLink } from "@angular/router";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  todos: Todo[] = [];
+  tasks: Task[] = [];
   taskCount = 0;
 
-  constructor(private todoService: TodoService) { }
+  constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
-    this.loadTodos();
+    this.loadTasks();
   }
 
-  loadTodos(): void {
-    this.todoService.getTodos().subscribe({
+  loadTasks(): void {
+    this.taskService.getTasks().subscribe({
       next: (data) => {
-        this.todos = data;
+        this.tasks = data;
         this.updateTaskCount();
       },
       error: (err) => {
-        console.error('Failed to load todos', err);
-        this.todos = [];
-        this.taskCount = 0; // Keine Todos vorhanden
+        console.error('Failed to load tasks', err);
+        this.tasks = [];
+        this.taskCount = 0; // Keine Tasks vorhanden
       }
     });
   }
 
   private updateTaskCount(): void {
-    this.taskCount = this.todos.filter(todo => !todo.isCompleted).length;
+    this.taskCount = this.tasks.filter(task => !task.isCompleted).length;
   }
 }

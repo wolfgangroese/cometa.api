@@ -1,5 +1,5 @@
 {
-  "todos": [
+  "tasks": [
     {
       "id": 1,
       "title": "buy tea and milk",
@@ -61,13 +61,13 @@
       "id": 1,
       "name": "Max Mustermann",
       "role": "admin",
-      "todos": [1, 2]
+      "tasks": [1, 2]
     },
     {
       "id": 2,
       "name": "Erna Musterfrau",
       "role": "user",
-      "todos": [3]
+      "tasks": [3]
     }
   ]
 }

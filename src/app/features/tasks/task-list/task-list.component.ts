@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TodoService } from '../../../services/todo.service';
-import { Todo } from '../../../models/todo.model';
+import { TaskService } from '../../../services/task.service';
+import { Task } from '../../../models/task.model';
 import {RouterLink} from "@angular/router";
 import {CheckboxModule} from "primeng/checkbox";
 import {TableModule} from "primeng/table";
@@ -12,28 +12,28 @@ import {PaginatorModule} from "primeng/paginator";
 import {ReactiveFormsModule} from "@angular/forms";
 
 @Component({
-    selector: 'app-todo-list',
+    selector: 'app-task-list',
     standalone: true,
-    templateUrl: './todo-list.component.html',
-    styleUrls: ['./todo-list.component.scss'],
+    templateUrl: './task-list.component.html',
+    styleUrls: ['./task-list.component.scss'],
   imports: [CommonModule, RouterLink, CheckboxModule, TableModule, TagModule, Button, DropdownModule, PaginatorModule, ReactiveFormsModule]
 })
-export class TodoListComponent implements OnInit {
-  todos: Todo[] = [];
+export class TaskListComponent implements OnInit {
+  tasks: Task[] = [];
 
-  constructor(private todoService: TodoService) { }
+  constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
-    this.loadTodos();
+    this.loadTasks();
   }
 
-  loadTodos(): void {
-    this.todoService.getTodos().subscribe({
-      next: (todos) => {
-        this.todos = todos;
+  loadTasks(): void {
+    this.taskService.getTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks;
       },
       error: (err) => {
-        console.error('Fehler beim Laden der Todos:', err);
+        console.error('Fehler beim Laden der Tasks:', err);
       }
     });
   }
