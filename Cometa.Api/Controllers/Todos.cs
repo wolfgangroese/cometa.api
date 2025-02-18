@@ -31,9 +31,10 @@ public class Todos : ControllerBase
             Description = todo.Description,
             StartDate = todo.StartDate,
             DueDate = todo.DueDate,
-            Skills = todo.Skills.Select(s => s.Name).ToList(), // Nur Skill-Namen zurückgeben
+            Skills = todo.Skills?.Select(s => s.Name ?? string.Empty).ToList() ?? new List<string>(), 
             IsCompleted = todo.IsCompleted ?? false,
-            Rewards = todo.Rewards ?? 0
+            Rewards = todo.Rewards ?? 0,
+            Status = todo.TodoStatus
 
         });
 
@@ -59,10 +60,11 @@ public class Todos : ControllerBase
             Description = todo.Description,
             StartDate = todo.StartDate,
             DueDate = todo.DueDate,
-            Skills = todo.Skills.Select(s => s.Name).ToList(),
+            Skills = todo.Skills?.Select(s => s.Name ?? string.Empty).ToList() ?? new List<string>(), 
             IsCompleted = todo.IsCompleted ?? false,
-            Rewards = todo.Rewards ?? 0
-
+            Rewards = todo.Rewards ?? 0,
+            Status = todo.TodoStatus
+            
         };
 
         return Ok(todoDto);
@@ -84,8 +86,8 @@ public class Todos : ControllerBase
             DueDate = newTodoDto.DueDate,
             IsCompleted = newTodoDto.IsCompleted,
             Skills = newTodoDto.Skills.Select(skillName => new Skill { Name = skillName }).ToList(),
-            Rewards = newTodoDto.Rewards
-
+            Rewards = newTodoDto.Rewards,
+            TodoStatus = newTodoDto.Status
         };
 
         _context.Todos.Add(newTodo);
@@ -123,6 +125,7 @@ public class Todos : ControllerBase
         existingTodo.DueDate = updatedTodoDto.DueDate;
         existingTodo.IsCompleted = updatedTodoDto.IsCompleted;
         existingTodo.Rewards = updatedTodoDto.Rewards;
+        existingTodo.TodoStatus = updatedTodoDto.Status;
 
         // Skills aktualisieren
         if (updatedTodoDto.Skills != null)

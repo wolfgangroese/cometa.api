@@ -1,3 +1,5 @@
+using Cometa.Persistence.Enums;
+
 namespace Cometa.Api.DTOs;
 
 public class TodoDto
@@ -10,4 +12,5 @@ public class TodoDto
     public List<string> Skills { get; set; } = new(); // Keine nullable Items in der Liste
     public bool IsCompleted { get; set; } // Standardmäßig false
     public int Rewards { get; set; } // Anzahl der Belohnungen
+    public TodoStatus Status { get; set; } = TodoStatus.Waiting;
 }
