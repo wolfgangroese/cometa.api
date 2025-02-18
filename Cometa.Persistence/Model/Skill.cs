@@ -13,15 +13,23 @@ public class Skill : BaseEntity
 
     public Prevalence Prevalence { get; set; } = Prevalence.None; // Standardwert
 
-    public ICollection<Todo> Todos { get; set; } = new List<Todo>();
+    // ❌ Entfernt: Direkte Many-to-Many Beziehung zu TaskEntity
+    // public ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
 
-    public void AddTodo(Todo todo)
+    // ✅ Korrekt: Beziehung über TaskSkill
+    public ICollection<TaskSkill> TaskSkills { get; set; } = new List<TaskSkill>();
+
+    public void AddTask(TaskEntity taskEntity)
     {
-        Todos.Add(todo);
+        TaskSkills.Add(new TaskSkill { Task = taskEntity, Skill = this });
     }
 
-    public void RemoveTodo(Todo todo)
+    public void RemoveTask(TaskEntity taskEntity)
     {
-        Todos.Remove(todo);
+        var taskSkill = TaskSkills.FirstOrDefault(ts => ts.Task == taskEntity);
+        if (taskSkill != null)
+        {
+            TaskSkills.Remove(taskSkill);
+        }
     }
 }

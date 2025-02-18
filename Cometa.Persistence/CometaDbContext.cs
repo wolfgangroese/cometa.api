@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Cometa.Persistence.Model;
 
+// Verwende TaskEntity anstatt Task, um Konflikte mit System.Threading.Tasks.Task zu vermeiden
+
 namespace Cometa.Persistence;
 
 // Erweiterung des DbContext für Identity
@@ -12,91 +14,74 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    public DbSet<Todo> Todos { get; set; }
+    // ✅ KORREKT: Nur EINE DbSet-Definition pro Modell
+    public DbSet<TaskEntity> Tasks { get; set; }
     public DbSet<Skill> Skills { get; set; }
-
-    // Füge ApplicationUser als DbSet hinzu
-    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    public DbSet<TaskSkill> TaskSkills { get; set; } // 🔹 Neu hinzugefügt
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Identity-Tabellen konfigurieren
 
-        // Self-Referencing Beziehungen für Todos
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.ParentTodo)
+        // ✅ Self-Referencing Beziehungen für Tasks
+        modelBuilder.Entity<TaskEntity>()
+            .HasOne(t => t.ParentTask)
             .WithMany()
-            .HasForeignKey(t => t.ParentTodoId)
+            .HasForeignKey(t => t.ParentTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.ChildTodo)
+        modelBuilder.Entity<TaskEntity>()
+            .HasOne(t => t.ChildTask)
             .WithMany()
-            .HasForeignKey(t => t.ChildTodoId)
+            .HasForeignKey(t => t.ChildTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.NextTodo)
+        modelBuilder.Entity<TaskEntity>()
+            .HasOne(t => t.NextTask)
             .WithMany()
-            .HasForeignKey(t => t.NextTodoId)
+            .HasForeignKey(t => t.NextTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.PreviousTodo)
+        modelBuilder.Entity<TaskEntity>()
+            .HasOne(t => t.PreviousTask)
             .WithMany()
-            .HasForeignKey(t => t.PreviousTodoId)
+            .HasForeignKey(t => t.PreviousTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Todo -> Skills Beziehung
-        modelBuilder.Entity<Todo>()
-            .HasMany(t => t.Skills)
-            .WithMany(s => s.Todos)
-            .UsingEntity<Dictionary<string, object>>(
-                "TodoSkill",
-                j => j.HasOne<Skill>()
-                      .WithMany()
-                      .HasForeignKey("SkillId")
-                      .OnDelete(DeleteBehavior.Cascade),
-                j => j.HasOne<Todo>()
-                      .WithMany()
-                      .HasForeignKey("TodoId")
-                      .OnDelete(DeleteBehavior.Cascade)
-            );
+        // ✅ Many-to-Many-Verknüpfung über `TaskSkill`
+        modelBuilder.Entity<TaskSkill>()
+            .HasKey(ts => new { ts.TaskId, ts.SkillId });
 
-        // Indizes für die Zwischentabelle TodoSkill
-        modelBuilder.Entity("TodoSkill")
-            .HasIndex("SkillId")
-            .HasDatabaseName("IX_TodoSkill_SkillId");
+        modelBuilder.Entity<TaskSkill>()
+            .HasOne(ts => ts.Task)  // ✅ Hier korrekt!
+            .WithMany(t => t.TaskSkills)
+            .HasForeignKey(ts => ts.TaskId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity("TodoSkill")
-            .HasIndex("TodoId")
-            .HasDatabaseName("IX_TodoSkill_TodoId");
+        modelBuilder.Entity<TaskSkill>()
+            .HasOne(ts => ts.Skill)  // ✅ Hier korrekt!
+            .WithMany(s => s.TaskSkills)
+            .HasForeignKey(ts => ts.SkillId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        // Optionale Indizes für Performance
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.ParentTodoId)
-            .HasDatabaseName("IX_Todos_ParentTodoId");
+        // ✅ Indizes für Performance
+        modelBuilder.Entity<TaskSkill>()
+            .HasIndex(ts => ts.SkillId)
+            .HasDatabaseName("IX_TaskSkill_SkillId");
 
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.ChildTodoId)
-            .HasDatabaseName("IX_Todos_ChildTodoId");
-
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.NextTodoId)
-            .HasDatabaseName("IX_Todos_NextTodoId");
-
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.PreviousTodoId)
-            .HasDatabaseName("IX_Todos_PreviousTodoId");
+        modelBuilder.Entity<TaskSkill>()
+            .HasIndex(ts => ts.TaskId)
+            .HasDatabaseName("IX_TaskSkill_TaskId");
     }
-    
+
+    // ✅ KORREKT: SaveChanges & SaveChangesAsync ohne Konflikte mit .NET Task
     public override int SaveChanges()
     {
         ConvertDatesToUtc();
         return base.SaveChanges();
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override System.Threading.Tasks.Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         ConvertDatesToUtc();
         return base.SaveChangesAsync(cancellationToken);
@@ -105,31 +90,22 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
     private void ConvertDatesToUtc()
     {
         foreach (var entry in ChangeTracker.Entries()
-                     .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
+                 .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
         {
-            foreach (var property in entry.Properties)
+            foreach (var property in entry.Properties
+                 .Where(p => p.Metadata.ClrType == typeof(DateTime) || p.Metadata.ClrType == typeof(DateTime?)))
             {
-                if (property.Metadata.ClrType == typeof(DateTime) || property.Metadata.ClrType == typeof(DateTime?))
+                if (property.CurrentValue is DateTime dt)
                 {
-                    var currentValue = property.CurrentValue as DateTime?;
-
-                    if (currentValue.HasValue)
-                    {
-                        // Konvertiere ALLE DateTime-Werte zu UTC, auch wenn sie schon Local sind
-                        property.CurrentValue = currentValue.Value.ToUniversalTime();
-                    }
+                    property.CurrentValue = dt.Kind == DateTimeKind.Utc ? dt : dt.ToUniversalTime();
                 }
             }
         }
     }
-
 }
 
-// Benutzerklasse erweitern für zusätzliche Felder
+// ✅ KORREKT: Benutzerklasse mit Identity
 public class ApplicationUser : IdentityUser
 {
-    public string FullName { get; set; } = "Initial Admin"; // Beispiel für ein benutzerdefiniertes Feld
+    public string FullName { get; set; } = string.Empty;
 }
-
-
-
