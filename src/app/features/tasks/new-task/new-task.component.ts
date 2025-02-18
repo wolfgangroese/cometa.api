@@ -8,15 +8,15 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { PanelModule } from "primeng/panel";
-import { Todo } from "../../../models/todo.model";
-import { TodoService } from "../../../services/todo.service";
+import { Task } from "../../../models/task.model";
+import { TaskService } from "../../../services/task.service";
 import { Router } from "@angular/router";
 import { InputTextareaModule } from "primeng/inputtextarea";
 
 @Component({
-  selector: 'app-new-todo',
-  templateUrl: './new-todo.component.html',
-  styleUrls: ['./new-todo.component.scss'],
+  selector: 'app-new-task',
+  templateUrl: './new-task.component.html',
+  styleUrls: ['./new-task.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -31,19 +31,19 @@ import { InputTextareaModule } from "primeng/inputtextarea";
   ],
   providers: [
     MessageService,
-    TodoService,
+    TaskService,
   ],
 })
-export class NewTodoComponent {
-  todoForm: FormGroup;
+export class NewTaskComponent {
+  taskForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private todoService: TodoService,
+    private taskService: TaskService,
     private messageService: MessageService
   ) {
-    this.todoForm = this.fb.group({
+    this.taskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       startDate: [this.getTodayDate()],  // Standardwert: Heute
@@ -54,20 +54,20 @@ export class NewTodoComponent {
   }
 
   onSubmit(): void {
-    if (this.todoForm.valid) {
-      const newTodo: Todo = this.prepareTodoData(); // Daten vorbereiten
-      console.log('📤 Gesendete Daten:', newTodo); // Debugging
+    if (this.taskForm.valid) {
+      const newTask: Task = this.prepareTaskData(); // Daten vorbereiten
+      console.log('📤 Gesendete Daten:', newTask); // Debugging
 
-      this.todoService.addTodo(newTodo).subscribe({
+      this.taskService.addTask(newTask).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Erfolg',
-            detail: 'Todo wurde erfolgreich erstellt!',
+            detail: 'Task wurde erfolgreich erstellt!',
           });
 
           // Formular zurücksetzen und Standardwerte beibehalten
-          this.todoForm.reset({
+          this.taskForm.reset({
             name: '',
             description: '',
             startDate: this.getTodayDate(),
@@ -80,7 +80,7 @@ export class NewTodoComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Fehler',
-            detail: 'Das Todo konnte nicht gespeichert werden.',
+            detail: 'Das Task konnte nicht gespeichert werden.',
           });
         },
       });
@@ -88,13 +88,13 @@ export class NewTodoComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['/todos']).catch((error) =>
-      console.error('Fehler beim Navigieren zur Todo-Liste:', error)
+    this.router.navigate(['/tasks']).catch((error) =>
+      console.error('Fehler beim Navigieren zur Task-Liste:', error)
     );
   }
 
-  private prepareTodoData(): Todo {
-    const formData = this.todoForm.value;
+  private prepareTaskData(): Task {
+    const formData = this.taskForm.value;
     return {
       ...formData,
       startDate: this.convertDate(formData.startDate),

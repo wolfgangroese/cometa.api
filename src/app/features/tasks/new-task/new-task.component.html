@@ -1,12 +1,12 @@
-<div class="todo-form" [formGroup]="todoForm">
-  <h4>Neues Todo erstellen</h4>
+<div class="task-form" [formGroup]="taskForm">
+  <h4>Neues Task erstellen</h4>
 
   <div class="form-group">
     <div class="input-container">
       <input id="name" type="text" placeholder=" " formControlName="name" pInputText required/>
       <label for="name">Name</label>
     </div>
-    <p class="error-message" *ngIf="todoForm.get('name')?.invalid && todoForm.get('name')?.touched">
+    <p class="error-message" *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
       Der Name ist erforderlich und muss mindestens 3 Zeichen lang sein.
     </p>
   </div>
@@ -32,8 +32,8 @@
     </div>
   </div>
 
-  <button (click)="onSubmit()" class="submit-button" [disabled]="todoForm.invalid">Todo erstellen</button>
-  <button (click)="goBack()" class="back-button">Back to Todo List</button>
+  <button (click)="onSubmit()" class="submit-button" [disabled]="taskForm.invalid">Task erstellen</button>
+  <button (click)="goBack()" class="back-button">Back to Task List</button>
 </div>
 
 <p-toast></p-toast>

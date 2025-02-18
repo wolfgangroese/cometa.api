@@ -1,43 +1,43 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Todo, CreateTodoDto, UpdateTodoDto } from '../models/todo.model';
+import { Task, CreateTaskDto, UpdateTaskDto } from '../models/task.model';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment.dev'; // Automatisches Ersetzen
 
 @Injectable({
   providedIn: 'root',
 })
-export class TodoService {
-  private apiUrl = `${environment.api.baseUrl}/todos`; // Endpunkt für Todos
+export class TaskService {
+  private apiUrl = `${environment.api.baseUrl}/tasks`; // Endpunkt für Tasks
 
   constructor(private http: HttpClient) {}
 
-  getTodos(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.apiUrl).pipe(
+  getTasks(): Observable<Task[]> {
+    return this.http.get<Task[]>(this.apiUrl).pipe(
       catchError(this.handleError)
     );
   }
 
-  getTodoById(id: string): Observable<Todo> {
-    return this.http.get<Todo>(`${this.apiUrl}/${id}`).pipe(
+  getTaskById(id: string): Observable<Task> {
+    return this.http.get<Task>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
-  addTodo(todo: CreateTodoDto): Observable<Todo> {
-    return this.http.post<Todo>(this.apiUrl, todo).pipe(
+  addTask(task: CreateTaskDto): Observable<Task> {
+    return this.http.post<Task>(this.apiUrl, task).pipe(
       catchError(this.handleError)
     );
   }
 
-  updateTodo(id: string, todo: UpdateTodoDto): Observable<Todo> {
-    return this.http.put<Todo>(`${this.apiUrl}/${id}`, todo).pipe(
+  updateTask(id: string, task: UpdateTaskDto): Observable<Task> {
+    return this.http.put<Task>(`${this.apiUrl}/${id}`, task).pipe(
       catchError(this.handleError)
     );
   }
 
-  deleteTodo(id: string): Observable<null> {
+  deleteTask(id: string): Observable<null> {
     return this.http.delete<null>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
@@ -59,7 +59,7 @@ export class TodoService {
           errorMessage = 'Nicht autorisiert. Bitte melden Sie sich an.';
           break;
         case 404:
-          errorMessage = 'Todo nicht gefunden.';
+          errorMessage = 'Task nicht gefunden.';
           break;
         case 500:
           errorMessage = 'Interner Serverfehler. Bitte versuchen Sie es später erneut.';

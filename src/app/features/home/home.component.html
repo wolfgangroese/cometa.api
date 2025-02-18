@@ -1,12 +1,12 @@
 <div>
-  <p class="todo-total-count">{{ taskCount }} open Tasks</p>
+  <p class="task-total-count">{{ taskCount }} open Tasks</p>
 </div>
 
-<p *ngFor="let todo of todos" class="todo-item">
-  <a [routerLink]="['/todo', todo.id]" class="todo-link">
-    <h5 class="todo-title">
-      {{ todo.name }}
-      <i *ngIf="todo.isCompleted" class="pi pi-check-circle completed-icon"></i>
+<p *ngFor="let task of tasks" class="task-item">
+  <a [routerLink]="['/task', task.id]" class="task-link">
+    <h5 class="task-title">
+      {{ task.name }}
+      <i *ngIf="task.isCompleted" class="pi pi-check-circle completed-icon"></i>
     </h5>
   </a>
 </p>

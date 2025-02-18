@@ -1,5 +1,5 @@
-<div class="todo-form" [formGroup]="todoForm">
-  <h4>Todolist</h4>
+<div class="task-form" [formGroup]="taskForm">
+  <h4>Tasklist</h4>
 
   <div class="form-group">
     <div class="input-container">
@@ -8,7 +8,7 @@
       <label for="name">Name</label>
     </p-floatLabel>
     </div>
-    <p class="error-message" *ngIf="todoForm.get('name')?.invalid && todoForm.get('name')?.touched">
+    <p class="error-message" *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
       Der Name ist erforderlich.
     </p>
   </div>
@@ -67,9 +67,9 @@
     </div>
   </div>
 <p-buttonGroup>
-  <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTodo()" severity="help" [disabled]="todoForm.invalid"></p-button>
-  <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTodo()" severity="success"></p-button>
+  <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTask()" severity="help" [disabled]="taskForm.invalid"></p-button>
+  <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTask()" severity="success"></p-button>
   <p-button label="List" icon="pi pi-list" [rounded]="true" (click)="goBack()" severity="secondary"></p-button>
-  <p-button label="Delete" icon="pi pi-trash" [rounded]="true" (click)="deleteTodo()" severity="danger"></p-button>
+  <p-button label="Delete" icon="pi pi-trash" [rounded]="true" (click)="deleteTask()" severity="danger"></p-button>
 </p-buttonGroup>
 </div>
