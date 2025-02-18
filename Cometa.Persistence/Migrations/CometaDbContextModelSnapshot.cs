@@ -129,13 +129,13 @@ namespace Cometa.Persistence.Migrations
                     b.ToTable("Skills");
                 });
 
-            modelBuilder.Entity("Cometa.Persistence.Model.Todo", b =>
+            modelBuilder.Entity("Cometa.Persistence.Model.Task", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChildTodoId")
+                    b.Property<Guid?>("ChildTaskId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CompletedDate")
@@ -188,17 +188,17 @@ namespace Cometa.Persistence.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("character varying(120)");
 
-                    b.Property<Guid?>("NextTodoId")
+                    b.Property<Guid?>("NextTaskId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<Guid?>("ParentTodoId")
+                    b.Property<Guid?>("ParentTaskId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("PreviousTodoId")
+                    b.Property<Guid?>("PreviousTaskId")
                         .HasColumnType("uuid");
 
                     b.Property<int?>("Priority")
@@ -213,24 +213,24 @@ namespace Cometa.Persistence.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("TodoStatus")
+                    b.Property<int>("TaskStatus")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChildTodoId")
-                        .HasDatabaseName("IX_Todos_ChildTodoId");
+                    b.HasIndex("ChildTaskId")
+                        .HasDatabaseName("IX_Tasks_ChildTaskId");
 
-                    b.HasIndex("NextTodoId")
-                        .HasDatabaseName("IX_Todos_NextTodoId");
+                    b.HasIndex("NextTaskId")
+                        .HasDatabaseName("IX_Tasks_NextTaskId");
 
-                    b.HasIndex("ParentTodoId")
-                        .HasDatabaseName("IX_Todos_ParentTodoId");
+                    b.HasIndex("ParentTaskId")
+                        .HasDatabaseName("IX_Tasks_ParentTaskId");
 
-                    b.HasIndex("PreviousTodoId")
-                        .HasDatabaseName("IX_Todos_PreviousTodoId");
+                    b.HasIndex("PreviousTaskId")
+                        .HasDatabaseName("IX_Tasks_PreviousTaskId");
 
-                    b.ToTable("Todos");
+                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -365,54 +365,54 @@ namespace Cometa.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TodoSkill", b =>
+            modelBuilder.Entity("TaskSkill", b =>
                 {
                     b.Property<Guid>("SkillId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TodoId")
+                    b.Property<Guid>("TaskId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("SkillId", "TodoId");
+                    b.HasKey("SkillId", "TaskId");
 
                     b.HasIndex("SkillId")
-                        .HasDatabaseName("IX_TodoSkill_SkillId");
+                        .HasDatabaseName("IX_TaskSkill_SkillId");
 
-                    b.HasIndex("TodoId")
-                        .HasDatabaseName("IX_TodoSkill_TodoId");
+                    b.HasIndex("TaskId")
+                        .HasDatabaseName("IX_TaskSkill_TaskId");
 
-                    b.ToTable("TodoSkill");
+                    b.ToTable("TaskSkill");
                 });
 
-            modelBuilder.Entity("Cometa.Persistence.Model.Todo", b =>
+            modelBuilder.Entity("Cometa.Persistence.Model.Task", b =>
                 {
-                    b.HasOne("Cometa.Persistence.Model.Todo", "ChildTodo")
+                    b.HasOne("Cometa.Persistence.Model.Task", "ChildTask")
                         .WithMany()
-                        .HasForeignKey("ChildTodoId")
+                        .HasForeignKey("ChildTaskId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Cometa.Persistence.Model.Todo", "NextTodo")
+                    b.HasOne("Cometa.Persistence.Model.Task", "NextTask")
                         .WithMany()
-                        .HasForeignKey("NextTodoId")
+                        .HasForeignKey("NextTaskId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Cometa.Persistence.Model.Todo", "ParentTodo")
+                    b.HasOne("Cometa.Persistence.Model.Task", "ParentTask")
                         .WithMany()
-                        .HasForeignKey("ParentTodoId")
+                        .HasForeignKey("ParentTaskId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Cometa.Persistence.Model.Todo", "PreviousTodo")
+                    b.HasOne("Cometa.Persistence.Model.Task", "PreviousTask")
                         .WithMany()
-                        .HasForeignKey("PreviousTodoId")
+                        .HasForeignKey("PreviousTaskId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("ChildTodo");
+                    b.Navigation("ChildTask");
 
-                    b.Navigation("NextTodo");
+                    b.Navigation("NextTask");
 
-                    b.Navigation("ParentTodo");
+                    b.Navigation("ParentTask");
 
-                    b.Navigation("PreviousTodo");
+                    b.Navigation("PreviousTask");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -466,7 +466,7 @@ namespace Cometa.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TodoSkill", b =>
+            modelBuilder.Entity("TaskSkill", b =>
                 {
                     b.HasOne("Cometa.Persistence.Model.Skill", null)
                         .WithMany()
@@ -474,9 +474,9 @@ namespace Cometa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cometa.Persistence.Model.Todo", null)
+                    b.HasOne("Cometa.Persistence.Model.Task", null)
                         .WithMany()
-                        .HasForeignKey("TodoId")
+                        .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

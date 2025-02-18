@@ -1,6 +1,6 @@
 namespace Cometa.Api.DTOs;
 
-public class TodoDto
+public class TaskDto
 {
     public Guid Id { get; set; } // Eindeutige ID, Non-Nullable
     public required string Name { get; set; } // Name ist erforderlich

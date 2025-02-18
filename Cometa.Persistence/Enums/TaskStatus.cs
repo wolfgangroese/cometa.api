@@ -1,6 +1,6 @@
 namespace Cometa.Persistence.Enums;
 
-public enum TodoStatus
+public enum TaskStatus
 {
     Done, InProgress, Blocked, Waiting
 }

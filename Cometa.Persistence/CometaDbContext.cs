@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Cometa.Persistence.Model;
+using Task = Cometa.Persistence.Model.Task;
 
 namespace Cometa.Persistence;
 
@@ -12,7 +13,7 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    public DbSet<Todo> Todos { get; set; }
+    public DbSet<Task> Task { get; set; }
     public DbSet<Skill> Skills { get; set; }
 
     // Füge ApplicationUser als DbSet hinzu
@@ -22,72 +23,72 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder); // Identity-Tabellen konfigurieren
 
-        // Self-Referencing Beziehungen für Todos
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.ParentTodo)
+        // Self-Referencing Beziehungen für Tasks
+        modelBuilder.Entity<Task>()
+            .HasOne(t => t.ParentTask)
             .WithMany()
-            .HasForeignKey(t => t.ParentTodoId)
+            .HasForeignKey(t => t.ParentTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.ChildTodo)
+        modelBuilder.Entity<Task>()
+            .HasOne(t => t.ChildTask)
             .WithMany()
-            .HasForeignKey(t => t.ChildTodoId)
+            .HasForeignKey(t => t.ChildTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.NextTodo)
+        modelBuilder.Entity<Task>()
+            .HasOne(t => t.NextTask)
             .WithMany()
-            .HasForeignKey(t => t.NextTodoId)
+            .HasForeignKey(t => t.NextTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Todo>()
-            .HasOne(t => t.PreviousTodo)
+        modelBuilder.Entity<Task>()
+            .HasOne(t => t.PreviousTask)
             .WithMany()
-            .HasForeignKey(t => t.PreviousTodoId)
+            .HasForeignKey(t => t.PreviousTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Todo -> Skills Beziehung
-        modelBuilder.Entity<Todo>()
+        modelBuilder.Entity<Task>()
             .HasMany(t => t.Skills)
-            .WithMany(s => s.Todos)
+            .WithMany(s => s.Tasks)
             .UsingEntity<Dictionary<string, object>>(
-                "TodoSkill",
+                "TaskSkill",
                 j => j.HasOne<Skill>()
                       .WithMany()
                       .HasForeignKey("SkillId")
                       .OnDelete(DeleteBehavior.Cascade),
-                j => j.HasOne<Todo>()
+                j => j.HasOne<Task>()
                       .WithMany()
-                      .HasForeignKey("TodoId")
+                      .HasForeignKey("TaskId")
                       .OnDelete(DeleteBehavior.Cascade)
             );
 
-        // Indizes für die Zwischentabelle TodoSkill
-        modelBuilder.Entity("TodoSkill")
+        // Indizes für die Zwischentabelle TaskSkill
+        modelBuilder.Entity("TaskSkill")
             .HasIndex("SkillId")
-            .HasDatabaseName("IX_TodoSkill_SkillId");
+            .HasDatabaseName("IX_TaskSkill_SkillId");
 
-        modelBuilder.Entity("TodoSkill")
-            .HasIndex("TodoId")
-            .HasDatabaseName("IX_TodoSkill_TodoId");
+        modelBuilder.Entity("TaskSkill")
+            .HasIndex("TaskId")
+            .HasDatabaseName("IX_TaskSkill_TaskId");
 
         // Optionale Indizes für Performance
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.ParentTodoId)
-            .HasDatabaseName("IX_Todos_ParentTodoId");
+        modelBuilder.Entity<Task>()
+            .HasIndex(t => t.ParentTaskId)
+            .HasDatabaseName("IX_Tasks_ParentTaskId");
 
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.ChildTodoId)
-            .HasDatabaseName("IX_Todos_ChildTodoId");
+        modelBuilder.Entity<Task>()
+            .HasIndex(t => t.ChildTaskId)
+            .HasDatabaseName("IX_Tasks_ChildTaskId");
 
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.NextTodoId)
-            .HasDatabaseName("IX_Todos_NextTodoId");
+        modelBuilder.Entity<Task>()
+            .HasIndex(t => t.NextTaskId)
+            .HasDatabaseName("IX_Tasks_NextTaskId");
 
-        modelBuilder.Entity<Todo>()
-            .HasIndex(t => t.PreviousTodoId)
-            .HasDatabaseName("IX_Todos_PreviousTodoId");
+        modelBuilder.Entity<Task>()
+            .HasIndex(t => t.PreviousTaskId)
+            .HasDatabaseName("IX_Tasks_PreviousTaskId");
     }
     
     public override int SaveChanges()

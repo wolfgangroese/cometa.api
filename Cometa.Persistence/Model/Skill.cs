@@ -13,15 +13,15 @@ public class Skill : BaseEntity
 
     public Prevalence Prevalence { get; set; } = Prevalence.None; // Standardwert
 
-    public ICollection<Todo> Todos { get; set; } = new List<Todo>();
+    public ICollection<Task> Tasks { get; set; } = new List<Task>();
 
-    public void AddTodo(Todo todo)
+    public void AddTask(Task task)
     {
-        Todos.Add(todo);
+        Tasks.Add(task);
     }
 
-    public void RemoveTodo(Todo todo)
+    public void RemoveTask(Task task)
     {
-        Todos.Remove(todo);
+        Tasks.Remove(task);
     }
 }

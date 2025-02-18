@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using Cometa.Persistence.Enums;
+using TaskStatus = Cometa.Persistence.Enums.TaskStatus;
 
 namespace Cometa.Persistence.Model;
 
-public class Todo : BaseEntity
+public class Task : BaseEntity
 {
     [Required]
     [MaxLength(120)]
@@ -11,7 +12,7 @@ public class Todo : BaseEntity
     
     [MaxLength(500)]
     public string? Description { get; set; }
-    public TodoStatus TodoStatus { get; set; } = TodoStatus.Waiting;
+    public TaskStatus TaskStatus { get; set; } = TaskStatus.Waiting;
     public int? Priority { get; set; } 
     public int? Complexity { get; set; } 
     public ICollection<Skill> Skills { get; set; } = new List<Skill>();
@@ -31,17 +32,17 @@ public class Todo : BaseEntity
     public DateTime? CompletedDate { get; set; }
     public DateTime? EarliestStartDate { get; set; }
     
-    public Guid? ParentTodoId { get; set; }
-    public Todo? ParentTodo { get; set; } // Navigations-Property
+    public Guid? ParentTaskId { get; set; }
+    public Task? ParentTask { get; set; } // Navigations-Property
 
-    public Guid? ChildTodoId { get; set; }
-    public Todo? ChildTodo { get; set; } // Navigations-Property
+    public Guid? ChildTaskId { get; set; }
+    public Task? ChildTask { get; set; } // Navigations-Property
 
-    public Guid? NextTodoId { get; set; }
-    public Todo? NextTodo { get; set; } // Navigations-Property
+    public Guid? NextTaskId { get; set; }
+    public Task? NextTask { get; set; } // Navigations-Property
 
-    public Guid? PreviousTodoId { get; set; }
-    public Todo? PreviousTodo { get; set; } // Navigations-Property
+    public Guid? PreviousTaskId { get; set; }
+    public Task? PreviousTask { get; set; } // Navigations-Property
     
     [MaxLength(500)]
     public string? Notes { get; set; }
