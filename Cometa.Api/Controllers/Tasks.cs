@@ -3,8 +3,6 @@ using Cometa.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cometa.Api.DTOs;
-
-// Alias für die eigene Task-Klasse, um Konflikte mit System.Threading.Tasks.Task zu vermeiden
 using TaskEntity = Cometa.Persistence.Model.Task;
 
 namespace Cometa.Api.Controllers;
@@ -76,8 +74,7 @@ public class Tasks : ControllerBase
         {
             return BadRequest("Name is required");
         }
-
-
+        
         // Hier wird TaskEntity anstelle von Task verwendet
         var newTask = new TaskEntity
         {
@@ -105,8 +102,6 @@ public class Tasks : ControllerBase
         {
             return BadRequest("Invalid ID.");
         }
-
-
         var existingTask = await _context.Task
             .Include(t => t.Skills)
             .FirstOrDefaultAsync(t => t.Id == id);
@@ -132,8 +127,6 @@ public class Tasks : ControllerBase
         {
             existingTask.Skills.Add(new Skill { Name = skillName });
         }
-
-
         try
         {
             await _context.SaveChangesAsync();
