@@ -34,7 +34,7 @@ namespace Cometa.Api.Controllers
             {
                 await _userManager.AddToRoleAsync(user, "Performer");
 
-                var token = GenerateJwtToken(user);
+                var token = await GenerateJwtTokenAsync(user);
                 return Ok(new 
                 { 
                     Token = token, 
@@ -62,7 +62,7 @@ namespace Cometa.Api.Controllers
             if (!passwordValid)
                 return Unauthorized("Invalid credentials");
 
-            var token = GenerateJwtToken(user);
+            var token = await GenerateJwtTokenAsync(user);
             return Ok(new { Token = token, User = new { user.Id, user.UserName, user.Email } });
         }
 
@@ -88,14 +88,19 @@ namespace Cometa.Api.Controllers
         }
 
         // JWT Token generieren
-        private string GenerateJwtToken(ApplicationUser user)
+        private async Task<string> GenerateJwtTokenAsync(ApplicationUser user)
         {
-            var claims = new[]
+            // Basis-Claims
+            var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),  // ✅ Identity sucht mit `NameIdentifier`
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            // Rollen abrufen und als Claims hinzufügen
+            var roles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -110,6 +115,7 @@ namespace Cometa.Api.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
     }
 }

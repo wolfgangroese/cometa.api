@@ -16,10 +16,7 @@ public class TaskEntity : BaseEntity
     public int? Priority { get; set; } 
     public int? Complexity { get; set; } 
 
-    // ❌ Entfernen: Many-to-Many über direkte Skills-Verknüpfung
-    // public ICollection<Skill> Skills { get; set; } = new List<Skill>();
-
-    // ✅ Hinzufügen: Verknüpfung über `TaskSkill`
+  
     public ICollection<TaskSkill> TaskSkills { get; set; } = new List<TaskSkill>();
 
     [Range(0, int.MaxValue)]
@@ -31,7 +28,15 @@ public class TaskEntity : BaseEntity
     [Range(0, int.MaxValue)]
     public int? SpentTime { get; set; }
 
-    public DateTime? DueDate { get; set; }
+    private DateTime? _dueDate;
+
+    public DateTime? DueDate
+    {
+        get => _dueDate;
+        set => _dueDate = value != null ? DateTime.SpecifyKind(value.Value, DateTimeKind.Utc) : null;
+    }
+
+
     public DateTime? StartDate { get; set; } 
     public DateTime? EndDate { get; set; }
     public DateTime? CompletedDate { get; set; }
@@ -58,19 +63,11 @@ public class TaskEntity : BaseEntity
     
     public void AddSkill(Skill skill)
     {
-        // ❌ Entfernen: Direkte Manipulation der Skills-Liste
-        // Skills.Add(skill);
-
-        // ✅ Stattdessen `TaskSkill`-Verknüpfung hinzufügen
         TaskSkills.Add(new TaskSkill { Task = this, Skill = skill });
     }
 
     public void RemoveSkill(Skill skill)
     {
-        // ❌ Entfernen: Direkte Manipulation der Skills-Liste
-        // Skills.Remove(skill);
-
-        // ✅ Stattdessen `TaskSkill`-Eintrag entfernen
         var taskSkill = TaskSkills.FirstOrDefault(ts => ts.Skill == skill);
         if (taskSkill != null)
         {

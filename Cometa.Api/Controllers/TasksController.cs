@@ -3,21 +3,23 @@ using Cometa.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cometa.Api.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cometa.Api.Controllers;
 
 [ApiController]
 [Route("api/tasks")]
-public class Tasks : ControllerBase
+public class TasksController : ControllerBase
 {
     private readonly CometaDbContext _context;
 
-    public Tasks(CometaDbContext context)
+    public TasksController(CometaDbContext context)
     {
         _context = context;
     }
 
     [HttpGet(Name = "Tasks")]
+ //   [Authorize (Roles = "Admin,Staff,Performer")]
     public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasks()
     {
         var tasks = await _context.Tasks
@@ -44,6 +46,7 @@ public class Tasks : ControllerBase
     }
 
     [HttpGet("{id}", Name = "GetTaskById")]
+   // [Authorize (Roles = "Admin,Staff, Performer")]
     public async Task<ActionResult<TaskDto>> GetTaskById(Guid id)
     {
         var task = await _context.Tasks
@@ -76,6 +79,8 @@ public class Tasks : ControllerBase
 
     
     [HttpPost(Name = "CreateTask")]
+//    [Authorize (Roles = "Admin,Staff,Performer")]
+
     public async Task<ActionResult<TaskDto>> CreateTask([FromBody] TaskDto newTaskDto)
     {
         if (newTaskDto == null || string.IsNullOrEmpty(newTaskDto.Name))
@@ -114,6 +119,8 @@ public class Tasks : ControllerBase
     }
 
     [HttpPut("{id}", Name = "UpdateTask")]
+// [Authorize (Roles = "Admin,Staff")]
+
     public async Task<IActionResult> UpdateTask(Guid id, [FromBody] TaskDto updatedTaskDto)
     {
         if (updatedTaskDto == null || id == Guid.Empty)
@@ -131,17 +138,23 @@ public class Tasks : ControllerBase
             return NotFound(new { message = $"Task with ID {id} not found." });
         }
 
+        // ✅ Ensure DateTime values are converted to UTC
+        DateTime? ConvertToUtc(DateTime? date) =>
+            date.HasValue && date.Value.Kind == DateTimeKind.Unspecified 
+                ? DateTime.SpecifyKind(date.Value, DateTimeKind.Utc) 
+                : date;
+
         _context.TaskSkills.RemoveRange(existingTask.TaskSkills);
         existingTask.TaskSkills.Clear();
+
         existingTask.TaskStatus = updatedTaskDto.Status;
         existingTask.Name = updatedTaskDto.Name;
         existingTask.Description = updatedTaskDto.Description;
-        existingTask.StartDate = updatedTaskDto.StartDate;
-        existingTask.DueDate = updatedTaskDto.DueDate;
+        existingTask.StartDate = ConvertToUtc(updatedTaskDto.StartDate);  // ✅ Ensuring UTC
+        existingTask.DueDate = ConvertToUtc(updatedTaskDto.DueDate);      // ✅ Ensuring UTC
         existingTask.IsCompleted = updatedTaskDto.IsCompleted;
         existingTask.Rewards = updatedTaskDto.Rewards;
         existingTask.TaskSkills = new List<TaskSkill>();
-
 
         var updatedSkills = await _context.Skills
             .Where(s => updatedTaskDto.Skills.Contains(s.Name))
@@ -157,7 +170,10 @@ public class Tasks : ControllerBase
         return Ok(new { message = "Task updated successfully." });
     }
 
+
     [HttpDelete("{id}", Name = "DeleteTask")]
+   // [Authorize (Roles = "Admin,Staff")]
+
     public async Task<IActionResult> DeleteTask(Guid id)
     {
         if (id == Guid.Empty)
