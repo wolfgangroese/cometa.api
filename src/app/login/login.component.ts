@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../models/dtos/login.dto';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms'; // ReactiveFormsModule
@@ -22,6 +22,7 @@ import { CardModule } from 'primeng/card';  // Für p-card
     PasswordModule,
     CardModule,
     ReactiveFormsModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

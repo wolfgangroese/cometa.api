@@ -11,12 +11,13 @@ import { TaskDetailComponent } from "./features/tasks/task-detail/task-detail.co
 import { SearchComponent } from "./features/search/search.component";
 import { AccountComponent } from "./features/account/account.component";
 import { MenubarModule } from "primeng/menubar";
-import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClient, withInterceptors} from "@angular/common/http";
 import { FormsModule} from "@angular/forms";
 import { InputTextModule } from "primeng/inputtext";
 import { CalendarModule } from "primeng/calendar";
 import { NewTaskComponent } from "./features/tasks/new-task/new-task.component";
 import { AuthService } from "./services/auth.service";
+import {authInterceptor} from "./auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -42,7 +43,9 @@ import { AuthService } from "./services/auth.service";
   providers: [
     TaskService,
     AuthService,
-  provideHttpClient()
-  ],
+
+  provideHttpClient(
+    withInterceptors([authInterceptor])
+  )],
 })
 export class AppModule { }
