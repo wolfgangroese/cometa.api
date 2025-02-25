@@ -33,6 +33,11 @@
     <button (click)="login()" class="submit-button" [disabled]="loginForm.invalid">
       Anmelden
     </button>
+
+    <p class="register-link">
+      Noch kein Konto? <a routerLink="/register">Hier registrieren</a>
+    </p>
+
   </p-card>
   <p-toast></p-toast>
 </div>
