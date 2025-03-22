@@ -5,7 +5,7 @@ using Cometa.Persistence.Model;
 
 namespace Cometa.Persistence;
 
-public class CometaDbContext : IdentityDbContext<ApplicationUser>
+public class CometaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {
     public CometaDbContext(DbContextOptions<CometaDbContext> options) : base(options)
     {
@@ -19,6 +19,12 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder); 
 
+        modelBuilder.Entity<TaskEntity>()
+            .HasOne(t => t.Assignee)
+            .WithMany()
+            .HasForeignKey(t => t.AssigneeId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
         modelBuilder.Entity<TaskEntity>()
             .HasOne(t => t.ParentTask)
             .WithMany()
@@ -73,7 +79,7 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
         return base.SaveChanges();
     }
 
-    public override System.Threading.Tasks.Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         ConvertDatesToUtc();
         return base.SaveChangesAsync(cancellationToken);
@@ -103,9 +109,4 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser>
             }
         }
     }
-}
-
-public class ApplicationUser : IdentityUser
-{
-    public string FullName { get; set; } = string.Empty;
 }

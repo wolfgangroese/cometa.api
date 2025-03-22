@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Cometa.Persistence.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     {
         options.User.RequireUniqueEmail = true;
     })
-    .AddRoles<IdentityRole>()
+    .AddRoles<IdentityRole<Guid>>() // Explicitly use IdentityRole<Guid>
     .AddEntityFrameworkStores<CometaDbContext>()
     .AddDefaultTokenProviders();
 
@@ -78,7 +79,7 @@ var app = builder.Build();
 // Initialisiere Rollen und Admin-Benutzer bei App-Start
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(); // Verwende hier ApplicationUser
 
     string[] roles = new[] { "Admin", "Staff", "Performer" };
@@ -88,7 +89,7 @@ using (var scope = app.Services.CreateScope())
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            await roleManager.CreateAsync(new IdentityRole <Guid> {Name = role});
         }
     }
 
