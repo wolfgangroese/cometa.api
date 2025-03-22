@@ -183,17 +183,14 @@ export class TaskDetailComponent implements OnInit {
 
   private prepareCreateTaskData(): CreateTaskDto {
     const formData = this.taskForm.value;
-    const dueDate = formData.dueDate
-      ? new Date(formData.dueDate).toISOString()
-      :null;
     return {
       ...formData,
       name: formData.name,
       description: formData.description,
       rewards: formData.rewards,
       skills: formData.skills || [], // Skills-Array verwenden oder leerlassen
-      startDate: formData.startDate,
-      dueDate,
+      startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
+      dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
     };
   }
@@ -205,8 +202,8 @@ export class TaskDetailComponent implements OnInit {
       description: formData.description,
       rewards: formData.rewards ?? 0,
       skills: formData.skills ?? [],
-      startDate: formData.startDate,
-      dueDate: formData.dueDate,
+      startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
+      dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       isCompleted: formData.isCompleted ?? false,
       status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
     };

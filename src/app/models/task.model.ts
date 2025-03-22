@@ -8,20 +8,20 @@ export enum TaskStatus {
 export interface CreateTaskDto {
   name: string; // Name ist erforderlich
   description?: string;
-  startDate?: Date | null;
-  dueDate?: Date | null;
+  startDate?: string | null;
+  dueDate?: string | null;
   rewards?: number;
   skills?: string[]; // Array von Skill-Namen
-  endDate?: Date | null;
+  endDate?: string | null;
   status?: TaskStatus;
 }
 
 export interface UpdateTaskDto {
   name: string;
   description?: string;
-  startDate?: Date | null;
-  dueDate?: Date | null;
-  endDate?: Date | null;
+  startDate?: string | null;
+  dueDate?: string | null;
+  endDate?: string | null;
   rewards?: number;
   skills?: string[]; // Array von Skill-Namen
   isCompleted?: boolean;
@@ -32,9 +32,9 @@ export interface Task {
   id: UUID; // Einzigartige ID des Tasks
   name: string;
   description?: string;
-  startDate?: Date | null;
-  dueDate?: Date | null;
-  endDate?: Date | null;
+  startDate?: string | null;
+  dueDate?: string | null;
+  endDate?: string | null;
   rewards?: number;
   skills?: string[]; // Array von Skill-Namen
   isCompleted?: boolean;
