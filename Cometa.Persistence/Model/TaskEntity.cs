@@ -74,4 +74,7 @@ public class TaskEntity : BaseEntity
             TaskSkills.Remove(taskSkill);
         }
     }
+    [MaxLength(100)]
+    public Guid? AssigneeId { get; set; }
+    public ApplicationUser? Assignee { get; set; }
 }

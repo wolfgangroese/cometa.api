@@ -3,7 +3,6 @@ using Cometa.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cometa.Api.DTOs;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Cometa.Api.Controllers;
 
@@ -101,7 +100,7 @@ public class TasksController : ControllerBase
         };
 
         var existingSkills = await _context.Skills
-            .Where(s => newTaskDto.Skills.Contains(s.Name))
+            .Where(s => newTaskDto.Skills.Contains(s.Name ?? string.Empty))
             .ToListAsync();
 
         foreach (var skillName in newTaskDto.Skills)
@@ -157,7 +156,7 @@ public class TasksController : ControllerBase
         existingTask.TaskSkills = new List<TaskSkill>();
 
         var updatedSkills = await _context.Skills
-            .Where(s => updatedTaskDto.Skills.Contains(s.Name))
+            .Where(s => updatedTaskDto.Skills.Contains(s.Name ?? string.Empty))
             .ToListAsync();
 
         foreach (var skillName in updatedTaskDto.Skills)
