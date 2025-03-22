@@ -66,6 +66,21 @@
       ></p-dropdown>
     </div>
   </div>
+  <div class="form-group">
+    <div class="input-container">
+      <p-floatLabel>
+        <p-dropdown
+          id="assignedUser"
+          formControlName="assigneeId"
+          [options]="users"
+          optionLabel="userName"
+          optionValue="id"
+          placeholder="Select a user">
+        </p-dropdown>
+        <label for="assignedUser">Assigned User</label>
+      </p-floatLabel>
+    </div>
+  </div>
 <p-buttonGroup>
   <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTask()" severity="help" [disabled]="taskForm.invalid"></p-button>
   <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTask()" severity="success"></p-button>

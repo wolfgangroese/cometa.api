@@ -7,6 +7,7 @@
       <th scope="col">Deadline</th>
       <th scope="col">Completed</th>
       <th scope="col">Status</th>
+      <th scope="col">Assignee</th>
     </tr>
   </ng-template>
 
@@ -23,6 +24,7 @@
         <p-tag *ngIf="!task.isCompleted" severity="warning" value="No"></p-tag>
       </td>
       <td>{{ getStatusLabel(task.status) }}</td>
+      <td>{{ task.assigneeName || 'Unassigned' }}</td>
     </tr>
   </ng-template>
 </p-table>

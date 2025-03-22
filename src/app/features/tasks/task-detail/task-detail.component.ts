@@ -13,13 +13,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from "primeng/checkbox";
 import { InputTextareaModule } from "primeng/inputtextarea";
-import {ButtonGroupModule} from "primeng/buttongroup";
-import {FloatLabelModule} from "primeng/floatlabel";
+import { ButtonGroupModule } from "primeng/buttongroup";
+import { FloatLabelModule } from "primeng/floatlabel";
+import { UserService } from '../../../services/user.service';
+import { User } from "../../../models/user.model";
 
 
 enum TaskStatus {
   Done = 'Done',
-  InProgress = 'InProgress',
+  InProgress = 'In Progress',
   Blocked = 'Blocked',
   Waiting = 'Waiting',
 }
@@ -50,13 +52,15 @@ export class TaskDetailComponent implements OnInit {
   taskForm!: FormGroup;
   taskId: string | undefined;
   statusOptions = Object.values(TaskStatus);
+  users: User[] = [];
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -69,12 +73,24 @@ export class TaskDetailComponent implements OnInit {
       startDate: [null],
       dueDate: [null],
       isCompleted: [false],
+      assigneeId: [null],
     });
 
     this.taskId = this.route.snapshot.paramMap.get('id') || '';
     if (this.taskId) {
       this.loadTask();
     }
+    this.loadUsers();
+  }
+  loadUsers(): void {
+    this.userService.getUsers().subscribe({
+      next: (users) => {
+        this.users = users;
+      },
+      error: (err) => {
+        console.error('Error loading users:', err);
+      }
+    });
   }
 
   loadTask(): void {
@@ -91,8 +107,7 @@ export class TaskDetailComponent implements OnInit {
           status: task.status !== undefined && task.status !== null
             ? Object.values(TaskStatus)[task.status]
             : TaskStatus.Waiting,
-
-
+          assigneeId: task.assigneeId || null,
         });
       },
       error: (err) => {
@@ -192,6 +207,7 @@ export class TaskDetailComponent implements OnInit {
       startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
+      assigneeId: formData.assigneeId || null,
     };
   }
 
@@ -206,6 +222,7 @@ export class TaskDetailComponent implements OnInit {
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       isCompleted: formData.isCompleted ?? false,
       status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
+      assigneeId: formData.assigneeId || null,
     };
   }
 

@@ -14,6 +14,7 @@ export interface CreateTaskDto {
   skills?: string[]; // Array von Skill-Namen
   endDate?: string | null;
   status?: TaskStatus;
+  assigneeId?: string;
 }
 
 export interface UpdateTaskDto {
@@ -26,6 +27,7 @@ export interface UpdateTaskDto {
   skills?: string[]; // Array von Skill-Namen
   isCompleted?: boolean;
   status?: TaskStatus;
+  assigneeId?: string;
 }
 
 export interface Task {
@@ -41,4 +43,6 @@ export interface Task {
   parentTaskId?: UUID;
   subTasks?: Task[]; // Verschachtelte Tasks
   status?: TaskStatus;
+  assigneeId?: string;
+  assigneeName?: string;
 }

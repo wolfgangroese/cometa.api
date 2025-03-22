@@ -41,7 +41,7 @@ export class TaskListComponent implements OnInit {
   getStatusLabel(status: number): string {
     const statusMap: Record<number, string> = {
       0: 'Done',
-      1: 'In Progress',
+      1: 'InProgress',
       2: 'Blocked',
       3: 'Waiting'
     };
