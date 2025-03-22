@@ -13,4 +13,6 @@ public class TaskDto
     public bool IsCompleted { get; set; } // Standardmäßig false
     public int Rewards { get; set; } // Anzahl der Belohnungen
     public TaskStatus Status { get; set; } = TaskStatus.Waiting;
+    public Guid? AssigneeId { get; set; }
+    public string? AssigneeName { get; set; }
 }

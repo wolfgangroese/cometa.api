@@ -24,6 +24,7 @@ public class TasksController : ControllerBase
         var tasks = await _context.Tasks
             .Include(t => t.TaskSkills)
             .ThenInclude(ts => ts.Skill)
+            .Include(t => t.Assignee)
             .ToListAsync();
 
         var taskDtos = tasks.Select(task => new TaskDto
@@ -38,7 +39,9 @@ public class TasksController : ControllerBase
                 .ToList(),
             IsCompleted = task.IsCompleted ?? false,
             Rewards = task.Rewards ?? 0,
-            Status = task.TaskStatus
+            Status = task.TaskStatus,
+            AssigneeId = task.AssigneeId,
+            AssigneeName = task.Assignee?.UserName // Include assignee name
         });
 
         return Ok(taskDtos);
@@ -51,6 +54,7 @@ public class TasksController : ControllerBase
         var task = await _context.Tasks
             .Include(t => t.TaskSkills)
             .ThenInclude(ts => ts.Skill)
+            .Include(t => t.Assignee)
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (task == null)
@@ -70,7 +74,9 @@ public class TasksController : ControllerBase
                 .ToList(),
             IsCompleted = task.IsCompleted ?? false,
             Rewards = task.Rewards ?? 0,
-            Status = task.TaskStatus
+            Status = task.TaskStatus,
+            AssigneeId = task.AssigneeId,
+            AssigneeName = task.Assignee?.UserName
         };
 
         return Ok(taskDto);
@@ -96,7 +102,8 @@ public class TasksController : ControllerBase
             IsCompleted = newTaskDto.IsCompleted,
             Rewards = newTaskDto.Rewards,
             TaskStatus = newTaskDto.Status,
-            TaskSkills = new List<TaskSkill>()
+            TaskSkills = new List<TaskSkill>(),
+            AssigneeId = newTaskDto.AssigneeId
         };
 
         var existingSkills = await _context.Skills
@@ -154,6 +161,7 @@ public class TasksController : ControllerBase
         existingTask.IsCompleted = updatedTaskDto.IsCompleted;
         existingTask.Rewards = updatedTaskDto.Rewards;
         existingTask.TaskSkills = new List<TaskSkill>();
+        existingTask.AssigneeId = updatedTaskDto.AssigneeId;
 
         var updatedSkills = await _context.Skills
             .Where(s => updatedTaskDto.Skills.Contains(s.Name ?? string.Empty))
