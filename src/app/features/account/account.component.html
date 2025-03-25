@@ -3,6 +3,16 @@
     <h2>Willkommen, {{ currentUser.userName }}!</h2>
     <p>E-Mail: {{ currentUser.email }}</p>
 
+    <div class="rewards-section">
+      <h3>Your Rewards</h3>
+      <div class="reward-total">
+        <i class="pi pi-star-fill reward-icon"></i>
+        <span class="reward-count">{{ totalRewards }}</span>
+        <span class="reward-label">Coins</span>
+      </div>
+    </div>
+  </div>
+
     <div class="action-buttons">
       <p-button
         label="Logout"
@@ -22,4 +32,4 @@
       routerLink="/login">
     </p-button>
   </div>
-</div>
+
