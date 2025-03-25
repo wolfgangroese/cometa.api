@@ -34,21 +34,37 @@ namespace Cometa.Api.Controllers
             return Ok(userDtos);
         }
         
-        // Neue Methode für Benutzerbelohnungen
         [HttpGet("me/rewards")]
-        //[Authorize ( Roles = "Performer")]
+        [Authorize] // Diese Zeile aktivieren!
         public async Task<ActionResult<int>> GetUserRewards()
         {
-            var testUserId = "0195ce83-25eb-726f-8129-a59d6cb427b0";
-            var userGuid = Guid.Parse(testUserId);
-    
-            var user = await _userManager.FindByIdAsync(testUserId);
-            if (user == null)
+            try 
             {
-                return NotFound("User not found");
+                // Debug-Ausgabe
+                Console.WriteLine("GetUserRewards called. User authenticated: " + User.Identity.IsAuthenticated);
+        
+                // Hole die Benutzer-ID aus dem authentifizierten Benutzer
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Console.WriteLine("User ID from claim: " + userId);
+        
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized("User not authenticated");
+                }
+        
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                return Ok(new { totalRewards = user.TotalRewards });
             }
-    
-            return Ok(new { totalRewards = user.TotalRewards });
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in GetUserRewards: " + ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
