@@ -1,12 +1,48 @@
-<div>
-  <p class="task-total-count">{{ taskCount }} open Tasks</p>
-</div>
+<div class="home-container">
+  <!-- Tasks Section with Accordion -->
+  <div class="tasks-section">
+    <div class="tasks-accordion" (click)="toggleTasksList()">
+      <div class="task-header">
+        <span class="task-count">{{ taskCount }} open Tasks</span>
+        <i class="pi" [ngClass]="expanded ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+      </div>
+    </div>
 
-<p *ngFor="let task of tasks" class="task-item">
-  <a [routerLink]="['/task', task.id]" class="task-link">
-    <h5 class="task-title">
-      {{ task.name }}
-      <i *ngIf="task.isCompleted" class="pi pi-check-circle completed-icon"></i>
-    </h5>
-  </a>
-</p>
+    <div class="tasks-list" *ngIf="expanded">
+      <p *ngFor="let task of openTasks" class="task-item">
+        <a [routerLink]="['/task', task.id]" class="task-link">
+          <span class="task-title">
+            {{ task.name }}
+          </span>
+          <i *ngIf="task.isCompleted" class="pi pi-check-circle completed-icon"></i>
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Leaderboard Section -->
+  <div class="leaderboard-section">
+    <h3>User Leaderboard</h3>
+    <p-table [value]="users" styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#</th>
+          <th>User</th>
+          <th>Rewards</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-i="rowIndex">
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ user.fullName || user.userName }}</td>
+          <td>
+            <span class="reward-badge">
+              <i class="pi pi-star-fill"></i>
+              {{ user.totalRewards || 0 }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -13,19 +13,24 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+    return this.http.get<User[]>(`${this.apiUrl}/leaderboard`).pipe(
+      catchError(error => {
+        console.error('Error fetching users for leaderboard:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   getUserRewards(): Observable<number> {
     const token = localStorage.getItem('jwtToken');
     console.log('Getting rewards with token:', token ? 'Yes' : 'No');
 
-    // Manuelles Hinzufügen des Authorization-Headers
+    // Manual addition of the Authorization header
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.get<{totalRewards: number}>(
       `${this.apiUrl}/me/rewards`,
-      { headers } // Dies ist entscheidend
+      { headers }
     ).pipe(
       map(response => {
         console.log('Rewards response:', response);
