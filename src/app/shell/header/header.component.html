@@ -1,3 +1,58 @@
 <div class="header">
   <span class="header-title">COMETA | {{ currentLabel }}</span>
+
+  <div class="user-info">
+    <span *ngIf="currentUser" class="username">{{ currentUser.email || currentUser.userName }}</span>
+    <div class="account-icon"
+         (click)="toggleAccountMenu($event)"
+         (keydown.enter)="toggleAccountMenu($event)"
+         (keydown.space)="toggleAccountMenu($event)"
+         tabindex="0"
+         role="button"
+         aria-label="Open account menu">
+      <i class="pi pi-user"></i>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showAccountMenu"
+     class="account-menu-overlay"
+     (click)="closeAccountMenu($event)"
+     (keydown.escape)="closeAccountMenu($event)"
+     tabindex="-1"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="accountMenuTitle">
+  <div class="account-menu"
+       (click)="$event.stopPropagation()"
+       (keydown)="$event.stopPropagation()"
+       tabindex="0">
+    <div class="account-header">
+      <h3 id="accountMenuTitle">Account</h3>
+      <i class="pi pi-times close-icon"
+         (click)="closeAccountMenu($event)"
+         (keydown.enter)="closeAccountMenu($event)"
+         (keydown.space)="closeAccountMenu($event)"
+         tabindex="0"
+         role="button"
+         aria-label="Close account menu"></i>
+    </div>
+
+    <div class="account-details" *ngIf="currentUser">
+      <div class="user-email">{{ currentUser.email }}</div>
+
+      <div class="rewards-info">
+        <i class="pi pi-star-fill reward-icon"></i>
+        <span class="reward-count">{{ totalRewards }}</span>
+        <span class="reward-label">Coins</span>
+      </div>
+
+      <button class="logout-button"
+              (click)="logout()"
+              aria-label="Logout from your account">
+        <i class="pi pi-sign-out"></i>
+        Logout
+      </button>
+    </div>
+  </div>
 </div>

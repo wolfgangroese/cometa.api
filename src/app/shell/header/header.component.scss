@@ -1,21 +1,157 @@
-.header.header {
-  width: 100vw; /* Deckt die gesamte Fensterbreite ab */
-  background-color: #f8f9fa; /* Farbe des Headers */
+.header {
+  width: 100vw;
+  background-color: #f8f9fa;
   border-bottom: 1px solid #ddd;
-  position: relative; /* Optional, falls du den Header fixieren willst */
-  left: 0; /* Start an der linken Seite */
-}
-
-.header-content {
-  max-width: 1200px; /* Breite des Inhalts, z. B. wie dein Main-Container */
-  margin: 0 auto; /* Zentriert den Inhalt */
+  padding: 12px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px; /* Abstand für den Content */
+  box-sizing: border-box;
 }
 
 .header-title {
   font-size: 1.5rem;
   font-weight: normal;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.username {
+  font-size: 1rem;
+  color: #1565C0;
+  font-weight: 500;
+}
+
+.account-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #1565C0;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  outline: none;
+}
+
+.account-icon:hover, .account-icon:focus {
+  background-color: #0D47A1;
+}
+
+.account-icon i {
+  font-size: 1.2rem;
+}
+
+/* Account Menu Overlay */
+.account-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.account-menu {
+  width: 300px;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.account-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.close-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
+  padding: 5px;
+  outline: none;
+}
+
+.close-icon:hover, .close-icon:focus {
+  color: #333;
+}
+
+.account-details {
+  padding: 20px;
+  flex: 1;
+}
+
+.user-email {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.rewards-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.reward-icon {
+  color: gold;
+  font-size: 1.8rem;
+}
+
+.reward-count {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.reward-label {
+  font-size: 1rem;
+  color: #666;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
 }
