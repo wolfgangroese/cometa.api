@@ -7,4 +7,6 @@ public class ApplicationUser : IdentityUser<Guid>
 {
     [MaxLength(100)]
     public string FullName { get; set; } = string.Empty;
+
+    public int TotalRewards { get; set; } = 0;
 }

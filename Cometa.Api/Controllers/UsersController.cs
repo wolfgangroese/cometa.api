@@ -1,8 +1,10 @@
-// Cometa.Api/Controllers/UsersController.cs
 using Cometa.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization; // Neue Direktive für [Authorize]
+using System.Security.Claims; // Neue Direktive für ClaimTypes
+
 namespace Cometa.Api.Controllers
 {
     [ApiController]
@@ -30,6 +32,26 @@ namespace Cometa.Api.Controllers
             });
             
             return Ok(userDtos);
+        }
+        
+        // Neue Methode für Benutzerbelohnungen
+        [HttpGet("me/rewards")]
+        [Authorize]
+        public async Task<ActionResult<int>> GetUserRewards()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var userGuid))
+            {
+                return Unauthorized();
+            }
+            
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(new { totalRewards = user.TotalRewards });
         }
     }
 }
