@@ -3,6 +3,12 @@ using Cometa.Persistence.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cometa.Api.DTOs;
+using Cometa.Domain.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Cometa.Api.Controllers;
 
@@ -18,7 +24,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet(Name = "Tasks")]
- //   [Authorize (Roles = "Admin,Staff,Performer")]
+    //[Authorize (Roles = "Admin,Staff,Performer")]
     public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasks()
     {
         var tasks = await _context.Tasks
@@ -48,7 +54,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet("{id}", Name = "GetTaskById")]
-   // [Authorize (Roles = "Admin,Staff, Performer")]
+    //[Authorize (Roles = "Admin,Staff, Performer")]
     public async Task<ActionResult<TaskDto>> GetTaskById(Guid id)
     {
         var task = await _context.Tasks
@@ -84,8 +90,7 @@ public class TasksController : ControllerBase
 
     
     [HttpPost(Name = "CreateTask")]
-//    [Authorize (Roles = "Admin,Staff,Performer")]
-
+    //[Authorize (Roles = "Admin,Staff,Performer")]
     public async Task<ActionResult<TaskDto>> CreateTask([FromBody] TaskDto newTaskDto)
     {
         if (newTaskDto == null || string.IsNullOrEmpty(newTaskDto.Name))
@@ -121,12 +126,25 @@ public class TasksController : ControllerBase
 
         newTaskDto.Id = newTask.Id;
 
+        // If task is created as already completed, update rewards
+        if (newTask.IsCompleted == true && newTask.AssigneeId.HasValue)
+        {
+            try
+            {
+                var rewardService = HttpContext.RequestServices.GetRequiredService<RewardService>();
+                await rewardService.UpdateUserRewardsAsync(newTask.AssigneeId.Value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating rewards on task creation: {ex.Message}");
+            }
+        }
+
         return CreatedAtRoute("GetTaskById", new { id = newTask.Id }, newTaskDto);
     }
 
     [HttpPut("{id}", Name = "UpdateTask")]
-// [Authorize (Roles = "Admin,Staff")]
-
+    //[Authorize (Roles = "Admin,Staff")]
     public async Task<IActionResult> UpdateTask(Guid id, [FromBody] TaskDto updatedTaskDto)
     {
         if (updatedTaskDto == null || id == Guid.Empty)
@@ -144,6 +162,9 @@ public class TasksController : ControllerBase
             return NotFound(new { message = $"Task with ID {id} not found." });
         }
 
+        // Get the completion status BEFORE updating
+        bool wasCompletedBefore = existingTask.IsCompleted ?? false;
+        
         // ✅ Ensure DateTime values are converted to UTC
         DateTime? ConvertToUtc(DateTime? date) =>
             date.HasValue && date.Value.Kind == DateTimeKind.Unspecified 
@@ -174,13 +195,30 @@ public class TasksController : ControllerBase
         }
 
         await _context.SaveChangesAsync();
+        
+        // Check if the task was just completed
+        if (!wasCompletedBefore && existingTask.IsCompleted == true && existingTask.AssigneeId.HasValue)
+        {
+            Console.WriteLine($"Task {id} completed by user {existingTask.AssigneeId}. Updating rewards...");
+            try 
+            {
+                var rewardService = HttpContext.RequestServices.GetRequiredService<RewardService>();
+                var newRewards = await rewardService.UpdateUserRewardsAsync(existingTask.AssigneeId.Value);
+                Console.WriteLine($"Updated rewards: {newRewards}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating rewards: {ex.Message}");
+                // Don't rethrow - we don't want task updates to fail if reward update fails
+            }
+        }
+
         return Ok(new { message = "Task updated successfully." });
     }
 
 
     [HttpDelete("{id}", Name = "DeleteTask")]
-   // [Authorize (Roles = "Admin,Staff")]
-
+    //[Authorize (Roles = "Admin,Staff")]
     public async Task<IActionResult> DeleteTask(Guid id)
     {
         if (id == Guid.Empty)
@@ -201,6 +239,35 @@ public class TasksController : ControllerBase
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
 
+        // If a completed task is deleted, we should update the user's rewards
+        if (task.IsCompleted == true && task.AssigneeId.HasValue)
+        {
+            try
+            {
+                var rewardService = HttpContext.RequestServices.GetRequiredService<RewardService>();
+                await rewardService.UpdateUserRewardsAsync(task.AssigneeId.Value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating rewards after task deletion: {ex.Message}");
+            }
+        }
+
         return Ok(new { message = "Task deleted successfully." });
+    }
+
+    [HttpGet("test-rewards/{userId}")]
+    public async Task<IActionResult> TestRewards(Guid userId)
+    {
+        try
+        {
+            var rewardService = HttpContext.RequestServices.GetRequiredService<RewardService>();
+            var rewards = await rewardService.UpdateUserRewardsAsync(userId);
+            return Ok(new { rewards });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 }
