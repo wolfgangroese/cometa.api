@@ -17,6 +17,7 @@ import { ButtonGroupModule } from "primeng/buttongroup";
 import { FloatLabelModule } from "primeng/floatlabel";
 import { UserService } from '../../../services/user.service';
 import { User } from "../../../models/user.model";
+import { AuthService} from "../../../services/auth.service";
 
 
 enum TaskStatus {
@@ -60,7 +61,8 @@ export class TaskDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private taskService: TaskService,
     private messageService: MessageService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -240,5 +242,70 @@ export class TaskDetailComponent implements OnInit {
   }
 
 
+// Prüft, ob der aktuell eingeloggte User bereits der Assignee ist
+  isCurrentUserAssigned(): boolean {
+    const currentUser = this.authService.getCurrentUserSync();
+    if (!currentUser || !this.taskForm.get('assigneeId')?.value) {
+      return false;
+    }
+    return this.taskForm.get('assigneeId')?.value === currentUser.id;
+  }
 
+// Task vom aktuellen User übernehmen
+  pickTask(): void {
+    const currentUser = this.authService.getCurrentUserSync();
+    if (!currentUser) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Fehler',
+        detail: 'Du musst eingeloggt sein, um diese Task zu übernehmen.'
+      });
+      return;
+    }
+
+    // Aktuelles Datum und Zeit formatieren
+    const now = new Date();
+    const dateTimeString = now.toLocaleString('de-DE');
+
+    // Aktuellen Beschreibungstext holen
+    const currentDescription = this.taskForm.get('description')?.value || '';
+
+    // Neue Zeile mit Übernahmeinformation hinzufügen
+    const pickInfo = `\n\n- picked by ${currentUser.userName} on ${dateTimeString} -`;
+    const updatedDescription = currentDescription + pickInfo;
+
+    // Formular aktualisieren
+    this.taskForm.patchValue({
+      assigneeId: currentUser.id,
+      status: 'InProgress',
+      description: updatedDescription
+    });
+
+    // Task sofort mit den neuen Werten speichern
+    this.updateTask();
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Task übernommen',
+      detail: `Du hast die Task "${this.taskForm.get('name')?.value}" erfolgreich übernommen.`
+    });
+  }
+  /**
+   * Bestimmt, ob der Pick-Button angezeigt werden soll
+   * @returns true wenn der Button angezeigt werden soll, sonst false
+   */
+  showPickButton(): boolean {
+    // Den aktuellen Status holen (beachte dass es ein String oder ein enum sein könnte)
+    const currentStatus = this.taskForm.get('status')?.value;
+
+    // Debug-Ausgabe
+    console.log('Current status:', currentStatus);
+    console.log('Current user assigned:', this.isCurrentUserAssigned());
+
+    // Prüfen ob es 'Waiting' ist - verschiedene Werte beachten
+    return !this.isCurrentUserAssigned() &&
+      (currentStatus === 'Waiting' ||
+        currentStatus === 3 ||      // Numerischer Wert in Enumeration
+        currentStatus?.toString().toLowerCase() === 'waiting');
+  }
 }

@@ -83,3 +83,135 @@ textarea:not(:placeholder-shown) + label {
   flex: 1;  /* Beide Felder bekommen die gleiche Breite */
   min-width: 150px; /* Damit sie nicht zu schmal werden */
 }
+
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .label-container {
+      min-width: 120px;
+      text-align: left;
+
+      label {
+        font-size: 14px;
+        color: #333;
+        font-weight: normal;
+        position: static; // Verhindert absolute Positionierung
+        transform: none;
+        background: none;
+        padding: 0;
+      }
+    }
+
+    .input-container {
+      flex: 1;
+
+      input, textarea, p-dropdown {
+        width: 100%;
+      }
+    }
+
+    .pick-button {
+      margin-left: 10px;
+      white-space: nowrap;
+    }
+  }
+
+// Spezielle Styling für Rewards + Pick-Button
+.rewards-group {
+  align-items: center;
+}
+
+// Spezielle Styling für die Completed-Checkbox
+.completed-group {
+  margin-top: 10px;
+  margin-bottom: 30px;
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+
+    p-checkbox {
+      margin-right: 10px;
+    }
+
+    .checkbox-label {
+      font-size: 14px;
+      color: #333;
+    }
+  }
+}
+
+// Button-Gruppe
+.action-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+// Dropdowns
+.custom-dropdown {
+  width: 100%;
+}
+.form-row {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.label-column {
+  min-width: 120px;
+  text-align: left;
+
+  span {
+    font-size: 14px;
+    color: #333;
+  }
+}
+
+.input-column {
+  flex: 1;
+  max-width: 450px; // Begrenze die Breite für konsistentes Layout
+
+  input, textarea, p-dropdown {
+    width: 100%;
+  }
+
+  // Für die Checkbox
+  p-checkbox {
+    margin-left: 5px;
+  }
+}
+
+// Speziell für Rewards und Pick-Button
+.rewards-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  input {
+    flex: 1;
+  }
+
+  .pick-button {
+    margin-left: 10px;
+    white-space: nowrap;
+  }
+}
+
+// Button-Gruppe
+.action-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+// Anpassungen für das gesamte Formular
+.task-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}

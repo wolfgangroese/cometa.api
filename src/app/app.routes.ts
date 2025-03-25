@@ -7,6 +7,7 @@ import { AccountComponent } from './features/account/account.component';
 import { TaskListComponent } from "./features/tasks/task-list/task-list.component";
 import { TaskDetailComponent } from "./features/tasks/task-detail/task-detail.component";
 import { NewTaskComponent } from "./features/tasks/new-task/new-task.component";
+import { TaskQuickAddComponent } from './features/tasks/task-quick-add/task-quick-add.component';
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'task/new', component: NewTaskComponent },
+  { path: 'task/quick-add', component: TaskQuickAddComponent }, // Neue Route
   { path: 'task/:id', component: TaskDetailComponent },
   { path: 'search', component: SearchComponent },
   { path: 'news', component: NewsComponent },
