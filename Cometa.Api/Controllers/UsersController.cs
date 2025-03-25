@@ -36,21 +36,18 @@ namespace Cometa.Api.Controllers
         
         // Neue Methode für Benutzerbelohnungen
         [HttpGet("me/rewards")]
-        [Authorize]
+        //[Authorize ( Roles = "Performer")]
         public async Task<ActionResult<int>> GetUserRewards()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var userGuid))
-            {
-                return Unauthorized();
-            }
-            
-            var user = await _userManager.FindByIdAsync(userId);
+            var testUserId = "0195ce83-25eb-726f-8129-a59d6cb427b0";
+            var userGuid = Guid.Parse(testUserId);
+    
+            var user = await _userManager.FindByIdAsync(testUserId);
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User not found");
             }
-            
+    
             return Ok(new { totalRewards = user.TotalRewards });
         }
     }
