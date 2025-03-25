@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Cometa.Domain.Services;
 using Cometa.Persistence.Model;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,9 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<RewardService>();
+
+
 
 // Configure DbContext for Identity
 builder.Services.AddDbContext<CometaDbContext>(options =>
