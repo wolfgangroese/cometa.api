@@ -40,23 +40,33 @@
 
 
 
-  <div class="form-group">
-    <div class="input-container">
-      <p-floatLabel>
-        <input id="rewards" formControlName="rewards"/>
-        <label for="rewards">Rewards</label>
-      </p-floatLabel>
+  <!-- Rewards mit Pick-Button -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Rewards</span>
     </div>
+    <div class="input-column rewards-container">
+      <input id="rewards" formControlName="rewards" />
 
-    <div class="input-container">
-      <p-checkbox id="isCompleted" formControlName="isCompleted" [binary]="true"></p-checkbox>
-      <label for="isCompleted" class="checkbox-label">Completed</label>
+      <!-- Pick-Button -->
+      <p-button
+        label="Pick"
+        icon="pi pi-user-plus"
+        [rounded]="true"
+        (click)="pickTask()"
+        severity="info"
+        *ngIf="showPickButton()"
+        styleClass="pick-button"
+      ></p-button>
     </div>
   </div>
 
-  <div class="form-group status-group">
-    <div class="input-container">
-      <label for="status" class="custom-label">Status</label>
+  <!-- Status-Dropdown -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Status</span>
+    </div>
+    <div class="input-column">
       <p-dropdown
         id="status"
         formControlName="status"
@@ -66,25 +76,39 @@
       ></p-dropdown>
     </div>
   </div>
-  <div class="form-group">
-    <div class="input-container">
-      <p-floatLabel>
-        <p-dropdown
-          id="assignedUser"
-          formControlName="assigneeId"
-          [options]="users"
-          optionLabel="userName"
-          optionValue="id"
-          placeholder="Select a user">
-        </p-dropdown>
-        <label for="assignedUser">Assigned User</label>
-      </p-floatLabel>
+
+  <!-- Assigned User-Dropdown -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Assigned User</span>
+    </div>
+    <div class="input-column">
+      <p-dropdown
+        id="assignedUser"
+        formControlName="assigneeId"
+        [options]="users"
+        optionLabel="userName"
+        optionValue="id"
+        placeholder="Select a user">
+      </p-dropdown>
     </div>
   </div>
-<p-buttonGroup>
-  <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTask()" severity="help" [disabled]="taskForm.invalid"></p-button>
-  <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTask()" severity="success"></p-button>
-  <p-button label="List" icon="pi pi-list" [rounded]="true" (click)="goBack()" severity="secondary"></p-button>
-  <p-button label="Delete" icon="pi pi-trash" [rounded]="true" (click)="deleteTask()" severity="danger"></p-button>
-</p-buttonGroup>
+
+  <!-- Completed-Checkbox -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Completed</span>
+    </div>
+    <div class="input-column">
+      <p-checkbox id="isCompleted" formControlName="isCompleted" [binary]="true"></p-checkbox>
+    </div>
+  </div>
+
+  <!-- Button-Gruppe -->
+  <p-buttonGroup class="action-buttons">
+    <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTask()" severity="help" [disabled]="taskForm.invalid"></p-button>
+    <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTask()" severity="success"></p-button>
+    <p-button label="List" icon="pi pi-list" [rounded]="true" (click)="goBack()" severity="secondary"></p-button>
+    <p-button label="Delete" icon="pi pi-trash" [rounded]="true" (click)="deleteTask()" severity="danger"></p-button>
+  </p-buttonGroup>
 </div>

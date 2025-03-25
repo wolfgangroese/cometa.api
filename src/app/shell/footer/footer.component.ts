@@ -11,11 +11,11 @@ interface MenuItem {
 
 
 @Component({
-    selector: 'app-footer',
-    standalone: true,
-    templateUrl: './footer.component.html',
-    styleUrls: ['./footer.component.scss'],
-    imports: [CommonModule, RouterModule, MenubarModule]
+  selector: 'app-footer',
+  standalone: true,
+  templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss'],
+  imports: [CommonModule, RouterModule, MenubarModule]
 })
 export class FooterComponent implements OnInit {
   items: MenuItem[] | undefined;
@@ -25,6 +25,7 @@ export class FooterComponent implements OnInit {
       { label: 'Home', icon: 'pi pi-home', routerLink: ['/home'] },
       { label: 'Tasks', icon: 'pi pi-check-circle', routerLink: ['/tasks'] },
       { label: 'New Task', icon: 'pi pi-plus', routerLink: ['/task/new'] },
+      { label: 'Quick Add', icon: 'pi pi-bolt', routerLink: ['/task/quick-add'] },
       { label: 'News', icon: 'pi pi-envelope', routerLink: ['/news'] },
       { label: 'Search', icon: 'pi pi-search', routerLink: ['/search'] },
       { label: 'Account', icon: 'pi pi-user', routerLink: ['/account'] }

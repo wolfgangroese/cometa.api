@@ -85,4 +85,21 @@ export class AuthService {
     console.error('Auth service error:', error);
     return throwError(() => new Error(error.message || 'Fehler beim Authentifizieren.'));
   }
+  /**
+   * Gibt den aktuellen Benutzer synchron zurück
+   * @returns Der aktuelle Benutzer oder null, wenn nicht eingeloggt
+   */
+  getCurrentUserSync(): User | null {
+    const userJson = localStorage.getItem('currentUser');
+    if (!userJson) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(userJson) as User;
+    } catch (e) {
+      console.error('Fehler beim Parsen des User-Objekts aus localStorage:', e);
+      return null;
+    }
+  }
 }
