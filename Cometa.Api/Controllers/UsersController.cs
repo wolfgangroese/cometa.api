@@ -64,7 +64,7 @@ namespace Cometa.Api.Controllers
             try 
             {
                 // Debug output
-                Console.WriteLine("GetUserRewards called. User authenticated: " + User.Identity.IsAuthenticated);
+                Console.WriteLine("GetUserRewards called. User authenticated: " + User.Identity?.IsAuthenticated);
         
                 // Get user ID from the authenticated user
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
