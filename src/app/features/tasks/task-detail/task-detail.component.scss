@@ -215,3 +215,23 @@ textarea:not(:placeholder-shown) + label {
   margin: 0 auto;
   padding: 20px;
 }
+.permission-notice {
+  margin: 20px 0;
+  padding: 10px 15px;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.warning-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #856404;
+  margin: 0;
+}
+
+.warning-text i {
+  font-size: 1.2em;
+}

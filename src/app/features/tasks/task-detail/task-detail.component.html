@@ -1,12 +1,12 @@
 <div class="task-form" [formGroup]="taskForm">
-  <h4>Tasklist</h4>
+  <h4>Task Details</h4>
 
   <div class="form-group">
     <div class="input-container">
-    <p-floatLabel>
-      <input pInputText id="name" type="text"  formControlName="name" required />
-      <label for="name">Name</label>
-    </p-floatLabel>
+      <p-floatLabel>
+        <input pInputText id="name" type="text" formControlName="name" required />
+        <label for="name">Name</label>
+      </p-floatLabel>
     </div>
     <p class="error-message" *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
       Der Name ist erforderlich.
@@ -15,10 +15,10 @@
 
   <div class="form-group">
     <div class="input-container">
-    <p-floatLabel>
-      <textarea id="description" type="text" placeholder=" " formControlName="description"></textarea>
-      <label for="description">Description</label>
-    </p-floatLabel>
+      <p-floatLabel>
+        <textarea id="description" type="text" placeholder=" " formControlName="description"></textarea>
+        <label for="description">Description</label>
+      </p-floatLabel>
     </div>
   </div>
 
@@ -38,9 +38,7 @@
     </div>
   </div>
 
-
-
-  <!-- Rewards mit Pick-Button -->
+  <!-- Rewards with Pick-Button -->
   <div class="form-row">
     <div class="label-column">
       <span>Rewards</span>
@@ -61,7 +59,7 @@
     </div>
   </div>
 
-  <!-- Status-Dropdown -->
+  <!-- Status-Dropdown - Always enabled for all roles -->
   <div class="form-row">
     <div class="label-column">
       <span>Status</span>
@@ -104,11 +102,55 @@
     </div>
   </div>
 
+  <!-- Permission notice for Performers -->
+  <div class="permission-notice" *ngIf="!permissionService.canEditTaskProperties()">
+    <p class="warning-text">
+      <i class="pi pi-info-circle"></i>
+      Als Performer können Sie nur den Status der Aufgabe ändern.
+    </p>
+  </div>
+
   <!-- Button-Gruppe -->
   <p-buttonGroup class="action-buttons">
-    <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTask()" severity="help" [disabled]="taskForm.invalid"></p-button>
-    <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTask()" severity="success"></p-button>
-    <p-button label="List" icon="pi pi-list" [rounded]="true" (click)="goBack()" severity="secondary"></p-button>
-    <p-button label="Delete" icon="pi pi-trash" [rounded]="true" (click)="deleteTask()" severity="danger"></p-button>
+    <!-- Update button - show for all roles but with different functionality -->
+    <p-button
+      label="Update"
+      icon="pi pi-refresh"
+      [rounded]="true"
+      (click)="updateTask()"
+      severity="help"
+      [disabled]="taskForm.invalid">
+    </p-button>
+
+    <!-- Duplicate button - only for Admin/Staff -->
+    <p-button
+      *ngIf="permissionService.canCreateTasks()"
+      label="Duplicate"
+      icon="pi pi-plus"
+      [rounded]="true"
+      (click)="addTask()"
+      severity="success">
+    </p-button>
+
+    <!-- List button - for all users -->
+    <p-button
+      label="List"
+      icon="pi pi-list"
+      [rounded]="true"
+      (click)="goBack()"
+      severity="secondary">
+    </p-button>
+
+    <!-- Delete button - only for Admin/Staff -->
+    <p-button
+      *ngIf="permissionService.canDeleteTasks()"
+      label="Delete"
+      icon="pi pi-trash"
+      [rounded]="true"
+      (click)="deleteTask()"
+      severity="danger">
+    </p-button>
   </p-buttonGroup>
 </div>
+
+<p-toast></p-toast>
