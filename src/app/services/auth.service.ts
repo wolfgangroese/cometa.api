@@ -7,6 +7,16 @@ import { RegisterDto } from '../models/dtos/register.dto';
 import { LoginDto } from '../models/dtos/login.dto';
 import { User } from '../models/user.model';
 
+interface TokenPayload {
+  nameid: string;
+  unique_name: string;
+  email: string;
+  role: string[] | string;
+  exp: number;
+  iss: string;
+  aud: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -17,8 +27,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  register(registerData: RegisterDto): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register`, registerData).pipe(
+  register(registerData: RegisterDto): Observable<unknown> {
+    return this.http.post<unknown>(`${this.apiUrl}/register`, registerData).pipe(
       catchError(this.handleError)
     );
   }
@@ -52,6 +62,14 @@ export class AuthService {
   saveToken(token: string): void {
     console.log('Saving token to localStorage:', token ? 'Yes (token exists)' : 'No (empty token)');
     localStorage.setItem('jwtToken', token);
+
+    // Store the parsed token claims to access roles
+    if (token) {
+      const tokenData = this.parseJwt(token);
+      localStorage.setItem('tokenData', JSON.stringify(tokenData));
+    } else {
+      localStorage.removeItem('tokenData');
+    }
   }
 
   loadUserFromToken(): void {
@@ -78,6 +96,7 @@ export class AuthService {
   logout(): void {
     console.log('Logging out, removing token and user');
     localStorage.removeItem('jwtToken');
+    localStorage.removeItem('tokenData');
     this.setCurrentUser(null);
   }
 
@@ -85,6 +104,7 @@ export class AuthService {
     console.error('Auth service error:', error);
     return throwError(() => new Error(error.message || 'Fehler beim Authentifizieren.'));
   }
+
   /**
    * Gibt den aktuellen Benutzer synchron zurück
    * @returns Der aktuelle Benutzer oder null, wenn nicht eingeloggt
@@ -101,5 +121,58 @@ export class AuthService {
       console.error('Fehler beim Parsen des User-Objekts aus localStorage:', e);
       return null;
     }
+  }
+
+  /**
+   * Parse JWT token to get claims including roles
+   */
+  private parseJwt(token: string): TokenPayload {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      return JSON.parse(jsonPayload) as TokenPayload;
+    } catch (e) {
+      console.error('Error parsing JWT token:', e);
+      return {} as TokenPayload;
+    }
+  }
+
+  /**
+   * Check if the current user has the specified role
+   */
+  hasRole(role: string): boolean {
+    const tokenDataStr = localStorage.getItem('tokenData');
+    if (!tokenDataStr) {
+      return false;
+    }
+
+    try {
+      const tokenData = JSON.parse(tokenDataStr) as TokenPayload;
+      // Check 'role' claim in token (format varies depending on your JWT configuration)
+      const roles = tokenData.role || [];
+
+      // Handle both array and string formats
+      if (Array.isArray(roles)) {
+        return roles.includes(role);
+      } else if (typeof roles === 'string') {
+        return roles === role;
+      }
+
+      return false;
+    } catch (e) {
+      console.error('Error checking user role:', e);
+      return false;
+    }
+  }
+
+  /**
+   * Check if user has any of the specified roles
+   */
+  hasAnyRole(roles: string[]): boolean {
+    return roles.some(role => this.hasRole(role));
   }
 }

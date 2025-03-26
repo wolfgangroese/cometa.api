@@ -3,4 +3,5 @@ export interface User {
   userName: string;
   email: string;
   totalRewards?: number;
+  roles?: string[];
 }

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskService } from '../../../services/task.service';
-import { CreateTaskDto, UpdateTaskDto } from '../../../models/task.model';
+import { CreateTaskDto, UpdateTaskDto, TaskStatus } from '../../../models/task.model';
 import { Button, ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -17,15 +17,8 @@ import { ButtonGroupModule } from "primeng/buttongroup";
 import { FloatLabelModule } from "primeng/floatlabel";
 import { UserService } from '../../../services/user.service';
 import { User } from "../../../models/user.model";
-import { AuthService} from "../../../services/auth.service";
-
-
-enum TaskStatus {
-  Done = 'Done',
-  InProgress = 'In Progress',
-  Blocked = 'Blocked',
-  Waiting = 'Waiting',
-}
+import { AuthService } from "../../../services/auth.service";
+import { PermissionService } from "../../../services/permission.service";
 
 @Component({
   selector: 'app-task-detail',
@@ -48,12 +41,19 @@ enum TaskStatus {
     ButtonGroupModule,
     FloatLabelModule,
   ],
+  providers: [MessageService]
 })
 export class TaskDetailComponent implements OnInit {
   taskForm!: FormGroup;
   taskId: string | undefined;
-  statusOptions = Object.values(TaskStatus);
+
+  // Define status options for the dropdown
+  statusOptions = ['Done', 'In Progress', 'Blocked', 'Waiting'];
+
   users: User[] = [];
+
+  // Track original status value before changes
+  originalStatus?: TaskStatus;
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +63,7 @@ export class TaskDetailComponent implements OnInit {
     private messageService: MessageService,
     private userService: UserService,
     private authService: AuthService,
+    public permissionService: PermissionService, // Public for template access
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +72,7 @@ export class TaskDetailComponent implements OnInit {
       description: [''],
       status: [''],
       rewards: [0],
-      skills: [[]], // Initialisiere Skills als leeres Array
+      skills: [[]],
       startDate: [null],
       dueDate: [null],
       isCompleted: [false],
@@ -79,11 +80,14 @@ export class TaskDetailComponent implements OnInit {
     });
 
     this.taskId = this.route.snapshot.paramMap.get('id') || '';
+
     if (this.taskId) {
       this.loadTask();
     }
+
     this.loadUsers();
   }
+
   loadUsers(): void {
     this.userService.getUsers().subscribe({
       next: (users) => {
@@ -96,8 +100,24 @@ export class TaskDetailComponent implements OnInit {
   }
 
   loadTask(): void {
-    this.taskService.getTaskById(this.taskId!).subscribe({
+    if (!this.taskId) return;
+
+    this.taskService.getTaskById(this.taskId).subscribe({
       next: (task) => {
+        // Store original status for comparison later
+        this.originalStatus = task.status;
+
+        // Map numeric status to string representation for dropdown
+        let statusString: string;
+        switch(task.status) {
+          case TaskStatus.Done: statusString = 'Done'; break;
+          case TaskStatus.InProgress: statusString = 'In Progress'; break;
+          case TaskStatus.Blocked: statusString = 'Blocked'; break;
+          case TaskStatus.Waiting: statusString = 'Waiting'; break;
+          default: statusString = 'Waiting';
+        }
+
+        // Patch the form with task data
         this.taskForm.patchValue({
           name: task.name,
           description: task.description,
@@ -106,16 +126,37 @@ export class TaskDetailComponent implements OnInit {
           startDate: task.startDate ? this.formatDate(task.startDate) : null,
           dueDate: task.dueDate ? this.formatDate(task.dueDate) : null,
           isCompleted: task.isCompleted,
-          status: task.status !== undefined && task.status !== null
-            ? Object.values(TaskStatus)[task.status]
-            : TaskStatus.Waiting,
+          status: statusString,
           assigneeId: task.assigneeId || null,
         });
+
+        // Apply permission-based disabling of fields
+        this.applyPermissionRestrictions();
       },
       error: (err) => {
         console.error('Fehler beim Laden der Task:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Fehler',
+          detail: 'Die Task konnte nicht geladen werden.'
+        });
       },
     });
+  }
+
+  /**
+   * Apply form field restrictions based on user permissions
+   */
+  private applyPermissionRestrictions(): void {
+    // Only allow status changes for regular users
+    if (!this.permissionService.canEditTaskProperties()) {
+      // Disable all form controls except status
+      Object.keys(this.taskForm.controls).forEach(key => {
+        if (key !== 'status') {
+          this.taskForm.get(key)?.disable();
+        }
+      });
+    }
   }
 
   goBack(): void {
@@ -125,6 +166,15 @@ export class TaskDetailComponent implements OnInit {
   }
 
   addTask(): void {
+    if (!this.permissionService.canCreateTasks()) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Keine Berechtigung',
+        detail: 'Sie haben keine Berechtigung, neue Tasks zu erstellen.'
+      });
+      return;
+    }
+
     if (this.taskForm.valid) {
       const newTask: CreateTaskDto = this.prepareCreateTaskData();
       this.taskService.addTask(newTask).subscribe({
@@ -148,34 +198,106 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
-
   updateTask(): void {
-    if (this.taskForm.valid) {
-      console.log("✅ Formular-Werte vor dem Speichern:", this.taskForm.value);
-      console.log("🛑 Hat das Formular 'isCompleted'?", this.taskForm.contains('isCompleted'));
-      const updatedTask: UpdateTaskDto = this.prepareUpdateTaskData();
-      this.taskService.updateTask(this.taskId!, updatedTask).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Erfolg',
-            detail: 'Task erfolgreich aktualisiert!',
-          });
-          this.goBack();
-        },
-        error: (err) => {
-          console.error('Fehler beim Aktualisieren des Tasks:', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Fehler',
-            detail: 'Das Task konnte nicht aktualisiert werden.',
-          });
-        },
+    if (this.taskForm.invalid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Fehler',
+        detail: 'Bitte füllen Sie alle erforderlichen Felder aus.'
       });
+      return;
     }
+
+    // If user can only edit status, use the status-only endpoint
+    if (!this.permissionService.canEditTaskProperties()) {
+      this.updateTaskStatusOnly();
+      return;
+    }
+
+    // Otherwise, do a full update
+    const updatedTask: UpdateTaskDto = this.prepareUpdateTaskData();
+    this.taskService.updateTask(this.taskId!, updatedTask).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Erfolg',
+          detail: 'Task erfolgreich aktualisiert!',
+        });
+        this.goBack();
+      },
+      error: (err) => {
+        console.error('Fehler beim Aktualisieren des Tasks:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Fehler',
+          detail: 'Das Task konnte nicht aktualisiert werden.',
+        });
+      },
+    });
+  }
+
+  /**
+   * Update only the status field (for Performer role)
+   */
+  private updateTaskStatusOnly(): void {
+    const statusValue = this.taskForm.get('status')?.value;
+
+    // Convert string status to enum value
+    let statusEnum: TaskStatus;
+    switch(statusValue) {
+      case 'Done': statusEnum = TaskStatus.Done; break;
+      case 'In Progress': statusEnum = TaskStatus.InProgress; break;
+      case 'Blocked': statusEnum = TaskStatus.Blocked; break;
+      case 'Waiting': statusEnum = TaskStatus.Waiting; break;
+      default:
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Fehler',
+          detail: 'Ungültiger Status.'
+        });
+        return;
+    }
+
+    if (!this.taskId) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Fehler',
+        detail: 'Task-ID fehlt.'
+      });
+      return;
+    }
+
+    // Use a dedicated endpoint just for status updates
+    this.taskService.updateTaskStatus(this.taskId, statusEnum).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Erfolg',
+          detail: 'Status erfolgreich aktualisiert!'
+        });
+        this.goBack();
+      },
+      error: (err: Error) => {
+        console.error('Fehler beim Aktualisieren des Status:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Fehler',
+          detail: 'Der Status konnte nicht aktualisiert werden.'
+        });
+      }
+    });
   }
 
   deleteTask(): void {
+    if (!this.permissionService.canDeleteTasks()) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Keine Berechtigung',
+        detail: 'Sie haben keine Berechtigung, Tasks zu löschen.'
+      });
+      return;
+    }
+
     if (this.taskId) {
       this.taskService.deleteTask(this.taskId).subscribe({
         next: () => {
@@ -200,21 +322,42 @@ export class TaskDetailComponent implements OnInit {
 
   private prepareCreateTaskData(): CreateTaskDto {
     const formData = this.taskForm.value;
+
+    // Convert string status to enum value
+    let statusEnum: TaskStatus;
+    switch(formData.status) {
+      case 'Done': statusEnum = TaskStatus.Done; break;
+      case 'In Progress': statusEnum = TaskStatus.InProgress; break;
+      case 'Blocked': statusEnum = TaskStatus.Blocked; break;
+      case 'Waiting': statusEnum = TaskStatus.Waiting; break;
+      default: statusEnum = TaskStatus.Waiting;
+    }
+
     return {
-      ...formData,
       name: formData.name,
       description: formData.description,
       rewards: formData.rewards,
-      skills: formData.skills || [], // Skills-Array verwenden oder leerlassen
+      skills: formData.skills || [],
       startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
-      status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
+      status: statusEnum,
       assigneeId: formData.assigneeId || null,
     };
   }
 
   private prepareUpdateTaskData(): UpdateTaskDto {
     const formData = this.taskForm.value;
+
+    // Convert string status to enum value
+    let statusEnum: TaskStatus;
+    switch(formData.status) {
+      case 'Done': statusEnum = TaskStatus.Done; break;
+      case 'In Progress': statusEnum = TaskStatus.InProgress; break;
+      case 'Blocked': statusEnum = TaskStatus.Blocked; break;
+      case 'Waiting': statusEnum = TaskStatus.Waiting; break;
+      default: statusEnum = TaskStatus.Waiting;
+    }
+
     return {
       name: formData.name,
       description: formData.description,
@@ -223,26 +366,23 @@ export class TaskDetailComponent implements OnInit {
       startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       isCompleted: formData.isCompleted ?? false,
-      status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 0,
+      status: statusEnum,
       assigneeId: formData.assigneeId || null,
     };
   }
 
   private formatDate(date: string | Date): string {
-    if (!date) return ''; // Falls `null` oder `undefined`, gibt es einen leeren String zurück
+    if (!date) return '';
 
-    // Falls es schon ein Date-Objekt ist, direkt umwandeln
     if (date instanceof Date) {
-      return date.toISOString().split('T')[0]; // Konvertiert in "YYYY-MM-DD"
+      return date.toISOString().split('T')[0];
     }
 
-    // Falls es ein String ist, zuerst in ein Date-Objekt umwandeln
     const parsedDate = new Date(date);
     return parsedDate.toISOString().split('T')[0];
   }
 
-
-// Prüft, ob der aktuell eingeloggte User bereits der Assignee ist
+  // Check if the current user is assigned to this task
   isCurrentUserAssigned(): boolean {
     const currentUser = this.authService.getCurrentUserSync();
     if (!currentUser || !this.taskForm.get('assigneeId')?.value) {
@@ -251,7 +391,7 @@ export class TaskDetailComponent implements OnInit {
     return this.taskForm.get('assigneeId')?.value === currentUser.id;
   }
 
-// Task vom aktuellen User übernehmen
+  // Task assignment for current user
   pickTask(): void {
     const currentUser = this.authService.getCurrentUserSync();
     if (!currentUser) {
@@ -263,49 +403,45 @@ export class TaskDetailComponent implements OnInit {
       return;
     }
 
-    // Aktuelles Datum und Zeit formatieren
+    // Format current date and time
     const now = new Date();
     const dateTimeString = now.toLocaleString('de-DE');
 
-    // Aktuellen Beschreibungstext holen
+    // Get current description
     const currentDescription = this.taskForm.get('description')?.value || '';
 
-    // Neue Zeile mit Übernahmeinformation hinzufügen
+    // Add assignment info
     const pickInfo = `\n\n- picked by ${currentUser.userName} on ${dateTimeString} -`;
     const updatedDescription = currentDescription + pickInfo;
 
-    // Formular aktualisieren
+    // Update form values
     this.taskForm.patchValue({
       assigneeId: currentUser.id,
-      status: 'InProgress',
+      status: 'In Progress', // Use string value from statusOptions
       description: updatedDescription
     });
 
-    // Task sofort mit den neuen Werten speichern
-    this.updateTask();
+    // If user is Performer, just update status
+    if (!this.permissionService.canEditTaskProperties()) {
+      this.updateTaskStatusOnly();
+      return;
+    }
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Task übernommen',
-      detail: `Du hast die Task "${this.taskForm.get('name')?.value}" erfolgreich übernommen.`
-    });
+    // Otherwise update all task properties
+    this.updateTask();
   }
+
   /**
-   * Bestimmt, ob der Pick-Button angezeigt werden soll
-   * @returns true wenn der Button angezeigt werden soll, sonst false
+   * Determines if the Pick button should be displayed
    */
   showPickButton(): boolean {
-    // Den aktuellen Status holen (beachte dass es ein String oder ein enum sein könnte)
     const currentStatus = this.taskForm.get('status')?.value;
 
-    // Debug-Ausgabe
-    console.log('Current status:', currentStatus);
-    console.log('Current user assigned:', this.isCurrentUserAssigned());
+    // Task must be in Waiting status and not assigned
+    const isWaiting = currentStatus === 'Waiting';
 
-    // Prüfen ob es 'Waiting' ist - verschiedene Werte beachten
-    return !this.isCurrentUserAssigned() &&
-      (currentStatus === 'Waiting' ||
-        currentStatus === 3 ||      // Numerischer Wert in Enumeration
-        currentStatus?.toString().toLowerCase() === 'waiting');
+    const assigneeId = this.taskForm.get('assigneeId')?.value;
+
+    return isWaiting && !assigneeId && !this.isCurrentUserAssigned();
   }
 }
