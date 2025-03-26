@@ -1,0 +1,39 @@
+<p-table [value]="tasks" responsiveLayout="scroll">
+  <ng-template pTemplate="header">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Reward</th>
+      <th scope="col">Start Date</th>
+      <th scope="col">Deadline</th>
+      <th scope="col">Completed</th>
+      <th scope="col">Status</th>
+      <th scope="col">Assignee</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-task>
+    <tr>
+      <td>
+        <a [routerLink]="['/task', task.id]" class="task-link">{{ task.name }}</a>
+      </td>
+      <td>{{ task.rewards }} </td>
+      <td>{{ task.startDate | date:'yyyy-MM-dd' }}</td>
+      <td>{{ task.dueDate | date:'yyyy-MM-dd' }}</td>
+      <td>
+        <p-tag *ngIf="task.isCompleted" severity="success" value="Yes"></p-tag>
+        <p-tag *ngIf="!task.isCompleted" severity="warning" value="No"></p-tag>
+      </td>
+      <td>{{ getStatusLabel(task.status) }}</td>
+      <td>{{ task.assigneeName || 'Unassigned' }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<div class="new-task-container">
+  <p-button
+    label="Neues Task"
+    icon="pi pi-plus"
+    severity="success"
+    [routerLink]="['/task/new']">
+  </p-button>
+</div>

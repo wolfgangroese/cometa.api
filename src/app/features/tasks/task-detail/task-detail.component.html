@@ -1,0 +1,114 @@
+<div class="task-form" [formGroup]="taskForm">
+  <h4>Tasklist</h4>
+
+  <div class="form-group">
+    <div class="input-container">
+    <p-floatLabel>
+      <input pInputText id="name" type="text"  formControlName="name" required />
+      <label for="name">Name</label>
+    </p-floatLabel>
+    </div>
+    <p class="error-message" *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
+      Der Name ist erforderlich.
+    </p>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+    <p-floatLabel>
+      <textarea id="description" type="text" placeholder=" " formControlName="description"></textarea>
+      <label for="description">Description</label>
+    </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="form-group date-group">
+    <div class="input-container">
+      <p-floatLabel>
+        <input id="startDate" formControlName="startDate" type="date" />
+        <label for="startDate">Start Date</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="input-container">
+      <p-floatLabel>
+        <input id="dueDate" formControlName="dueDate" type="date" />
+        <label for="dueDate">Due Date</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+
+
+  <!-- Rewards mit Pick-Button -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Rewards</span>
+    </div>
+    <div class="input-column rewards-container">
+      <input id="rewards" formControlName="rewards" />
+
+      <!-- Pick-Button -->
+      <p-button
+        label="Pick"
+        icon="pi pi-user-plus"
+        [rounded]="true"
+        (click)="pickTask()"
+        severity="info"
+        *ngIf="showPickButton()"
+        styleClass="pick-button"
+      ></p-button>
+    </div>
+  </div>
+
+  <!-- Status-Dropdown -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Status</span>
+    </div>
+    <div class="input-column">
+      <p-dropdown
+        id="status"
+        formControlName="status"
+        [options]="statusOptions"
+        placeholder="Status auswählen"
+        class="custom-dropdown"
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <!-- Assigned User-Dropdown -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Assigned User</span>
+    </div>
+    <div class="input-column">
+      <p-dropdown
+        id="assignedUser"
+        formControlName="assigneeId"
+        [options]="users"
+        optionLabel="userName"
+        optionValue="id"
+        placeholder="Select a user">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <!-- Completed-Checkbox -->
+  <div class="form-row">
+    <div class="label-column">
+      <span>Completed</span>
+    </div>
+    <div class="input-column">
+      <p-checkbox id="isCompleted" formControlName="isCompleted" [binary]="true"></p-checkbox>
+    </div>
+  </div>
+
+  <!-- Button-Gruppe -->
+  <p-buttonGroup class="action-buttons">
+    <p-button label="Update" icon="pi pi-refresh" [rounded]="true" (click)="updateTask()" severity="help" [disabled]="taskForm.invalid"></p-button>
+    <p-button label="Duplicate" icon="pi pi-plus" [rounded]="true" (click)="addTask()" severity="success"></p-button>
+    <p-button label="List" icon="pi pi-list" [rounded]="true" (click)="goBack()" severity="secondary"></p-button>
+    <p-button label="Delete" icon="pi pi-trash" [rounded]="true" (click)="deleteTask()" severity="danger"></p-button>
+  </p-buttonGroup>
+</div>

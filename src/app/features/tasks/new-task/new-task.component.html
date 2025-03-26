@@ -1,0 +1,56 @@
+<div class="task-form" [formGroup]="taskForm">
+  <h4>Neues Task erstellen</h4>
+
+  <div class="form-group">
+    <div class="input-container">
+      <input id="name" type="text" placeholder=" " formControlName="name" pInputText required/>
+      <label for="name">Name</label>
+    </div>
+    <p class="error-message" *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
+      Der Name ist erforderlich und muss mindestens 3 Zeichen lang sein.
+    </p>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+      <textarea id="description" placeholder=" " formControlName="description"></textarea>
+      <label for="description">Beschreibung</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+      <input id="startDate" type="date" placeholder=" " formControlName="startDate" />
+      <label for="startDate">Startdatum</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+      <input id="dueDate" type="date" placeholder=" " formControlName="dueDate" />
+      <label for="dueDate">Deadline</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-container">
+      <p-floatLabel>
+        <p-dropdown
+          id="assignedUser"
+          formControlName="assigneeId"
+          [options]="users"
+          optionLabel="userName"
+          optionValue="id"
+          placeholder="Select a user">
+        </p-dropdown>
+        <label for="assignedUser">Assigned User</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <button (click)="onSubmit()" class="submit-button" [disabled]="taskForm.invalid">Task erstellen</button>
+  <button (click)="goBack()" class="back-button">Back to Task List</button>
+</div>
+
+<p-toast></p-toast>
+

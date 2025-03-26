@@ -1,0 +1,35 @@
+p-table {
+  width: 100%;
+}
+
+th {
+  background: #f4f4f4;
+  text-align: left;
+  padding: 10px;
+  font-size: 12px;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+p-tag {
+  width: 60px;
+  display: flex;
+  justify-content: center;
+}
+.task-link {
+  color: #007ad9;  /* PrimeNG Blau */
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.new-task-container {
+  margin-top: 20px;
+  text-align: center;
+}

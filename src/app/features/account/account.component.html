@@ -1,0 +1,35 @@
+<div class="account-container">
+  <div *ngIf="currentUser" class="user-info">
+    <h2>Willkommen, {{ currentUser.userName }}!</h2>
+    <p>E-Mail: {{ currentUser.email }}</p>
+
+    <div class="rewards-section">
+      <h3>Your Rewards</h3>
+      <div class="reward-total">
+        <i class="pi pi-star-fill reward-icon"></i>
+        <span class="reward-count">{{ totalRewards }}</span>
+        <span class="reward-label">Coins</span>
+      </div>
+    </div>
+  </div>
+
+    <div class="action-buttons">
+      <p-button
+        label="Logout"
+        icon="pi pi-sign-out"
+        severity="danger"
+        (click)="logout()">
+      </p-button>
+    </div>
+  </div>
+
+  <div *ngIf="!currentUser" class="login-prompt">
+    <p>Bitte melde dich erst an.</p>
+    <p-button
+      label="Login"
+      icon="pi pi-sign-in"
+      severity="primary"
+      routerLink="/login">
+    </p-button>
+  </div>
+

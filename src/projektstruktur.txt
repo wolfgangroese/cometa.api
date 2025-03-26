@@ -1,0 +1,94 @@
+.
+├── app
+│   ├── app.component.html
+│   ├── app.component.scss
+│   ├── app.component.spec.ts
+│   ├── app.component.ts
+│   ├── app.config.server.ts
+│   ├── app.config.ts
+│   ├── app.module.ts
+│   ├── app.routes.ts
+│   ├── auth.interceptor.ts
+│   ├── features
+│   │   ├── account
+│   │   │   ├── account.component.html
+│   │   │   ├── account.component.scss
+│   │   │   ├── account.component.spec.ts
+│   │   │   └── account.component.ts
+│   │   ├── home
+│   │   │   ├── home.component.html
+│   │   │   ├── home.component.scss
+│   │   │   ├── home.component.spec.ts
+│   │   │   └── home.component.ts
+│   │   ├── news
+│   │   │   ├── news.component.html
+│   │   │   ├── news.component.scss
+│   │   │   ├── news.component.spec.ts
+│   │   │   └── news.component.ts
+│   │   ├── search
+│   │   │   ├── search.component.html
+│   │   │   ├── search.component.scss
+│   │   │   ├── search.component.spec.ts
+│   │   │   └── search.component.ts
+│   │   └── tasks
+│   │       ├── new-task
+│   │       │   ├── new-task.component.html
+│   │       │   ├── new-task.component.scss
+│   │       │   ├── new-task.component.spec.ts
+│   │       │   └── new-task.component.ts
+│   │       ├── task-detail
+│   │       │   ├── task-detail.component.html
+│   │       │   ├── task-detail.component.scss
+│   │       │   ├── task-detail.component.spec.ts
+│   │       │   └── task-detail.component.ts
+│   │       ├── task-list
+│   │       │   ├── task-list.component.html
+│   │       │   ├── task-list.component.scss
+│   │       │   └── task-list.component.ts
+│   │       └── task-quick-add
+│   │           ├── task-quick-add.component.html
+│   │           ├── task-quick-add.component.scss
+│   │           ├── task-quick-add.component.spec.ts
+│   │           └── task-quick-add.component.ts
+│   ├── login
+│   │   ├── login.component.html
+│   │   ├── login.component.scss
+│   │   ├── login.component.spec.ts
+│   │   └── login.component.ts
+│   ├── models
+│   │   ├── dtos
+│   │   │   ├── login.dto.ts
+│   │   │   └── register.dto.ts
+│   │   ├── task.model.ts
+│   │   └── user.model.ts
+│   ├── register
+│   │   ├── register.component.html
+│   │   ├── register.component.scss
+│   │   ├── register.component.spec.ts
+│   │   └── register.component.ts
+│   ├── services
+│   │   ├── auth.service.ts
+│   │   ├── task.service.ts
+│   │   └── user.service.ts
+│   └── shell
+│       ├── footer
+│       │   ├── footer.component.html
+│       │   ├── footer.component.scss
+│       │   ├── footer.component.spec.ts
+│       │   └── footer.component.ts
+│       └── header
+│           ├── header.component.html
+│           ├── header.component.scss
+│           ├── header.component.spec.ts
+│           └── header.component.ts
+├── environments
+│   └── environment.dev.ts
+├── favicon.ico
+├── index.html
+├── main.server.ts
+├── main.ts
+├── polyfills.ts
+├── projektstruktur.txt
+└── styles.scss
+
+21 directories, 71 files
