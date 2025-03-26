@@ -44,11 +44,15 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 
-// Überprüfung des SecretKeys, um null zu vermeiden
-var secretKey = builder.Configuration["Jwt:SecretKey"];
+// Get JWT Secret from different sources with priority
+var secretKey = builder.Configuration["Jwt:SecretKey"] ?? 
+                Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+
 if (string.IsNullOrEmpty(secretKey))
 {
-    throw new InvalidOperationException("JWT SecretKey ist in der Konfiguration nicht gesetzt.");
+    throw new InvalidOperationException(
+        "JWT SecretKey is not configured. Please set it using User Secrets ('dotnet user-secrets set \"Jwt:SecretKey\" \"your-key\"') " +
+        "or an environment variable ('JWT_SECRET_KEY').");
 }
 
 // Authentifizierung und JWT Token (optional, falls du JWT verwenden möchtest)
