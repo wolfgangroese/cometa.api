@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, ReplaySubject } from 'rxjs';
 import { environment } from '../../environments/environment.dev';
 import { catchError, tap } from 'rxjs/operators';
@@ -175,4 +175,30 @@ export class AuthService {
   hasAnyRole(roles: string[]): boolean {
     return roles.some(role => this.hasRole(role));
   }
+  /**
+   * Direct authentication test that bypasses the interceptor
+   */
+  testDirectAuth(): Observable<any> {
+    const token = localStorage.getItem('jwtToken');
+    console.log('Testing direct auth with token:', token ? 'Token exists' : 'No token');
+
+    if (!token) {
+      return throwError(() => new Error('No token available'));
+    }
+
+    // Create headers manually to bypass interceptor
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log('Authorization header created manually');
+
+    // Make a direct request to the auth test endpoint
+    return this.http.get<any>(`${environment.api.baseUrl}/tasks/auth-test`, { headers })
+      .pipe(
+        tap(response => console.log('Direct auth test successful:', response)),
+        catchError(error => {
+          console.error('Direct auth test failed:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
 }

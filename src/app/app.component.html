@@ -1,7 +1,12 @@
 <app-header></app-header>
+
 <main>
   <p-toast position="top-right"></p-toast>
+
   <router-outlet></router-outlet>
+  <button (click)="testAuthDirectly()" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    Test Auth Directly
+  </button>
 </main>
 <app-footer></app-footer>
 

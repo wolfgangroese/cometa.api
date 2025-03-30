@@ -8,6 +8,7 @@ import { ToastModule } from "primeng/toast";
 import { MessageService } from "primeng/api";
 import { AuthService } from "./services/auth.service"; // ✅ AuthService importieren
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -40,4 +41,12 @@ export class AppComponent implements OnInit { // ✅ OnInit implementieren
       life: 3000
     });
   }
+
+// In your AppComponent class
+testAuthDirectly(): void {
+  this.authService.testDirectAuth().subscribe({
+    next: (result) => console.log('Direct auth test successful:', result),
+    error: (err) => console.error('Direct auth test failed:', err)
+  });
+}
 }

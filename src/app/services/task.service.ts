@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Task, CreateTaskDto, UpdateTaskDto, TaskStatus } from '../models/task.model';
-import { catchError } from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import { environment } from '../../environments/environment.dev';
 
 @Injectable({
@@ -14,8 +14,34 @@ export class TaskService {
   constructor(private http: HttpClient) {}
 
   getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.apiUrl).pipe(
-      catchError(this.handleError)
+    console.log('Calling getTasks() from TaskService');
+    const token = localStorage.getItem('jwtToken');
+    console.log('Token in getTasks:', token ? 'exists' : 'missing');
+
+    if (token) {
+      // Parse and log token details
+      try {
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(atob(parts[1]));
+          console.log('Token payload:', payload);
+          console.log('Token role:', payload.role);
+          console.log('Expiration:', new Date(payload.exp * 1000).toLocaleString());
+        }
+      } catch (e) {
+        console.error('Error parsing token:', e);
+      }
+    }
+
+    // Create explicit headers to ensure the token is sent correctly
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<Task[]>(this.apiUrl, { headers }).pipe(
+      tap(tasks => console.log('Tasks retrieved successfully:', tasks)),
+      catchError(error => {
+        console.error('Error in getTasks:', error);
+        return throwError(() => error);
+      })
     );
   }
 
@@ -26,7 +52,9 @@ export class TaskService {
   }
 
   addTask(task: CreateTaskDto): Observable<Task> {
-    return this.http.post<Task>(this.apiUrl, task).pipe(
+    const token = localStorage.getItem('jwtToken');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Task>(this.apiUrl, task, { headers}).pipe(
       catchError(this.handleError)
     );
   }
