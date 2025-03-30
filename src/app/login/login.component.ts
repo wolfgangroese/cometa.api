@@ -61,12 +61,8 @@ export class LoginComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response: any) => {
-        console.log('Login successful, response:', response);
-        console.log('Token received:', response.token ? 'Yes, length: ' + response.token.length : 'No');
-
         this.authService.saveToken(response.token);
-        console.log('After saveToken, checking localStorage:', localStorage.getItem('jwtToken') ? 'Token in localStorage' : 'No token in localStorage');
-
+        this.authService.loadUserFromToken();
         this.router.navigate(['/home']);
       },
       error: (error) => {

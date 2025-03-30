@@ -86,7 +86,8 @@ export class TaskQuickAddComponent {
         dueDate: null,
         rewards: 1,
         isCompleted: false,
-        status: 3 // Waiting
+        status: 3,  // Waiting
+        skillNames: [],
       };
 
       this.taskService.addTask(newTask).subscribe({

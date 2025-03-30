@@ -21,7 +21,7 @@ interface MenuItem {
 })
 export class HeaderComponent implements OnInit {
   currentLabel = 'COMETA';
-  currentUser: User | null = null;
+  currentUser?: User | null = null;
   showAccountMenu = false;
   totalRewards = 0;
 
@@ -41,7 +41,8 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Beobachte Navigation-Änderungen
+    console.log('📣 Header currentUser:', this.currentUser);
+
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {

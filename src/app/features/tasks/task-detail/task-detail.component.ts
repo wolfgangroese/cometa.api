@@ -19,6 +19,8 @@ import { UserService } from '../../../services/user.service';
 import { User } from "../../../models/user.model";
 import { AuthService } from "../../../services/auth.service";
 import { PermissionService } from "../../../services/permission.service";
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ChipsModule } from 'primeng/chips';
 
 @Component({
   selector: 'app-task-detail',
@@ -40,21 +42,24 @@ import { PermissionService } from "../../../services/permission.service";
     InputTextareaModule,
     ButtonGroupModule,
     FloatLabelModule,
+    AutoCompleteModule,
+    ChipsModule
   ],
   providers: [MessageService]
 })
 export class TaskDetailComponent implements OnInit {
   taskForm!: FormGroup;
   taskId: string | undefined;
-
-  // Define status options for the dropdown
-  statusOptions = ['Done', 'In Progress', 'Blocked', 'Waiting'];
-
   users: User[] = [];
-
-  // Track original status value before changes
+  currentUser?: User | null = null;
   originalStatus?: TaskStatus;
 
+  statusOptions = [
+    { label: 'Done', value: 'Done' },
+    { label: 'In Progress', value: 'In Progress' },
+    { label: 'Blocked', value: 'Blocked' },
+    { label: 'Waiting', value: 'Waiting' }
+  ];
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -63,39 +68,36 @@ export class TaskDetailComponent implements OnInit {
     private messageService: MessageService,
     private userService: UserService,
     private authService: AuthService,
-    public permissionService: PermissionService, // Public for template access
+    public permissionService: PermissionService,
   ) {}
 
   ngOnInit(): void {
     this.taskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
-      status: [''],
+      status: [this.statusOptions[3].value], // Standardwert 'Waiting'
       rewards: [0],
       skills: [[]],
+      skillNames: [[]], // 🆕 hier landen die Chips
       startDate: [null],
       dueDate: [null],
       isCompleted: [false],
-      assigneeId: [null],
+      assigneeId: [null]
     });
 
     this.taskId = this.route.snapshot.paramMap.get('id') || '';
-
-    if (this.taskId) {
-      this.loadTask();
-    }
-
+    if (this.taskId) this.loadTask();
     this.loadUsers();
+
+    this.currentUser = this.authService.getCurrentUserSync();
+    console.log('Aktueller User:', this.authService.getCurrentUserSync());
+
   }
 
   loadUsers(): void {
     this.userService.getUsers().subscribe({
-      next: (users) => {
-        this.users = users;
-      },
-      error: (err) => {
-        console.error('Error loading users:', err);
-      }
+      next: (users) => this.users = users,
+      error: (err) => console.error('Error loading users:', err)
     });
   }
 
@@ -104,33 +106,29 @@ export class TaskDetailComponent implements OnInit {
 
     this.taskService.getTaskById(this.taskId).subscribe({
       next: (task) => {
-        // Store original status for comparison later
         this.originalStatus = task.status;
-
-        // Map numeric status to string representation for dropdown
-        let statusString: string;
+        let statusValue;
         switch(task.status) {
-          case TaskStatus.Done: statusString = 'Done'; break;
-          case TaskStatus.InProgress: statusString = 'In Progress'; break;
-          case TaskStatus.Blocked: statusString = 'Blocked'; break;
-          case TaskStatus.Waiting: statusString = 'Waiting'; break;
-          default: statusString = 'Waiting';
+          case TaskStatus.Done: statusValue = 'Done'; break;
+          case TaskStatus.InProgress: statusValue = 'In Progress'; break;
+          case TaskStatus.Blocked: statusValue = 'Blocked'; break;
+          case TaskStatus.Waiting: statusValue = 'Waiting'; break;
+          default: statusValue = 'Waiting';
         }
 
-        // Patch the form with task data
         this.taskForm.patchValue({
           name: task.name,
           description: task.description,
           rewards: task.rewards ?? 0,
           skills: task.skills ?? [],
+          skillNames: task.skills ?? [],
           startDate: task.startDate ? this.formatDate(task.startDate) : null,
           dueDate: task.dueDate ? this.formatDate(task.dueDate) : null,
           isCompleted: task.isCompleted,
-          status: statusString,
+          status: statusValue,
           assigneeId: task.assigneeId || null,
         });
 
-        // Apply permission-based disabling of fields
         this.applyPermissionRestrictions();
       },
       error: (err) => {
@@ -323,7 +321,6 @@ export class TaskDetailComponent implements OnInit {
   private prepareCreateTaskData(): CreateTaskDto {
     const formData = this.taskForm.value;
 
-    // Convert string status to enum value
     let statusEnum: TaskStatus;
     switch(formData.status) {
       case 'Done': statusEnum = TaskStatus.Done; break;
@@ -338,6 +335,7 @@ export class TaskDetailComponent implements OnInit {
       description: formData.description,
       rewards: formData.rewards,
       skills: formData.skills || [],
+      skillNames: formData.skillNames || [], // 🆕 hinzugefügt
       startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       status: statusEnum,
@@ -348,7 +346,6 @@ export class TaskDetailComponent implements OnInit {
   private prepareUpdateTaskData(): UpdateTaskDto {
     const formData = this.taskForm.value;
 
-    // Convert string status to enum value
     let statusEnum: TaskStatus;
     switch(formData.status) {
       case 'Done': statusEnum = TaskStatus.Done; break;
@@ -363,6 +360,7 @@ export class TaskDetailComponent implements OnInit {
       description: formData.description,
       rewards: formData.rewards ?? 0,
       skills: formData.skills ?? [],
+      skillNames: formData.skillNames || [], // 🆕 hinzugefügt
       startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       isCompleted: formData.isCompleted ?? false,
@@ -382,6 +380,8 @@ export class TaskDetailComponent implements OnInit {
     return parsedDate.toISOString().split('T')[0];
   }
 
+
+
   // Check if the current user is assigned to this task
   isCurrentUserAssigned(): boolean {
     const currentUser = this.authService.getCurrentUserSync();
@@ -390,6 +390,8 @@ export class TaskDetailComponent implements OnInit {
     }
     return this.taskForm.get('assigneeId')?.value === currentUser.id;
   }
+
+
 
   // Task assignment for current user
   pickTask(): void {
@@ -418,8 +420,11 @@ export class TaskDetailComponent implements OnInit {
     this.taskForm.patchValue({
       assigneeId: currentUser.id,
       status: 'In Progress', // Use string value from statusOptions
-      description: updatedDescription
+      description: updatedDescription,
+      skillNames: this.taskForm.get('skillNames') ?.value ?? [],
     });
+    console.log('SkillNames im Form:', this.taskForm.get('skillNames')?.value);
+
 
     // If user is Performer, just update status
     if (!this.permissionService.canEditTaskProperties()) {
@@ -444,4 +449,5 @@ export class TaskDetailComponent implements OnInit {
 
     return isWaiting && !assigneeId && !this.isCurrentUserAssigned();
   }
+
 }
