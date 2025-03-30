@@ -13,14 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 // CORS-Policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp",
-        policyBuilder =>
-        {
-            policyBuilder.WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials(); // Falls Cookies oder Authentifizierung nötig sind
-        });
+    options.AddPolicy("AllowAngularApp", policy =>
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 // Add services to the container.
@@ -72,8 +69,7 @@ builder.Services.AddAuthentication(options =>
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-            NameClaimType = ClaimTypes.NameIdentifier,
-            RoleClaimType = ClaimTypes.Role
+            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
         };
     });
 
@@ -130,15 +126,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-
 app.UseCors("AllowAngularApp");
-
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseHttpsRedirection();
-
 app.MapControllers();
-
-
+app.UseHttpsRedirection();
 app.Run();

@@ -100,7 +100,7 @@ namespace Cometa.Api.Controllers
 
             // Rollen abrufen und als Claims hinzufügen
             var roles = await _userManager.GetRolesAsync(user);
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            claims.AddRange(roles.Select(role => new Claim("role", role)));
 
             // Use the secret key from configuration, not user email
             var secretKey = _configuration["Jwt:SecretKey"];
