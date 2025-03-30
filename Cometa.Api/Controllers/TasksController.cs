@@ -10,12 +10,13 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using Cometa.Persistence.Enums;
 
 namespace Cometa.Api.Controllers;
 
 [ApiController]
 [Route("api/tasks")]
-[Authorize]
+//[Authorize]
 public class TasksController : ControllerBase
 {
     private readonly CometaDbContext _context;
@@ -31,7 +32,7 @@ public class TasksController : ControllerBase
     {
         var tasks = await _context.Tasks
             .Include(t => t.TaskSkills)
-            .ThenInclude(ts => ts.Skill)
+                .ThenInclude(ts => ts.Skill)
             .Include(t => t.Assignee)
             .ToListAsync();
 
@@ -42,9 +43,8 @@ public class TasksController : ControllerBase
             Description = task.Description,
             StartDate = task.StartDate,
             DueDate = task.DueDate,
-            Skills = task.TaskSkills
-                .Select(ts => ts.Skill.Name ?? string.Empty)
-                .ToList(),
+            Skills = task.TaskSkills.Select(ts => ts.Skill!.Name ?? string.Empty).ToList(),
+            SkillNames = task.TaskSkills.Select(ts => ts.Skill!.Name ?? string.Empty).ToList(),
             IsCompleted = task.IsCompleted ?? false,
             Rewards = task.Rewards ?? 0,
             Status = task.TaskStatus,
@@ -53,6 +53,34 @@ public class TasksController : ControllerBase
         });
 
         return Ok(taskDtos);
+    }
+    private async Task<List<TaskSkill>> MapSkillNamesToTaskSkills(List<string> skillNames, TaskEntity task)
+    {
+        var normalizedNames = skillNames
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Select(name => name.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var existingSkills = await _context.Skills
+            .Where(s => normalizedNames.Contains(s.Name!))
+            .ToListAsync();
+
+        var taskSkills = new List<TaskSkill>();
+
+        foreach (var name in normalizedNames)
+        {
+            var skill = existingSkills.FirstOrDefault(s => s.Name!.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (skill == null)
+            {
+                skill = new Skill { Name = name };
+                _context.Skills.Add(skill);
+            }
+
+            taskSkills.Add(new TaskSkill { Skill = skill, Task = task });
+        }
+
+        return taskSkills;
     }
 
     [HttpGet("{id}", Name = "GetTaskById")]
@@ -91,7 +119,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost(Name = "CreateTask")]
-   // [Authorize(Roles = "Admin,Staff")]
+    [Authorize(Roles = "Admin,Staff")]
     public async Task<ActionResult<TaskDto>> CreateTask([FromBody] TaskDto newTaskDto)
     {
         if (newTaskDto == null || string.IsNullOrEmpty(newTaskDto.Name))
@@ -108,19 +136,14 @@ public class TasksController : ControllerBase
             IsCompleted = newTaskDto.IsCompleted,
             Rewards = newTaskDto.Rewards,
             TaskStatus = newTaskDto.Status,
+            CreationStatus = CreationStatus.Draft, 
             TaskSkills = new List<TaskSkill>(),
             AssigneeId = newTaskDto.AssigneeId
         };
 
-        var existingSkills = await _context.Skills
-            .Where(s => newTaskDto.Skills.Contains(s.Name ?? string.Empty))
-            .ToListAsync();
-
-        foreach (var skillName in newTaskDto.Skills)
-        {
-            var skill = existingSkills.FirstOrDefault(s => s.Name == skillName) ?? new Skill { Name = skillName };
-            newTask.TaskSkills.Add(new TaskSkill { Task = newTask, Skill = skill });
-        }
+        // 🆕 Skills werden via SkillNames gesucht oder angelegt
+        var taskSkills = await MapSkillNamesToTaskSkills(newTaskDto.SkillNames, newTask);
+        newTask.TaskSkills = taskSkills;
 
         _context.Tasks.Add(newTask);
         await _context.SaveChangesAsync();
@@ -143,78 +166,68 @@ public class TasksController : ControllerBase
 
         return CreatedAtRoute("GetTaskById", new { id = newTask.Id }, newTaskDto);
     }
-
-    [HttpPut("{id}", Name = "UpdateTask")]
-    [Authorize(Roles = "Admin,Staff")]
-    public async Task<IActionResult> UpdateTask(Guid id, [FromBody] TaskDto updatedTaskDto)
+    
+   [HttpPut("{id}", Name = "UpdateTask")]
+   [Authorize(Roles = "Admin,Staff")] 
+   public async Task<IActionResult> UpdateTask(Guid id, [FromBody] TaskDto updatedTaskDto)
     {
-        if (updatedTaskDto == null || id == Guid.Empty)
-        {
-            return BadRequest("Invalid request.");
-        }
-
-        var existingTask = await _context.Tasks
-            .Include(t => t.TaskSkills)
-            .ThenInclude(ts => ts.Skill)
-            .FirstOrDefaultAsync(t => t.Id == id);
-
-        if (existingTask == null)
-        {
-            return NotFound(new { message = $"Task with ID {id} not found." });
-        }
-
-        // Get the completion status BEFORE updating
-        bool wasCompletedBefore = existingTask.IsCompleted ?? false;
-        
-        // Ensure DateTime values are converted to UTC
-        DateTime? ConvertToUtc(DateTime? date) =>
-            date.HasValue && date.Value.Kind == DateTimeKind.Unspecified 
-                ? DateTime.SpecifyKind(date.Value, DateTimeKind.Utc) 
-                : date;
-
-        _context.TaskSkills.RemoveRange(existingTask.TaskSkills);
-        existingTask.TaskSkills.Clear();
-
-        existingTask.TaskStatus = updatedTaskDto.Status;
-        existingTask.Name = updatedTaskDto.Name;
-        existingTask.Description = updatedTaskDto.Description;
-        existingTask.StartDate = ConvertToUtc(updatedTaskDto.StartDate);
-        existingTask.DueDate = ConvertToUtc(updatedTaskDto.DueDate);
-        existingTask.IsCompleted = updatedTaskDto.IsCompleted;
-        existingTask.Rewards = updatedTaskDto.Rewards;
-        existingTask.TaskSkills = new List<TaskSkill>();
-        existingTask.AssigneeId = updatedTaskDto.AssigneeId;
-
-        var updatedSkills = await _context.Skills
-            .Where(s => updatedTaskDto.Skills.Contains(s.Name ?? string.Empty))
-            .ToListAsync();
-
-        foreach (var skillName in updatedTaskDto.Skills)
-        {
-            var skill = updatedSkills.FirstOrDefault(s => s.Name == skillName) ?? new Skill { Name = skillName };
-            existingTask.TaskSkills.Add(new TaskSkill { Task = existingTask, Skill = skill });
-        }
-
-        await _context.SaveChangesAsync();
-        
-        // Check if the task was just completed
-        if (!wasCompletedBefore && existingTask.IsCompleted == true && existingTask.AssigneeId.HasValue)
-        {
-            Console.WriteLine($"Task {id} completed by user {existingTask.AssigneeId}. Updating rewards...");
-            try 
-            {
-                var rewardService = HttpContext.RequestServices.GetRequiredService<RewardService>();
-                var newRewards = await rewardService.UpdateUserRewardsAsync(existingTask.AssigneeId.Value);
-                Console.WriteLine($"Updated rewards: {newRewards}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error updating rewards: {ex.Message}");
-            }
-        }
-
-        return Ok(new { message = "Task updated successfully." });
+    if (updatedTaskDto == null || id == Guid.Empty)
+    {
+        return BadRequest("Invalid request.");
     }
+
+    var existingTask = await _context.Tasks
+        .Include(t => t.TaskSkills)
+        .ThenInclude(ts => ts.Skill)
+        .FirstOrDefaultAsync(t => t.Id == id);
+
+    if (existingTask == null)
+    {
+        return NotFound(new { message = $"Task with ID {id} not found." });
+    }
+
+    bool wasCompletedBefore = existingTask.IsCompleted ?? false;
+
+    DateTime? ConvertToUtc(DateTime? date) =>
+        date.HasValue && date.Value.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(date.Value, DateTimeKind.Utc)
+            : date;
+
+    _context.TaskSkills.RemoveRange(existingTask.TaskSkills); 
+    existingTask.TaskSkills.Clear();
+
+    existingTask.TaskStatus = updatedTaskDto.Status;
+    existingTask.Name = updatedTaskDto.Name;
+    existingTask.Description = updatedTaskDto.Description;
+    existingTask.StartDate = ConvertToUtc(updatedTaskDto.StartDate);
+    existingTask.DueDate = ConvertToUtc(updatedTaskDto.DueDate);
+    existingTask.IsCompleted = updatedTaskDto.IsCompleted;
+    existingTask.Rewards = updatedTaskDto.Rewards;
+    existingTask.AssigneeId = updatedTaskDto.AssigneeId;
+    existingTask.CreationStatus = updatedTaskDto.CreationStatus; 
+
+    // 🆕 neue Skills zuweisen
+    var taskSkills = await MapSkillNamesToTaskSkills(updatedTaskDto.SkillNames, existingTask);
+    existingTask.TaskSkills = taskSkills;
+
+    await _context.SaveChangesAsync();
+
+    if (!wasCompletedBefore && existingTask.IsCompleted == true && existingTask.AssigneeId.HasValue)
+    {
+        try
+        {
+            var rewardService = HttpContext.RequestServices.GetRequiredService<RewardService>();
+            var newRewards = await rewardService.UpdateUserRewardsAsync(existingTask.AssigneeId.Value);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating rewards: {ex.Message}");
+        }
+    }
+
+    return Ok(new { message = "Task updated successfully." });
+}
+
 
     // Special endpoint for Performers to only update task status
     [HttpPatch("{id}/status", Name = "UpdateTaskStatus")]
@@ -299,6 +312,12 @@ public class TasksController : ControllerBase
         return Ok(new { message = "Task deleted successfully." });
     }
 
+    
+    
+    
+    
+    // TESTING AND DEBUGGING 
+    
     [HttpGet("test-rewards/{userId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> TestRewards(Guid userId)

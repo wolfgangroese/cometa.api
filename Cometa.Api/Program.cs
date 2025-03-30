@@ -69,7 +69,7 @@ builder.Services.AddAuthentication(options =>
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+            RoleClaimType = ClaimTypes.Role,
         };
     });
 
@@ -124,11 +124,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
-app.UseHttpsRedirection();
 app.Run();

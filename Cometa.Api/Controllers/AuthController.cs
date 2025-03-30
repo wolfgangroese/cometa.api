@@ -90,7 +90,6 @@ namespace Cometa.Api.Controllers
         // JWT Token generieren
         private async Task<string> GenerateJwtTokenAsync(ApplicationUser user)
         {
-            // Basis-Claims
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -98,17 +97,17 @@ namespace Cometa.Api.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            // Rollen abrufen und als Claims hinzufügen
             var roles = await _userManager.GetRolesAsync(user);
-            claims.AddRange(roles.Select(role => new Claim("role", role)));
 
-            // Use the secret key from configuration, not user email
+            // ✅ Richtiger ClaimType für Rollen!
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
             var secretKey = _configuration["Jwt:SecretKey"];
             if (string.IsNullOrEmpty(secretKey))
             {
                 throw new InvalidOperationException("JWT SecretKey is not configured");
             }
-    
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -122,6 +121,7 @@ namespace Cometa.Api.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
 
     }
