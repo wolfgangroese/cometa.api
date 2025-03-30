@@ -2,7 +2,7 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient, withFetch, withInterceptors } from "@angular/common/http";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { authInterceptor } from "./auth.interceptor"; // Make sure to import your interceptor
 
 export const appConfig: ApplicationConfig = {
@@ -11,8 +11,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(
-      withFetch(),
-      withInterceptors([authInterceptor]) // Add the interceptor here
+      withInterceptors([authInterceptor])
     )
   ]
 };

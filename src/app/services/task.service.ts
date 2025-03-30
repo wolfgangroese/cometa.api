@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Task, CreateTaskDto, UpdateTaskDto, TaskStatus } from '../models/task.model';
 import {catchError, tap} from 'rxjs/operators';
@@ -14,29 +14,7 @@ export class TaskService {
   constructor(private http: HttpClient) {}
 
   getTasks(): Observable<Task[]> {
-    console.log('Calling getTasks() from TaskService');
-    const token = localStorage.getItem('jwtToken');
-    console.log('Token in getTasks:', token ? 'exists' : 'missing');
-
-    if (token) {
-      // Parse and log token details
-      try {
-        const parts = token.split('.');
-        if (parts.length === 3) {
-          const payload = JSON.parse(atob(parts[1]));
-          console.log('Token payload:', payload);
-          console.log('Token role:', payload.role);
-          console.log('Expiration:', new Date(payload.exp * 1000).toLocaleString());
-        }
-      } catch (e) {
-        console.error('Error parsing token:', e);
-      }
-    }
-
-    // Create explicit headers to ensure the token is sent correctly
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<Task[]>(this.apiUrl, { headers }).pipe(
+    return this.http.get<Task[]>(this.apiUrl).pipe(
       tap(tasks => console.log('Tasks retrieved successfully:', tasks)),
       catchError(error => {
         console.error('Error in getTasks:', error);
@@ -46,15 +24,13 @@ export class TaskService {
   }
 
   getTaskById(id: string): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Task>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
+
   addTask(task: CreateTaskDto): Observable<Task> {
-    const token = localStorage.getItem('jwtToken');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post<Task>(this.apiUrl, task, { headers}).pipe(
+    return this.http.post<Task>(this.apiUrl, task).pipe(
       catchError(this.handleError)
     );
   }

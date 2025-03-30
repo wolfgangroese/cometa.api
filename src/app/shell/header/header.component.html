@@ -3,6 +3,7 @@
 
   <div class="user-info">
     <span *ngIf="currentUser" class="username">{{ currentUser.email || currentUser.userName }}</span>
+    <span *ngIf="currentUser?.role" class="role-badge">{{ currentUser?.role }}</span>
     <div class="account-icon"
          (click)="toggleAccountMenu($event)"
          (keydown.enter)="toggleAccountMenu($event)"
@@ -39,7 +40,13 @@
     </div>
 
     <div class="account-details" *ngIf="currentUser">
-      <div class="user-email">{{ currentUser.email }}</div>
+      <div class="user-email">
+        <span>{{ currentUser?.email }}</span>
+        <span *ngIf="currentUser?.role" class="role-badge">
+  {{ currentUser.role }}
+</span>
+
+      </div>
 
       <div class="rewards-info">
         <i class="pi pi-star-fill reward-icon"></i>

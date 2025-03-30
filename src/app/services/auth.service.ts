@@ -11,7 +11,7 @@ interface TokenPayload {
   nameid: string;
   unique_name: string;
   email: string;
-  role: string[] | string;
+  role: string | string[] | null;
   exp: number;
   iss: string;
   aud: string;
@@ -81,15 +81,30 @@ export class AuthService {
       console.log('Using authorization header:', headers.Authorization);
 
       this.http.get<User>(`${this.apiUrl}/me`, { headers }).subscribe({
-        next: (user) => {
-          console.log('User loaded successfully:', user.userName);
+        next: (apiUser) => {
+          const user = { ...apiUser }; // 👉 wirklich klonen
+
+          const tokenDataStr = localStorage.getItem('tokenData');
+          if (tokenDataStr) {
+            const tokenData = JSON.parse(tokenDataStr) as TokenPayload;
+            if (tokenData.role) {
+              user.roles = Array.isArray(tokenData.role) ? tokenData.role : [tokenData.role];
+              user.role = Array.isArray(tokenData.role) ? tokenData.role[0] : tokenData.role;
+            } else {
+              console.warn('❗ Rolle im Token fehlt oder null:', tokenData);
+            }
+
+          }
+
+          console.log('✅ FINAL USER:', user); // <== Hier muss role erscheinen
           this.setCurrentUser(user);
         },
         error: (err) => {
           console.error('Error loading user from token:', err);
           this.logout();
-        },
+        }
       });
+
     }
   }
 
@@ -130,16 +145,27 @@ export class AuthService {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
 
-      return JSON.parse(jsonPayload) as TokenPayload;
+      const parsed = JSON.parse(jsonPayload);
+
+      const role = parsed["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      return {
+        ...parsed,
+        role // 👈 das normale 'role' Feld wird hier gesetzt!
+      } as TokenPayload;
+
     } catch (e) {
       console.error('Error parsing JWT token:', e);
       return {} as TokenPayload;
     }
   }
+
 
   /**
    * Check if the current user has the specified role
@@ -152,22 +178,20 @@ export class AuthService {
 
     try {
       const tokenData = JSON.parse(tokenDataStr) as TokenPayload;
-      // Check 'role' claim in token (format varies depending on your JWT configuration)
       const roles = tokenData.role || [];
 
-      // Handle both array and string formats
       if (Array.isArray(roles)) {
-        return roles.includes(role);
+        return roles.some(r => r.toLowerCase() === role.toLowerCase()); // ✅
       } else if (typeof roles === 'string') {
-        return roles === role;
+        return roles.toLowerCase() === role.toLowerCase(); // ✅
       }
-
       return false;
     } catch (e) {
       console.error('Error checking user role:', e);
       return false;
     }
   }
+
 
   /**
    * Check if user has any of the specified roles

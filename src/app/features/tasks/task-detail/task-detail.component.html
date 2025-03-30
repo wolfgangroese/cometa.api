@@ -1,108 +1,127 @@
 <div class="task-form" [formGroup]="taskForm">
   <h4>Task Details</h4>
 
-  <div class="form-group">
-    <div class="input-container">
-      <p-floatLabel>
-        <input pInputText id="name" type="text" formControlName="name" required />
-        <label for="name">Name</label>
-      </p-floatLabel>
-    </div>
-    <p class="error-message" *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
-      Der Name ist erforderlich.
-    </p>
-  </div>
-
-  <div class="form-group">
-    <div class="input-container">
-      <p-floatLabel>
-        <textarea id="description" type="text" placeholder=" " formControlName="description"></textarea>
-        <label for="description">Description</label>
-      </p-floatLabel>
-    </div>
-  </div>
-
-  <div class="form-group date-group">
-    <div class="input-container">
-      <p-floatLabel>
-        <input id="startDate" formControlName="startDate" type="date" />
-        <label for="startDate">Start Date</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="input-container">
-      <p-floatLabel>
-        <input id="dueDate" formControlName="dueDate" type="date" />
-        <label for="dueDate">Due Date</label>
-      </p-floatLabel>
-    </div>
-  </div>
-
-  <!-- Rewards with Pick-Button -->
+  <!-- Name -->
   <div class="form-row">
     <div class="label-column">
-      <span>Rewards</span>
+      <label for="name">Name</label>
+    </div>
+    <div class="input-column">
+      <input id="name" pInputText type="text" formControlName="name" />
+      <small *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched" class="p-error">
+        Name is required
+      </small>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="description">Description</label>
+    </div>
+    <div class="input-column">
+      <textarea id="description" pInputTextarea formControlName="description" rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="skillNames">Skills</label>
+    </div>
+    <div class="input-column">
+      <p-chips id="skillNames" formControlName="skillNames" [allowDuplicate]="false" [addOnBlur]="true"
+               [disabled]="!permissionService.canEditTaskProperties()"></p-chips>
+    </div>
+  </div>
+
+  <!-- Dates -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="startDate">Start Date</label>
+    </div>
+    <div class="input-column">
+      <input id="startDate" type="date" pInputText formControlName="startDate" />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="label-column">
+      <label for="dueDate">Due Date</label>
+    </div>
+    <div class="input-column">
+      <input id="dueDate" type="date" pInputText formControlName="dueDate" />
+    </div>
+  </div>
+
+  <!-- Rewards + Pick Button -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="rewards">Rewards</label>
     </div>
     <div class="input-column rewards-container">
-      <input id="rewards" formControlName="rewards" />
+      <p-inputNumber id="rewards" formControlName="rewards" [showButtons]="true" [min]="0"></p-inputNumber>
 
-      <!-- Pick-Button -->
       <p-button
         label="Pick"
         icon="pi pi-user-plus"
-        [rounded]="true"
         (click)="pickTask()"
         severity="info"
         *ngIf="showPickButton()"
-        styleClass="pick-button"
-      ></p-button>
+        styleClass="pick-button">
+      </p-button>
     </div>
   </div>
 
-  <!-- Status-Dropdown - Always enabled for all roles -->
+  <!-- Status Dropdown -->
   <div class="form-row">
     <div class="label-column">
-      <span>Status</span>
+      <label for="status">Status</label>
     </div>
     <div class="input-column">
       <p-dropdown
-        id="status"
+        inputId="status"
         formControlName="status"
         [options]="statusOptions"
-        placeholder="Status auswählen"
-        class="custom-dropdown"
-      ></p-dropdown>
-    </div>
-  </div>
-
-  <!-- Assigned User-Dropdown -->
-  <div class="form-row">
-    <div class="label-column">
-      <span>Assigned User</span>
-    </div>
-    <div class="input-column">
-      <p-dropdown
-        id="assignedUser"
-        formControlName="assigneeId"
-        [options]="users"
-        optionLabel="userName"
-        optionValue="id"
-        placeholder="Select a user">
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        [showClear]="true"
+        [style]="{width: '100%'}">
       </p-dropdown>
     </div>
   </div>
 
-  <!-- Completed-Checkbox -->
+  <!-- Assigned User -->
   <div class="form-row">
     <div class="label-column">
-      <span>Completed</span>
+      <label for="assigneeId">Assigned User</label>
     </div>
     <div class="input-column">
-      <p-checkbox id="isCompleted" formControlName="isCompleted" [binary]="true"></p-checkbox>
+      <p-dropdown
+        inputId="assigneeId"
+        formControlName="assigneeId"
+        [options]="users"
+        optionLabel="userName"
+        optionValue="id"
+        appendTo="body"
+        [showClear]="true"
+        [style]="{width: '100%'}">
+      </p-dropdown>
     </div>
   </div>
 
-  <!-- Permission notice for Performers -->
+  <!-- Completed Checkbox -->
+  <div class="form-row checkbox-row">
+    <div class="label-column">
+      <label for="isCompleted">Completed</label>
+    </div>
+    <div class="input-column">
+      <p-checkbox inputId="isCompleted" formControlName="isCompleted" [binary]="true"></p-checkbox>
+    </div>
+  </div>
+
+  <!-- Permission Notice -->
   <div class="permission-notice" *ngIf="!permissionService.canEditTaskProperties()">
     <p class="warning-text">
       <i class="pi pi-info-circle"></i>
@@ -110,47 +129,42 @@
     </p>
   </div>
 
-  <!-- Button-Gruppe -->
-  <p-buttonGroup class="action-buttons">
-    <!-- Update button - show for all roles but with different functionality -->
+  <!-- Action Buttons -->
+  <div class="button-container">
     <p-button
       label="Update"
       icon="pi pi-refresh"
-      [rounded]="true"
       (click)="updateTask()"
       severity="help"
-      [disabled]="taskForm.invalid">
+      [disabled]="taskForm.invalid"
+      class="mr-2">
     </p-button>
 
-    <!-- Duplicate button - only for Admin/Staff -->
     <p-button
       *ngIf="permissionService.canCreateTasks()"
       label="Duplicate"
       icon="pi pi-plus"
-      [rounded]="true"
       (click)="addTask()"
-      severity="success">
+      severity="success"
+      class="mr-2">
     </p-button>
 
-    <!-- List button - for all users -->
     <p-button
       label="List"
       icon="pi pi-list"
-      [rounded]="true"
       (click)="goBack()"
-      severity="secondary">
+      severity="secondary"
+      class="mr-2">
     </p-button>
 
-    <!-- Delete button - only for Admin/Staff -->
     <p-button
       *ngIf="permissionService.canDeleteTasks()"
       label="Delete"
       icon="pi pi-trash"
-      [rounded]="true"
       (click)="deleteTask()"
       severity="danger">
     </p-button>
-  </p-buttonGroup>
+  </div>
 </div>
 
 <p-toast></p-toast>

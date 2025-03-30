@@ -1,21 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
 import { AppComponent } from './app/app.component';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideRouter } from "@angular/router";
-import { routes } from "./app/app.routes";
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ToastModule } from "primeng/toast";
-import { importProvidersFrom } from "@angular/core";
-import { MessageService } from "primeng/api";
+import { appConfig } from "./app/app.config";
 
-
-bootstrapApplication(AppComponent, {
+// Erweitere die appConfig mit provideAnimations
+const configWithAnimations = {
+  ...appConfig,
   providers: [
-    importProvidersFrom(ToastModule),
-    MessageService,
-    provideHttpClient(withFetch()),
-    provideRouter(routes),
-    provideAnimationsAsync(),
-  ],
-})
+    ...appConfig.providers || [],
+    provideAnimations()
+  ]
+};
+
+bootstrapApplication(AppComponent, configWithAnimations)
   .catch(err => console.error(err));

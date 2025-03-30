@@ -15,6 +15,8 @@ export interface CreateTaskDto {
   endDate?: string | null;
   status?: TaskStatus;
   assigneeId?: string;
+  skillNames: string [];
+
 }
 
 export interface UpdateTaskDto {
@@ -28,6 +30,8 @@ export interface UpdateTaskDto {
   isCompleted?: boolean;
   status?: TaskStatus;
   assigneeId?: string;
+  skillNames: string [];
+
 }
 
 export interface Task {
@@ -45,4 +49,5 @@ export interface Task {
   status?: TaskStatus;
   assigneeId?: string;
   assigneeName?: string;
+  skillNames: string [];
 }

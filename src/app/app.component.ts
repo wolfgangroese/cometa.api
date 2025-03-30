@@ -27,7 +27,9 @@ import { AuthService } from "./services/auth.service"; // ✅ AuthService import
 export class AppComponent implements OnInit { // ✅ OnInit implementieren
   title = 'cometa';
 
-  constructor(private messageService: MessageService, private authService: AuthService) {} // ✅ AuthService injizieren
+  constructor(
+    private messageService: MessageService,
+    private authService: AuthService) {} // ✅ AuthService injizieren
 
   ngOnInit(): void {
     this.authService.loadUserFromToken(); // ✅ Benutzer nach Seiten-Reload wiederherstellen

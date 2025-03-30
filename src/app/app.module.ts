@@ -16,6 +16,9 @@ import { InputTextModule } from "primeng/inputtext";
 import { CalendarModule } from "primeng/calendar";
 import { NewTaskComponent } from "./features/tasks/new-task/new-task.component";
 import { AuthService } from "./services/auth.service";
+import {DropdownModule} from "primeng/dropdown";
+import {InputNumberModule} from "primeng/inputnumber";
+import {CheckboxModule} from "primeng/checkbox";
 
 @NgModule({
   declarations: [
@@ -36,7 +39,11 @@ import { AuthService } from "./services/auth.service";
     FormsModule,
     InputTextModule,
     CalendarModule,
-    NewTaskComponent
+    NewTaskComponent,
+    DropdownModule,
+    InputNumberModule,
+    CheckboxModule,
+
   ],
   providers: [
     TaskService,
