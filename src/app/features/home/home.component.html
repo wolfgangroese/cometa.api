@@ -1,28 +1,58 @@
 <div class="home-container">
-  <!-- Tasks Section with Accordion -->
+
+  <!-- Tasks Section with Accordion - use filteredTasks here -->
   <div class="tasks-section">
     <div class="tasks-accordion" (click)="toggleTasksList()">
       <div class="task-header">
-        <span class="task-count">{{ taskCount }} open Tasks</span>
+        <span class="task-count">{{ filteredTasks.length }} open Tasks</span>
         <i class="pi" [ngClass]="expanded ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
       </div>
     </div>
 
     <div class="tasks-list" *ngIf="expanded">
-      <p *ngFor="let task of openTasks" class="task-item">
+      <!-- Skills Filter Section -->
+      <div class="filter-section" *ngIf="availableSkills.length > 0">
+        <div class="filter-header">
+          <h4>Filter by Skills:</h4>
+          <button class="reset-filter" (click)="resetFilters()" *ngIf="activeFilters.length > 0">
+            Reset Filters
+          </button>
+        </div>
+
+        <div class="skill-filters">
+          <div *ngFor="let skill of availableSkills"
+               class="filter-chip"
+               [class.active]="activeFilters.includes(skill)"
+               (click)="toggleSkillFilter(skill)">
+            {{ skill }}
+            <i class="pi pi-times" *ngIf="activeFilters.includes(skill)"></i>
+          </div>
+        </div>
+      </div>
+      <p *ngFor="let task of filteredTasks" class="task-item">
         <a [routerLink]="['/task', task.id]" class="task-link">
           <span class="task-title">
             {{ task.name }}
           </span>
+          <span class="task-skills" *ngIf="task.skills && task.skills.length > 0">
+            <span *ngFor="let skill of task.skills" class="skill-chip">
+              {{ skill }}
+            </span>
+          </span>
           <i *ngIf="task.isCompleted" class="pi pi-check-circle completed-icon"></i>
         </a>
+      </p>
+
+      <!-- Show a message if no tasks match the filters -->
+      <p *ngIf="filteredTasks.length === 0" class="no-tasks-message">
+        No tasks match the selected filters.
       </p>
     </div>
   </div>
 
   <!-- Leaderboard Section -->
   <div class="leaderboard-section">
-    <h3>User Leaderboard</h3>
+    <h4>Leaderboard</h4>
     <p-table [value]="users" styleClass="p-datatable-sm">
       <ng-template pTemplate="header">
         <tr>

@@ -35,7 +35,24 @@
   text-transform: uppercase;
   font-weight: 500;
 }
+.rewards-badge {
+  display: flex;
+  align-items: center;
+  background-color: #fff3cd;
+  color: #856404;
+  font-size: 1.3rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-left: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
 
+.rewards-badge i {
+  color: #ffc107;
+  font-size: 1.5rem;
+  margin-right: 5px;
+}
 .account-icon {
   display: flex;
   justify-content: center;

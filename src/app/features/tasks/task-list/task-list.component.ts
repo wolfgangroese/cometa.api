@@ -11,6 +11,15 @@ import { DropdownModule } from "primeng/dropdown";
 import { PaginatorModule } from "primeng/paginator";
 import { ReactiveFormsModule } from "@angular/forms";
 import { PermissionService } from "../../../services/permission.service";
+import { MessageService } from "primeng/api";
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { FilterService } from "primeng/api";
+import {InputTextModule} from "primeng/inputtext";
+import {MultiSelectModule} from "primeng/multiselect";
+import {CalendarModule} from "primeng/calendar";
+import {TooltipModule} from "primeng/tooltip";
 
 @Component({
   selector: 'app-task-list',
@@ -26,15 +35,31 @@ import { PermissionService } from "../../../services/permission.service";
     ButtonModule, // Changed to ButtonModule
     DropdownModule,
     PaginatorModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    ToastModule,
+    ConfirmDialogModule,
+    InputTextModule,
+    MultiSelectModule,
+    CalendarModule,
+    TooltipModule,
+  ],
+  providers: [MessageService, ConfirmationService, FilterService],
 })
 export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
 
+  statusOptions = [
+    { label: 'Done', value: 0 },
+    { label: 'In Progress', value: 1 },
+    { label: 'Blocked', value: 2 },
+    { label: 'Waiting', value: 3 }
+  ];
+
   constructor(
     private taskService: TaskService,
-    public permissionService: PermissionService // Public for use in template
+    public permissionService: PermissionService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -64,6 +89,32 @@ export class TaskListComponent implements OnInit {
     return statusMap[status] ?? 'Unknown';
   }
 
+  deleteTask(id: string): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this task?',
+      accept: () => {
+        this.taskService.deleteTask(id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Task deleted successfully'
+            });
+            this.loadTasks();
+          },
+          error: (err) => {
+            console.error('Error deleting task:', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete task'
+            });
+          }
+        });
+      }
+    });
+  }
+
   getStatusSeverity(status: number): string {
     const severityMap: Record<number, string> = {
       0: 'success', // Done
@@ -74,4 +125,6 @@ export class TaskListComponent implements OnInit {
 
     return severityMap[status] ?? 'info';
   }
+
+  protected readonly HTMLInputElement = HTMLInputElement;
 }

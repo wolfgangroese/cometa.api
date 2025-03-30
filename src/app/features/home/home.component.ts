@@ -25,6 +25,9 @@ export class HomeComponent implements OnInit {
   taskCount = 0;
   users: User[] = [];
   expanded = false;
+  availableSkills: string[] = [];
+  activeFilters: string[] = [];
+  filteredTasks: Task[] = [];
 
   constructor(
     private taskService: TaskService,
@@ -43,6 +46,11 @@ export class HomeComponent implements OnInit {
         this.tasks = data;
         this.openTasks = this.tasks.filter(task => !task.isCompleted);
         this.taskCount = this.openTasks.length;
+        this.availableSkills = Array.from(new Set(
+          this.openTasks.flatMap(task => task.skills || [])
+        )).filter(skill => skill); // Remove empty skills
+
+        this.filteredTasks = [...this.openTasks];
       },
       error: (err) => {
         console.error('Failed to load tasks', err);
@@ -53,6 +61,36 @@ export class HomeComponent implements OnInit {
         });
       }
     });
+  }
+  toggleSkillFilter(skill: string): void {
+    const index = this.activeFilters.indexOf(skill);
+    if (index > -1) {
+      // Remove from filters
+      this.activeFilters.splice(index, 1);
+    } else {
+      // Add to filters
+      this.activeFilters.push(skill);
+    }
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    if (this.activeFilters.length === 0) {
+      // No filters, show all open tasks
+      this.filteredTasks = [...this.openTasks];
+    } else {
+      // Show only tasks that have ALL selected skills
+      this.filteredTasks = this.openTasks.filter(task =>
+        this.activeFilters.every(skill =>
+          task.skills && task.skills.includes(skill)
+        )
+      );
+    }
+  }
+
+  resetFilters(): void {
+    this.activeFilters = [];
+    this.filteredTasks = [...this.openTasks];
   }
 
   loadUsers(): void {

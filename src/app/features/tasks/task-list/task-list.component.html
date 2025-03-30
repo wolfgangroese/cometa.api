@@ -1,13 +1,55 @@
-<p-table [value]="tasks" responsiveLayout="scroll">
+<div class="p-d-flex p-mb-3">
+  <span class="p-input-icon-left p-ml-auto"></span>
+    <i class="pi pi-search"></i>
+    <input pInputText type="text" (input)="dt.filterGlobal(($any($event.target)).value, 'contains')" placeholder="Search..." /></div>
+
+<p-table #dt [value]="tasks"
+         responsiveLayout="scroll"
+         [paginator]="true"
+         [rows]="25"
+         [globalFilterFields]="['name', 'rewards', 'assigneeName']"
+         sortMode="multiple"
+         styleClass="p-datatable-sm">
+
   <ng-template pTemplate="header">
     <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Reward</th>
-      <th scope="col">Start Date</th>
-      <th scope="col">Deadline</th>
-      <th scope="col">Completed</th>
-      <th scope="col">Status</th>
-      <th scope="col">Assignee</th>
+      <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th pSortableColumn="rewards">Reward <p-sortIcon field="rewards"></p-sortIcon></th>
+      <th pSortableColumn="startDate">Start Date <p-sortIcon field="startDate"></p-sortIcon></th>
+      <th pSortableColumn="dueDate">Deadline <p-sortIcon field="dueDate"></p-sortIcon></th>
+      <th pSortableColumn="isCompleted">Completed <p-sortIcon field="isCompleted"></p-sortIcon></th>
+      <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+      <th pSortableColumn="assigneeName">Assignee <p-sortIcon field="assigneeName"></p-sortIcon></th>
+      <th>Actions</th>
+    </tr>
+    <tr>
+      <th>
+        <p-columnFilter type="text" field="name"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="numeric" field="rewards"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="date" field="startDate"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="date" field="dueDate"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="boolean" field="isCompleted"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown [options]="statusOptions" (onChange)="filter($event.value)" placeholder="Select Status">
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="assigneeName"></p-columnFilter>
+      </th>
+      <th></th>
     </tr>
   </ng-template>
 
@@ -34,6 +76,16 @@
         </ng-container>
       </td>
       <td>{{ task.assigneeName || 'Unassigned' }}</td>
+      <td>
+      <!-- Add delete icon only for incomplete tasks -->
+      <button *ngIf="!task.isCompleted && permissionService.canDeleteTasks()"
+              pButton
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger p-button-text"
+              (click)="deleteTask(task.id)"
+              pTooltip="Delete task"
+              aria-label="Delete task"></button>
+      </td>
     </tr>
   </ng-template>
 </p-table>
@@ -58,3 +110,5 @@
     [style]="{'margin-left': '10px'}">
   </p-button>
 </div>
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

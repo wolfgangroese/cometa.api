@@ -4,7 +4,9 @@
   <div class="user-info">
     <span *ngIf="currentUser" class="username">{{ currentUser.email || currentUser.userName }}</span>
     <span *ngIf="currentUser?.role" class="role-badge">{{ currentUser?.role }}</span>
-    <div class="account-icon"
+    <span *ngIf="currentUser && totalRewards !== undefined" class="rewards-badge">
+      <i class="pi pi-star-fill"></i> {{ totalRewards }}
+    </span>    <div class="account-icon"
          (click)="toggleAccountMenu($event)"
          (keydown.enter)="toggleAccountMenu($event)"
          (keydown.space)="toggleAccountMenu($event)"
@@ -13,7 +15,6 @@
          aria-label="Open account menu">
       <i class="pi pi-user"></i>
     </div>
-  </div>
 </div>
 
 <div *ngIf="showAccountMenu"
@@ -62,4 +63,5 @@
       </button>
     </div>
   </div>
+</div>
 </div>
