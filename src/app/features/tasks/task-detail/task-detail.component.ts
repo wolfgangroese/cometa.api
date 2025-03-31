@@ -84,7 +84,7 @@ export class TaskDetailComponent implements OnInit {
       isCompleted: [false],
       assigneeId: [null],
       effortMin: [0],
-      effortMax: [0],
+      effortMax: [1],
     });
 
     this.taskId = this.route.snapshot.paramMap.get('id') || '';
@@ -130,7 +130,7 @@ export class TaskDetailComponent implements OnInit {
           status: statusValue,
           assigneeId: task.assigneeId || null,
           effortMin: task.effortMin ?? 0,
-          effortMax: task.effortMax ?? 0,
+          effortMax: task.effortMax ?? 1,
         });
 
         this.applyPermissionRestrictions();
@@ -345,7 +345,7 @@ export class TaskDetailComponent implements OnInit {
       status: statusEnum,
       assigneeId: formData.assigneeId || null,
       effortMin: formData.effortMin || 0,
-      effortMax: formData.effortMax || 0,
+      effortMax: formData.effortMax || 1,
     };
   }
 
@@ -373,7 +373,7 @@ export class TaskDetailComponent implements OnInit {
       status: statusEnum,
       assigneeId: formData.assigneeId || null,
       effortMin: formData.effortMin ?? 0,
-      effortMax: formData.effortMax ?? 0,
+      effortMax: formData.effortMax ?? 1,
 
     };
   }
