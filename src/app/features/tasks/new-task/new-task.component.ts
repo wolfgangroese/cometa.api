@@ -150,7 +150,7 @@ export class NewTaskComponent implements OnInit {
       status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 3, // Default to Waiting (3)
       assigneeId: formData.assigneeId,
       effortMin: formData.effortMin || 0,
-      effortMax: formData.effortMax || 0,
+      effortMax: formData.effortMax || 1,
       skillNames: formData.skillNames || []
     };
   }

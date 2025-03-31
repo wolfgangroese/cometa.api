@@ -32,12 +32,11 @@ import { TooltipModule } from "primeng/tooltip";
     CheckboxModule,
     TableModule,
     TagModule,
-    ButtonModule, // Changed to ButtonModule
+    ButtonModule,
     DropdownModule,
     PaginatorModule,
     ReactiveFormsModule,
     ToastModule,
-    ConfirmDialogModule,
     ConfirmDialogModule,
     InputTextModule,
     MultiSelectModule,
