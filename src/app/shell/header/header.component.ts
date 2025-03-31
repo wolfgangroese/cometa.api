@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import {Router, NavigationEnd, RouterLink} from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -15,7 +15,7 @@ interface MenuItem {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
@@ -103,5 +103,10 @@ export class HeaderComponent implements OnInit {
     } catch (error) {
       console.error('Navigation failed:', error);
     }
+  }
+
+  // Helper method to check if user is Admin or Staff
+  isAdminOrStaff(): boolean {
+    return this.authService.hasAnyRole(['Admin', 'Staff']);
   }
 }

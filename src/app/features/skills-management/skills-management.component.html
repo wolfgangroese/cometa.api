@@ -1,0 +1,175 @@
+<!-- src/app/features/skills/skills-management/skills-management.component.html -->
+<div class="skills-management-container">
+  <h2>Skills Management</h2>
+
+  <!-- Skill Form -->
+  <div class="form-container">
+    <form [formGroup]="skillForm" class="p-grid">
+      <div class="p-field">
+        <label for="name">Skill Name</label>
+        <input id="name" type="text" pInputText formControlName="name" class="form-input">
+        <small *ngIf="skillForm.get('name')?.touched && skillForm.get('name')?.invalid" class="p-error">
+          Name is required and must be at least 2 characters
+        </small>
+      </div>
+
+      <div class="p-field">
+        <label for="description">Description</label>
+        <input id="description" type="text" pInputText formControlName="description" class="form-input">
+      </div>
+
+      <div class="button-container">
+        <button
+          *ngIf="!isEditing"
+          pButton
+          type="button"
+          label="Add Skill"
+          icon="pi pi-plus"
+          (click)="addSkill()"
+          [disabled]="skillForm.invalid || loading"
+          class="p-button-success">
+        </button>
+
+        <ng-container *ngIf="isEditing">
+          <button
+            pButton
+            type="button"
+            label="Update"
+            icon="pi pi-check"
+            (click)="updateSkill()"
+            [disabled]="skillForm.invalid || loading"
+            class="p-button-primary">
+          </button>
+
+          <button
+            pButton
+            type="button"
+            label="Cancel"
+            icon="pi pi-times"
+            (click)="cancelEdit()"
+            [disabled]="loading"
+            class="p-button-secondary">
+          </button>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+
+  <!-- Skills Table -->
+  <div class="table-container">
+    <p-table [value]="skills" [paginator]="true" [rows]="10" styleClass="p-datatable-sm" [loading]="loading">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-skill>
+        <tr>
+          <td>{{ skill.name }}</td>
+          <td>{{ skill.description }}</td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="editSkill(skill)"
+              class="p-button-rounded p-button-text">
+            </button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              (click)="confirmDelete(skill)"
+              class="p-button-rounded p-button-text p-button-danger">
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3" class="empty-message">No skills found</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Dialog to show tasks using a skill -->
+<p-dialog
+  [(visible)]="showTasksDialog"
+  [style]="{width: '80vw', maxWidth: '800px'}"
+  [modal]="true"
+  [draggable]="true"
+  [resizable]="false"
+  header="Tasks Using Skill">
+
+  <ng-template pTemplate="header">
+    <span>Tasks Using Skill: {{ selectedSkill?.name || '' }}</span>
+  </ng-template>
+
+  <div class="dialog-content">
+    <p *ngIf="tasksUsingSkill.length === 0" class="no-tasks-message">
+      No tasks are using this skill.
+    </p>
+
+    <p-table
+      *ngIf="tasksUsingSkill.length > 0"
+      [value]="tasksUsingSkill"
+      styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Task Name</th>
+          <th>Status</th>
+          <th>Assignee</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-task>
+        <tr>
+          <td>{{ task.name }}</td>
+          <td>
+            <span [ngClass]="{
+              'badge-success': task.status === 0,
+              'badge-info': task.status === 1,
+              'badge-danger': task.status === 2,
+              'badge-warning': task.status === 3
+            }" class="status-badge">
+              {{ task.status === 0 ? 'Done' :
+              task.status === 1 ? 'In Progress' :
+                task.status === 2 ? 'Blocked' :
+                  task.status === 3 ? 'Waiting' : 'Unknown' }}
+            </span>
+          </td>
+          <td>{{ task.assigneeName || 'Unassigned' }}</td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-external-link"
+              (click)="navigateToTask(task.id)"
+              class="p-button-text p-button-sm"
+              pTooltip="View Task">
+              View
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Close"
+      icon="pi pi-times"
+      (click)="showTasksDialog = false"
+      class="p-button-text">
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
