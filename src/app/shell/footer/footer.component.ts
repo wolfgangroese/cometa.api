@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
+import { TooltipModule } from "primeng/tooltip";
 
 interface MenuItem {
   label: string;
@@ -15,7 +16,12 @@ interface MenuItem {
   standalone: true,
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
-  imports: [CommonModule, RouterModule, MenubarModule]
+  imports: [
+    CommonModule,
+    RouterModule,
+    MenubarModule,
+    TooltipModule
+  ]
 })
 export class FooterComponent implements OnInit {
   items: MenuItem[] | undefined;

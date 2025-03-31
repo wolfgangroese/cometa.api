@@ -1,6 +1,11 @@
 <footer>
   <div class="footer-container">
-    <a *ngFor="let item of items" [routerLink]="item.routerLink" class="footer-item">
+    <a *ngFor="let item of items"
+       [routerLink]="item.routerLink"
+       class="footer-item"
+       [pTooltip]="item.label"
+       tooltipPosition="top"
+       [attr.aria-label]="item.label">
       <i [class]="item.icon"></i>
     </a>
   </div>

@@ -1,7 +1,7 @@
 <div class="quick-add-container">
-  <h2>Task-Schnellerfassung</h2>
-  <p class="instructions">Gib Tasks ein und drücke Enter, um weitere hinzuzufügen.</p>
-  <p class="instructions">Drücke "Alle speichern", wenn du fertig bist.</p>
+  <h2>Task-Quick-Add</h2>
+  <p class="instructions">Hit Enter for a new task</p>
+  <p class="instructions">Hit "Save all" when ready</p>
 
   <div class="input-area">
     <span class="p-input-icon-left">
@@ -19,7 +19,7 @@
   </div>
 
   <div class="tasks-list" *ngIf="pendingTasks.length > 0">
-    <h3>Hinzugefügte Tasks ({{ pendingTasks.length }})</h3>
+    <h3>New added tasks ({{ pendingTasks.length }})</h3>
     <ul>
       <li *ngFor="let task of pendingTasks; let i = index" class="task-item">
         <span class="task-name">{{ task }}</span>
@@ -34,15 +34,16 @@
 
     <div class="action-buttons">
       <p-button
-        label="Alle speichern"
+        label="Save all"
         icon="pi pi-save"
         (click)="saveAllTasks()"
         [disabled]="isCreating || pendingTasks.length === 0"
         [loading]="isCreating"
         styleClass="p-button-success"
       ></p-button>
+
       <p-button
-        label="Zur Task-Liste"
+        label="Back to list"
         icon="pi pi-list"
         (click)="goToTaskList()"
         styleClass="p-button-secondary"
@@ -52,13 +53,21 @@
   </div>
 
   <div class="saved-tasks" *ngIf="savedTasks.length > 0">
-    <h3>Gespeicherte Tasks</h3>
+    <h3>Saved tasks</h3>
     <ul>
       <li *ngFor="let task of savedTasks" class="saved-task-item">
         <i class="pi pi-check-circle"></i>
         <span>{{ task.name }}</span>
       </li>
     </ul>
+  </div>
+  <div class="action-buttons">
+    <p-button
+      label="Back to list"
+      icon="pi pi-list"
+      (click)="goToTaskList()"
+      styleClass="p-button-secondary"
+    ></p-button>
   </div>
 
   <p-toast></p-toast>

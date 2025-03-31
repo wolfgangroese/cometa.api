@@ -16,10 +16,10 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { FilterService } from "primeng/api";
-import {InputTextModule} from "primeng/inputtext";
-import {MultiSelectModule} from "primeng/multiselect";
-import {CalendarModule} from "primeng/calendar";
-import {TooltipModule} from "primeng/tooltip";
+import { InputTextModule } from "primeng/inputtext";
+import { MultiSelectModule } from "primeng/multiselect";
+import { CalendarModule } from "primeng/calendar";
+import { TooltipModule } from "primeng/tooltip";
 
 @Component({
   selector: 'app-task-list',
@@ -37,6 +37,7 @@ import {TooltipModule} from "primeng/tooltip";
     PaginatorModule,
     ReactiveFormsModule,
     ToastModule,
+    ConfirmDialogModule,
     ConfirmDialogModule,
     InputTextModule,
     MultiSelectModule,
@@ -127,4 +128,5 @@ export class TaskListComponent implements OnInit {
   }
 
   protected readonly HTMLInputElement = HTMLInputElement;
+
 }

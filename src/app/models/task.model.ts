@@ -16,6 +16,8 @@ export interface CreateTaskDto {
   status?: TaskStatus;
   assigneeId?: string;
   skillNames: string [];
+  effortMin?: number;
+  effortMax?: number;
 
 }
 
@@ -31,6 +33,8 @@ export interface UpdateTaskDto {
   status?: TaskStatus;
   assigneeId?: string;
   skillNames: string [];
+  effortMin?: number;
+  effortMax?: number;
 
 }
 
@@ -50,4 +54,6 @@ export interface Task {
   assigneeId?: string;
   assigneeName?: string;
   skillNames: string [];
+  effortMin?: number;
+  effortMax?: number;
 }
