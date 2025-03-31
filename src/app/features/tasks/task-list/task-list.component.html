@@ -1,19 +1,20 @@
-<div class="p-d-flex p-mb-3">
+<div class="p-d-flex p-mb-4 p-p-3">
   <span class="p-input-icon-left p-ml-auto"></span>
     <i class="pi pi-search"></i>
-    <input pInputText type="text" (input)="dt.filterGlobal(($any($event.target)).value, 'contains')" placeholder="Search..." /></div>
+    <input pInputText type="text" (input)="dt.filterGlobal(($any($event.target)).value, 'contains')" placeholder="Search..."  class="global-search"/></div>
 
 <p-table #dt [value]="tasks"
          responsiveLayout="scroll"
          [paginator]="true"
          [rows]="25"
-         [globalFilterFields]="['name', 'rewards', 'assigneeName']"
+         [globalFilterFields]="['name', 'rewards', 'assigneeName', 'description', 'skills']"
          sortMode="multiple"
          styleClass="p-datatable-sm">
 
   <ng-template pTemplate="header">
     <tr>
       <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th pSortableColumn="skills">Skills <p-sortIcon field="skills"></p-sortIcon></th>
       <th pSortableColumn="effortMin">Effort Min <p-sortIcon field="effortMin"></p-sortIcon></th>
       <th pSortableColumn="effortMax">Max <p-sortIcon field="effortMax"></p-sortIcon></th>
       <th pSortableColumn="rewards">Reward <p-sortIcon field="rewards"></p-sortIcon></th>
@@ -27,6 +28,9 @@
     <tr>
       <th>
         <p-columnFilter type="text" field="name"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="skills"></p-columnFilter>
       </th>
       <th>
         <p-columnFilter type="numeric" field="effortMin"></p-columnFilter>
@@ -66,6 +70,7 @@
       <td>
         <a [routerLink]="['/task', task.id]" class="task-link">{{ task.name }}</a>
       </td>
+      <td>{{ task.skills }} </td>
       <td>{{ task.effortMin }} </td>
       <td>{{ task.effortMax }} </td>
       <td>{{ task.rewards }} </td>

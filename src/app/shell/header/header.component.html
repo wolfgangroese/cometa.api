@@ -55,6 +55,15 @@
         <span class="reward-label">Coins</span>
       </div>
 
+      <!-- Admin/Staff-only menu items -->
+      <div class="admin-menu" *ngIf="isAdminOrStaff()">
+        <h4 class="admin-menu-title">Admin Tools</h4>
+        <a [routerLink]="['/skills']" class="admin-menu-item" (click)="closeAccountMenu($event)">
+          <i class="pi pi-tag"></i>
+          Manage Skills
+        </a>
+      </div>
+
       <button class="logout-button"
               (click)="logout()"
               aria-label="Logout from your account">

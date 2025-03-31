@@ -10,7 +10,8 @@ import { NewTaskComponent } from "./features/tasks/new-task/new-task.component";
 import { TaskQuickAddComponent } from './features/tasks/task-quick-add/task-quick-add.component';
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
-import {AuthTestComponent} from "./features/auth-test/auth-test.component";
+import { AuthTestComponent } from "./features/auth-test/auth-test.component";
+import { SkillsManagementComponent } from './features/skills-management/skills-management.component';
 
 
 export const routes: Routes = [
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'news', component: NewsComponent },
   { path: 'account', component: AccountComponent },
   { path: 'auth-test', component: AuthTestComponent },
+  { path: 'skills', component: SkillsManagementComponent },
 
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
