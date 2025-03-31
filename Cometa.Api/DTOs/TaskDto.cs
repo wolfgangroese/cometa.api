@@ -18,5 +18,7 @@ public class TaskDto
     public CreationStatus CreationStatus { get; set; } = CreationStatus.Draft;
     public Guid? AssigneeId { get; set; }
     public string? AssigneeName { get; set; }
+    public int? EffortMin { get; set; }
+    public int? EffortMax { get; set; }
 
 }
