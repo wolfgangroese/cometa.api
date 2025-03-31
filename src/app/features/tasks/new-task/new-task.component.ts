@@ -16,6 +16,8 @@ import { DropdownModule } from "primeng/dropdown";
 import { FloatLabelModule } from "primeng/floatlabel";
 import { UserService } from '../../../services/user.service';
 import { User } from "../../../models/user.model";
+import {ChipsModule} from "primeng/chips";
+import {InputNumberModule} from "primeng/inputnumber";
 
 enum TaskStatus {
   Done = 'Done',
@@ -41,6 +43,8 @@ enum TaskStatus {
     InputTextareaModule,
     DropdownModule,
     FloatLabelModule,
+    ChipsModule,
+    InputNumberModule,
   ],
   providers: [
     MessageService,
@@ -49,7 +53,12 @@ enum TaskStatus {
 })
 export class NewTaskComponent implements OnInit {
   taskForm: FormGroup;
-  statusOptions = Object.values(TaskStatus);
+  statusOptions = [
+    { label: 'Done', value: 'Done' },
+    { label: 'In Progress', value: 'In Progress' },
+    { label: 'Blocked', value: 'Blocked' },
+    { label: 'Waiting', value: 'Waiting' }
+  ];
   users: User[] = [];
 
   constructor(
@@ -68,6 +77,9 @@ export class NewTaskComponent implements OnInit {
       isCompleted: [false],
       status: [TaskStatus.Waiting],
       assigneeId: [null],
+      skillNames: [[]],
+      effortMin: [0],
+      effortMax: [1],
     });
   }
 
@@ -137,6 +149,9 @@ export class NewTaskComponent implements OnInit {
       dueDate: this.convertDate(formData.dueDate),
       status: formData.status ? Object.keys(TaskStatus).indexOf(formData.status) : 3, // Default to Waiting (3)
       assigneeId: formData.assigneeId,
+      effortMin: formData.effortMin || 0,
+      effortMax: formData.effortMax || 1,
+      skillNames: formData.skillNames || []
     };
   }
 

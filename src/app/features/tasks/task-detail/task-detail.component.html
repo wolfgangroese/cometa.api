@@ -73,10 +73,30 @@
     </div>
   </div>
 
+  <!-- Min. Effort Field -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMin">Min. Effort (minutes)</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMin" formControlName="effortMin" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Max. Effort Field -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMax">Max. Effort (minutes)</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMax" formControlName="effortMax" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
   <!-- Status Dropdown -->
   <div class="form-row">
     <div class="label-column">
-      <label for="status">Status</label>
+      <label [htmlFor]="statusOptions">Status</label>
     </div>
     <div class="input-column">
       <p-dropdown
@@ -95,7 +115,7 @@
   <!-- Assigned User -->
   <div class="form-row">
     <div class="label-column">
-      <label for="assigneeId">Assigned User</label>
+      <label [htmlFor]="users">Assigned User</label>
     </div>
     <div class="input-column">
       <p-dropdown
@@ -132,11 +152,20 @@
   <!-- Action Buttons -->
   <div class="button-container">
     <p-button
-      label="Update"
+      label="Update & go back"
       icon="pi pi-refresh"
       (click)="updateTask()"
       severity="help"
       [disabled]="taskForm.invalid"
+      class="mr-2">
+    </p-button>
+
+
+    <p-button
+      label="List"
+      icon="pi pi-list"
+      (click)="goBack()"
+      severity="secondary"
       class="mr-2">
     </p-button>
 
@@ -146,14 +175,6 @@
       icon="pi pi-plus"
       (click)="addTask()"
       severity="success"
-      class="mr-2">
-    </p-button>
-
-    <p-button
-      label="List"
-      icon="pi pi-list"
-      (click)="goBack()"
-      severity="secondary"
       class="mr-2">
     </p-button>
 

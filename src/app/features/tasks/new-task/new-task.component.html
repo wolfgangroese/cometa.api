@@ -1,56 +1,145 @@
 <div class="task-form" [formGroup]="taskForm">
-  <h4>Neues Task erstellen</h4>
+  <h4>Create New Task</h4>
 
-  <div class="form-group">
-    <div class="input-container">
-      <input id="name" type="text" placeholder=" " formControlName="name" pInputText required/>
+  <!-- Name -->
+  <div class="form-row">
+    <div class="label-column">
       <label for="name">Name</label>
     </div>
-    <p class="error-message" *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
-      Der Name ist erforderlich und muss mindestens 3 Zeichen lang sein.
-    </p>
-  </div>
-
-  <div class="form-group">
-    <div class="input-container">
-      <textarea id="description" placeholder=" " formControlName="description"></textarea>
-      <label for="description">Beschreibung</label>
+    <div class="input-column">
+      <input id="name" pInputText type="text" formControlName="name" />
+      <small *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched" class="p-error">
+        Name is required
+      </small>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="input-container">
-      <input id="startDate" type="date" placeholder=" " formControlName="startDate" />
-      <label for="startDate">Startdatum</label>
+  <!-- Description -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="description">Description</label>
+    </div>
+    <div class="input-column">
+      <textarea id="description" pInputTextarea formControlName="description" rows="3"></textarea>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="input-container">
-      <input id="dueDate" type="date" placeholder=" " formControlName="dueDate" />
-      <label for="dueDate">Deadline</label>
+  <!-- Skills -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="skillNames">Skills</label>
+    </div>
+    <div class="input-column">
+      <p-chips id="skillNames" formControlName="skillNames" [allowDuplicate]="false" [addOnBlur]="true"></p-chips>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="input-container">
-      <p-floatLabel>
-        <p-dropdown
-          id="assignedUser"
-          formControlName="assigneeId"
-          [options]="users"
-          optionLabel="userName"
-          optionValue="id"
-          placeholder="Select a user">
-        </p-dropdown>
-        <label for="assignedUser">Assigned User</label>
-      </p-floatLabel>
+  <!-- Start Date -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="startDate">Start Date</label>
+    </div>
+    <div class="input-column">
+      <input id="startDate" type="date" pInputText formControlName="startDate" />
     </div>
   </div>
 
-  <button (click)="onSubmit()" class="submit-button" [disabled]="taskForm.invalid">Task erstellen</button>
-  <button (click)="goBack()" class="back-button">Back to Task List</button>
+  <!-- Due Date -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="dueDate">Due Date</label>
+    </div>
+    <div class="input-column">
+      <input id="dueDate" type="date" pInputText formControlName="dueDate" />
+    </div>
+  </div>
+
+  <!-- Rewards -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="rewards">Rewards</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="rewards" formControlName="rewards" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Min. Effort -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMin">Min. Effort (minutes)</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMin" formControlName="effortMin" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Max. Effort -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMax">Max. Effort (minutes)</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMax" formControlName="effortMax" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Status Dropdown -->
+  <div class="form-row">
+    <div class="label-column">
+      <label [htmlFor]="statusOptions">Status</label>
+    </div>
+    <div class="input-column">
+      <p-dropdown
+        inputId="status"
+        formControlName="status"
+        [options]="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        [showClear]="true"
+        [style]="{width: '100%'}">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <!-- Assigned User -->
+  <div class="form-row">
+    <div class="label-column">
+      <label [htmlFor]="users">Assigned User</label>
+    </div>
+    <div class="input-column">
+      <p-dropdown
+        inputId="assigneeId"
+        formControlName="assigneeId"
+        [options]="users"
+        optionLabel="userName"
+        optionValue="id"
+        appendTo="body"
+        [showClear]="true"
+        [style]="{width: '100%'}">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="button-container">
+    <p-button
+      label="Create Task"
+      icon="pi pi-plus"
+      (click)="onSubmit()"
+      severity="success"
+      [disabled]="taskForm.invalid"
+      class="mr-2">
+    </p-button>
+
+    <p-button
+      label="Back to List"
+      icon="pi pi-list"
+      (click)="goBack()"
+      severity="secondary">
+    </p-button>
+  </div>
 </div>
 
 <p-toast></p-toast>
-

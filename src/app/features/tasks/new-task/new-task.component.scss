@@ -1,86 +1,176 @@
+// Globales Formular-Layout
 .task-form {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
   box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
-  margin-bottom: 20px;
+// Form Rows - Konsistentes Layout mit Labels links
+.form-row {
+  display: flex;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
 }
 
-.input-container {
-  position: relative;
-  width: 100%;
+// Label-Spalte
+.label-column {
+  width: 130px;
+  padding-top: 10px;
+  padding-right: 15px;
+  text-align: right;
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+  }
 }
 
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  box-sizing: border-box;
+// Input-Spalte
+.input-column {
+  flex: 1;
+  max-width: 550px;
+
+  input[type="text"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: #3B82F6;
+    }
+
+    &:focus {
+      outline: 0 none;
+      border-color: #3B82F6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    }
+  }
 }
 
-input:focus, textarea:focus {
-  outline: none;
-  border-color: #007bff;
+// PrimeNG-Komponenten anpassen
+:host ::ng-deep {
+  // InputText Anpassungen
+  .p-inputtext {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  // Dropdown Anpassungen
+  .p-dropdown {
+    width: 100% !important;
+    min-height: 43px;
+
+    .p-dropdown-label {
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .p-dropdown-trigger {
+      width: 3rem;
+      padding: 0 0.75rem;
+    }
+
+    .p-dropdown-panel {
+      z-index: 1100;
+    }
+  }
+
+  // InputNumber Anpassungen
+  .p-inputnumber {
+    height: 43px; // Set a fixed height
+
+    .p-inputnumber-input {
+      height: 43px; // Match container height
+      padding: 0 10px; // Adjust padding to center text
+    }
+
+    .p-inputnumber-button-group {
+      height: 43px; // Match container height
+
+      .p-button {
+        height: 21.5px; // Half the container height
+        min-height: unset; // Remove any minimum height
+        padding: 0; // Remove padding
+
+        .p-button-icon {
+          font-size: 12px; // Smaller icon
+        }
+      }
+    }
+  }
+
+  // Chips Anpassungen
+  .p-chips {
+    width: 100%;
+
+    .p-chips-multiple-container {
+      width: 100%;
+      min-height: 43px;
+      padding: 0.25rem 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+
+      .p-chips-token {
+        margin: 0.25rem;
+        background-color: #e9ecef;
+      }
+    }
+  }
 }
 
-label {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  background: white;
-  padding: 0 5px;
-  font-size: 14px;
-  color: #aaa;
-  transition: all 0.3s;
-  pointer-events: none;
+// Rewards Container
+.rewards-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .p-inputnumber {
+    flex: 1;
+  }
 }
 
-input:focus + label,
-input:not(:placeholder-shown) + label,
-textarea:focus + label,
-textarea:not(:placeholder-shown) + label {
-  top: -10px;
-  font-size: 12px;
-  color: #007bff;
+// Button Container
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-left: 145px; // Align with inputs
 }
 
-.error-message {
-  font-size: 12px;
-  color: red;
-  margin-top: 5px;
+// Error message styling
+.p-error {
+  display: block;
+  color: #dc3545;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
 }
 
-button {
-  padding: 10px 15px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+// Heading styling
+h4 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #495057;
+  font-weight: 600;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
-.submit-button {
-  background-color: #007bff;
-  color: white;
-}
-
-.submit-button:hover {
-  background-color: #0056b3;
-}
-
-.back-button {
-  background-color: #6c757d;
-  color: white;
-}
-
-.back-button:hover {
-  background-color: #5a6268;
+// Margin helpers
+.mr-2 {
+  margin-right: 0.5rem;
 }

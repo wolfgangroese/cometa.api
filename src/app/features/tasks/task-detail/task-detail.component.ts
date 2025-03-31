@@ -82,7 +82,9 @@ export class TaskDetailComponent implements OnInit {
       startDate: [null],
       dueDate: [null],
       isCompleted: [false],
-      assigneeId: [null]
+      assigneeId: [null],
+      effortMin: [0],
+      effortMax: [1],
     });
 
     this.taskId = this.route.snapshot.paramMap.get('id') || '';
@@ -127,6 +129,8 @@ export class TaskDetailComponent implements OnInit {
           isCompleted: task.isCompleted,
           status: statusValue,
           assigneeId: task.assigneeId || null,
+          effortMin: task.effortMin ?? 0,
+          effortMax: task.effortMax ?? 1,
         });
 
         this.applyPermissionRestrictions();
@@ -340,6 +344,8 @@ export class TaskDetailComponent implements OnInit {
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       status: statusEnum,
       assigneeId: formData.assigneeId || null,
+      effortMin: formData.effortMin || 0,
+      effortMax: formData.effortMax || 1,
     };
   }
 
@@ -366,6 +372,9 @@ export class TaskDetailComponent implements OnInit {
       isCompleted: formData.isCompleted ?? false,
       status: statusEnum,
       assigneeId: formData.assigneeId || null,
+      effortMin: formData.effortMin ?? 0,
+      effortMax: formData.effortMax ?? 1,
+
     };
   }
 
