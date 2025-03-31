@@ -5,10 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Cometa.Api.DTOs;
 using Cometa.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using Cometa.Persistence.Enums;
 
@@ -49,7 +46,9 @@ public class TasksController : ControllerBase
             Rewards = task.Rewards ?? 0,
             Status = task.TaskStatus,
             AssigneeId = task.AssigneeId,
-            AssigneeName = task.Assignee?.UserName
+            AssigneeName = task.Assignee?.UserName,
+            EffortMin = task.EffortMin,
+            EffortMax = task.EffortMax
         });
 
         return Ok(taskDtos);
@@ -112,7 +111,9 @@ public class TasksController : ControllerBase
             Rewards = task.Rewards ?? 0,
             Status = task.TaskStatus,
             AssigneeId = task.AssigneeId,
-            AssigneeName = task.Assignee?.UserName
+            AssigneeName = task.Assignee?.UserName,
+            EffortMin = task.EffortMin,
+            EffortMax = task.EffortMax
         };
 
         return Ok(taskDto);
@@ -126,6 +127,11 @@ public class TasksController : ControllerBase
         {
             return BadRequest("Invalid Task object.");
         }
+        
+        if (newTaskDto.EffortMin.HasValue && newTaskDto.EffortMax.HasValue && newTaskDto.EffortMin > newTaskDto.EffortMax)
+        {
+            return BadRequest("Minimum effort cannot be greater than maximum effort.");
+        }
 
         var newTask = new TaskEntity
         {
@@ -138,7 +144,9 @@ public class TasksController : ControllerBase
             TaskStatus = newTaskDto.Status,
             CreationStatus = CreationStatus.Draft, 
             TaskSkills = new List<TaskSkill>(),
-            AssigneeId = newTaskDto.AssigneeId
+            AssigneeId = newTaskDto.AssigneeId,
+            EffortMin = newTaskDto.EffortMin,
+            EffortMax = newTaskDto.EffortMax
         };
 
         // 🆕 Skills werden via SkillNames gesucht oder angelegt
@@ -163,6 +171,7 @@ public class TasksController : ControllerBase
                 Console.WriteLine($"Error updating rewards on task creation: {ex.Message}");
             }
         }
+        
 
         return CreatedAtRoute("GetTaskById", new { id = newTask.Id }, newTaskDto);
     }
@@ -185,6 +194,11 @@ public class TasksController : ControllerBase
     {
         return NotFound(new { message = $"Task with ID {id} not found." });
     }
+    
+    if (updatedTaskDto.EffortMin.HasValue && updatedTaskDto.EffortMax.HasValue && updatedTaskDto.EffortMin > updatedTaskDto.EffortMax)
+    {
+        return BadRequest("Minimum effort cannot be greater than maximum effort.");
+    }
 
     bool wasCompletedBefore = existingTask.IsCompleted ?? false;
 
@@ -205,8 +219,9 @@ public class TasksController : ControllerBase
     existingTask.Rewards = updatedTaskDto.Rewards;
     existingTask.AssigneeId = updatedTaskDto.AssigneeId;
     existingTask.CreationStatus = updatedTaskDto.CreationStatus; 
-
-    // 🆕 neue Skills zuweisen
+    existingTask.EffortMin = updatedTaskDto.EffortMin;
+    existingTask.EffortMax = updatedTaskDto.EffortMax;
+    
     var taskSkills = await MapSkillNamesToTaskSkills(updatedTaskDto.SkillNames, existingTask);
     existingTask.TaskSkills = taskSkills;
 

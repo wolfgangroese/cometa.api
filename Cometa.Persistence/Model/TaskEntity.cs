@@ -77,4 +77,11 @@ public class TaskEntity : BaseEntity
     [MaxLength(100)]
     public Guid? AssigneeId { get; set; }
     public ApplicationUser? Assignee { get; set; }
+    
+    [Range(0, int.MaxValue)]
+    public int? EffortMin { get; set; }
+    
+    [Range(0, int.MaxValue)]
+    public int? EffortMax { get; set; }
+    
 }
