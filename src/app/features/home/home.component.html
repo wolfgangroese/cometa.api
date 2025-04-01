@@ -34,7 +34,7 @@
   <div class="dashboard-row">
     <!-- Tile D: Open Tasks (double width) -->
     <div class="dashboard-tile double-width">
-      <p-card styleClass="h-full" header="Open Tasks ({{ filteredTasks.length }})">
+      <p-card styleClass="h-full" header="{{ filteredTasks.length }} Tasks waiting ">
         <!-- Skills Filter Section -->
         <div class="filter-section" *ngIf="availableSkills.length > 0">
           <div class="filter-header">

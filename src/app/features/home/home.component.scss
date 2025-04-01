@@ -2,20 +2,20 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .dashboard-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .dashboard-tile {
   flex: 1 1 calc(33.333% - 1rem);
-  min-width: 280px; /* Slightly narrower to fit mobile better */
-  min-height: 350px; /* Shorter height */
+  min-width: 200px; /* Slightly narrower to fit mobile better */
+  min-height: 250px; /* Shorter height */
   display: flex;
   flex-direction: column;
   margin-bottom: 0.5rem; /* Less margin */
