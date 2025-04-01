@@ -38,6 +38,8 @@ export class HomeComponent implements OnInit {
   availableSkills: string[] = [];
   activeFilters: string[] = [];
   filteredTasks: Task[] = [];
+  showFilters = false;
+
 
   // Chart Data
   completionChartData: any;

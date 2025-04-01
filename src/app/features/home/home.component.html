@@ -32,28 +32,35 @@
 
   <!-- Second row: Task list and leaderboard -->
   <div class="dashboard-row">
+
     <!-- Tile D: Open Tasks (double width) -->
     <div class="dashboard-tile double-width">
       <p-card styleClass="h-full" header="{{ filteredTasks.length }} Tasks waiting ">
+
         <!-- Skills Filter Section -->
         <div class="filter-section" *ngIf="availableSkills.length > 0">
           <div class="filter-header">
-            <h4>Filter by Tags:</h4>
             <button class="reset-filter" (click)="resetFilters()" *ngIf="activeFilters.length > 0">
               Reset Filters
             </button>
+            <button class="toggle-filter" (click)="showFilters = !showFilters">
+              {{ showFilters ? 'Hide' : 'Show' }} Tag Filters
+            </button>
           </div>
 
-          <div class="skill-filters">
-            <div *ngFor="let skill of availableSkills"
-                 class="filter-chip"
-                 [class.active]="activeFilters.includes(skill)"
-                 (click)="toggleSkillFilter(skill)">
-              {{ skill }}
-              <i class="pi pi-times" *ngIf="activeFilters.includes(skill)"></i>
+          <div class="skill-filters-container" *ngIf="showFilters">
+            <div class="skill-filters-scrollable">
+              <div *ngFor="let skill of availableSkills"
+                   class="filter-chip"
+                   [class.active]="activeFilters.includes(skill)"
+                   (click)="toggleSkillFilter(skill)">
+                {{ skill }}
+                <i class="pi pi-times" *ngIf="activeFilters.includes(skill)"></i>
+              </div>
             </div>
           </div>
         </div>
+
 
         <!-- Tasks List -->
         <div class="tasks-list">
