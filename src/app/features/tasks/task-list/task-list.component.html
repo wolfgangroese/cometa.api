@@ -18,10 +18,11 @@
     <p-multiSelect
       [options]="cols"
       [(ngModel)]="selectedColumns"
+      (ngModelChange)="onColumnChange()"
       optionLabel="header"
       [showToggleAll]="true"
-      display="chip"
-      placeholder="Spalten wählen">
+      display="comma"
+      placeholder="Column select">
     </p-multiSelect>
   </p-overlayPanel>
 </div>
@@ -47,59 +48,6 @@
       <th>Actions</th>
     </tr>
 
-
-    <tr>
-      <th>
-        <input pInputText type="text" (input)="dt.filter($event.target, 'name', 'contains')" placeholder="Filter Task" />
-      </th>
-      <th *ngFor="let col of selectedColumns">
-        <ng-container [ngSwitch]="col.field">
-
-          <input *ngSwitchCase="'assigneeName'" pInputText type="text"
-                 (input)="dt.filter($event.target, col.field, 'contains')"
-                 placeholder="Filter Assignee" />
-
-          <input *ngSwitchCase="'description'" pInputText type="text"
-                 (input)="dt.filter($event.target, col.field, 'contains')"
-                 placeholder="Filter Description" />
-
-          <p-calendar *ngSwitchCase="'startDate'"
-                      (onSelect)="dt.filter($event, col.field, 'equals')"
-                      dateFormat="yy-mm-dd" showIcon="true" />
-
-          <p-calendar *ngSwitchCase="'dueDate'"
-                      (onSelect)="dt.filter($event, col.field, 'equals')"
-                      dateFormat="yy-mm-dd" showIcon="true" />
-
-          <p-dropdown *ngSwitchCase="'status'"
-                      [options]="statusOptions"
-                      placeholder="Status select"
-                      (onChange)="dt.filter($event.value, col.field, 'equals')"
-                      [showClear]="true">
-          </p-dropdown>
-
-          <p-dropdown *ngSwitchCase="'isCompleted'"
-                      [options]="[
-                    { label: 'Erledigt', value: true },
-                    { label: 'Offen', value: false }
-                  ]"
-                      placeholder="completed?"
-                      (onChange)="dt.filter($event.value, col.field, 'equals')"
-                      [showClear]="true">
-          </p-dropdown>
-
-          <input *ngSwitchCase="'skills'" pInputText type="text"
-                 (input)="dt.filter($event.target, col.field, 'contains')"
-                 placeholder="Filter Skills" />
-
-          <input *ngSwitchDefault pInputText type="text"
-                 (input)="dt.filter($event.target, col.field, 'contains')"
-                 [placeholder]="'Filter ' + col.header" />
-
-        </ng-container>
-      </th>
-      <th></th>
-    </tr>
 
   </ng-template>
 

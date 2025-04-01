@@ -72,6 +72,7 @@ export class TaskListComponent implements OnInit {
   ];
 
   selectedColumns = [...this.cols];
+  private readonly columnStorageKey = 'cometa.taskList.selectedColumns'
 
 
   constructor(
@@ -83,6 +84,18 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTasks();
+    const saved = localStorage.getItem(this.columnStorageKey);
+    if (saved) {
+      const savedFields = JSON.parse(saved);
+      this.selectedColumns = this.cols.filter(c => savedFields.includes(c.field));
+    } else {
+      // Optional: Default-Auswahl
+      this.selectedColumns = [...this.cols];
+    }
+  }
+  onColumnChange(): void {
+    const fields = this.selectedColumns.map(c => c.field);
+    localStorage.setItem(this.columnStorageKey, JSON.stringify(fields));
   }
 
   loadTasks(): void {
