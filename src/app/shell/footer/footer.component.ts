@@ -29,7 +29,7 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
     this.items = [
       { label: 'Home', icon: 'pi pi-home', routerLink: ['/home'] },
-      { label: 'Tasks', icon: 'pi pi-check-circle', routerLink: ['/tasks'] },
+      { label: 'Tasks', icon: 'pi pi-list', routerLink: ['/tasks'] },
       { label: 'New Task', icon: 'pi pi-plus', routerLink: ['/task/new'] },
       { label: 'Quick Add', icon: 'pi pi-bolt', routerLink: ['/task/quick-add'] },
       { label: 'News', icon: 'pi pi-bell', routerLink: ['/news'] },

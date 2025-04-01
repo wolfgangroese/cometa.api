@@ -21,6 +21,7 @@ import { MultiSelectModule } from "primeng/multiselect";
 import { CalendarModule } from "primeng/calendar";
 import { TooltipModule } from "primeng/tooltip";
 import {ChipModule} from "primeng/chip";
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-task-list',
@@ -45,6 +46,7 @@ import {ChipModule} from "primeng/chip";
     CalendarModule,
     TooltipModule,
     ChipModule,
+    OverlayPanelModule,
   ],
   providers: [MessageService, ConfirmationService, FilterService],
 })
@@ -57,6 +59,20 @@ export class TaskListComponent implements OnInit {
     { label: 'Blocked', value: 2 },
     { label: 'Waiting', value: 3 }
   ];
+  cols = [
+    { field: 'skills', header: 'Skills' },
+    { field: 'effortMin', header: 'Effort Min' },
+    { field: 'effortMax', header: 'Max' },
+    { field: 'rewards', header: 'Reward' },
+    { field: 'startDate', header: 'Start Date' },
+    { field: 'dueDate', header: 'Deadline' },
+    { field: 'isCompleted', header: 'Completed' },
+    { field: 'status', header: 'Status' },
+    { field: 'assigneeName', header: 'Assignee' }
+  ];
+
+  selectedColumns = [...this.cols];
+
 
   constructor(
     private taskService: TaskService,
@@ -118,16 +134,21 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  getStatusSeverity(status: number): string {
-    const severityMap: Record<number, string> = {
-      0: 'success', // Done
-      1: 'info',    // InProgress
-      2: 'danger',  // Blocked
-      3: 'warning'  // Waiting
-    };
-
-    return severityMap[status] ?? 'info';
+  statusSeverity(status: string): string {
+    switch (status) {
+      case 'Done':
+        return 'success';
+      case 'InProgress':
+        return 'info';
+      case 'Blocked':
+        return 'danger';
+      case 'Waiting':
+        return 'warning';
+      default:
+        return 'info';
+    }
   }
+
 
   protected readonly HTMLInputElement = HTMLInputElement;
 

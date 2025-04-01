@@ -1,12 +1,12 @@
 <!-- src/app/features/skills/skills-management/skills-management.component.html -->
 <div class="skills-management-container">
-  <h2>Skills Management</h2>
+  <h2>Tag Management</h2>
 
   <!-- Skill Form -->
   <div class="form-container">
     <form [formGroup]="skillForm" class="p-grid">
       <div class="p-field">
-        <label for="name">Skill Name</label>
+        <label for="name">Tag Name</label>
         <input id="name" type="text" pInputText formControlName="name" class="form-input">
         <small *ngIf="skillForm.get('name')?.touched && skillForm.get('name')?.invalid" class="p-error">
           Name is required and must be at least 2 characters
@@ -23,7 +23,7 @@
           *ngIf="!isEditing"
           pButton
           type="button"
-          label="Add Skill"
+          label="Add Tag"
           icon="pi pi-plus"
           (click)="addSkill()"
           [disabled]="skillForm.invalid || loading"
@@ -106,7 +106,7 @@
   header="Tasks Using Skill">
 
   <ng-template pTemplate="header">
-    <span>Tasks Using Skill: {{ selectedSkill?.name || '' }}</span>
+    <span>Tasks Using Tag: {{ selectedSkill?.name || '' }}</span>
   </ng-template>
 
   <div class="dialog-content">

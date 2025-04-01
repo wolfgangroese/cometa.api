@@ -2,7 +2,7 @@
   <span class="header-title">COMETA | {{ currentLabel }}</span>
 
   <div class="user-info">
-    <span *ngIf="currentUser" class="username">{{ currentUser.email || currentUser.userName }}</span>
+    <span *ngIf="currentUser" class="username">{{ currentUser.fullName }} ({{ currentUser.email}})</span>
     <span *ngIf="currentUser?.role" class="role-badge">{{ currentUser?.role }}</span>
     <span *ngIf="currentUser && totalRewards !== undefined" class="rewards-badge">
       <i class="pi pi-star-fill"></i> {{ totalRewards }}
@@ -60,7 +60,7 @@
         <h4 class="admin-menu-title">Admin Tools</h4>
         <a [routerLink]="['/skills']" class="admin-menu-item" (click)="closeAccountMenu($event)">
           <i class="pi pi-tag"></i>
-          Manage Skills
+          Manage Tags
         </a>
       </div>
 

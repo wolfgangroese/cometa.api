@@ -100,7 +100,7 @@
           <ng-template pTemplate="body" let-user let-i="rowIndex">
             <tr>
               <td>{{ i + 1 }}</td>
-              <td>{{ user.fullName || user.userName }}</td>
+              <td>{{ user.userName || user.fullName }}</td>
               <td>
                 <span class="reward-badge">
                   {{ user.totalRewards || 0 }}
