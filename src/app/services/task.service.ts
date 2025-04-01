@@ -35,6 +35,11 @@ export class TaskService {
     );
   }
 
+  duplicateTask(taskDto: CreateTaskDto) {
+    return this.http.post('/api/tasks/duplicate', { newTaskDto: taskDto });
+  }
+
+
   updateTask(id: string, task: UpdateTaskDto): Observable<Task> {
     return this.http.put<Task>(`${this.apiUrl}/${id}`, task).pipe(
       catchError(this.handleError)

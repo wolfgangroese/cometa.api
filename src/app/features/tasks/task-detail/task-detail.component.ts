@@ -172,7 +172,6 @@ export class TaskDetailComponent implements OnInit {
       name: formData.name,
       description: formData.description,
       rewards: formData.rewards,
-      skills: formData.skills ?? [],
       skillNames: (formData.skills ?? []).map((s: Skill) => s.name),
       startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
@@ -222,6 +221,21 @@ export class TaskDetailComponent implements OnInit {
       }
     });
   }
+
+  duplicateTask(): void {
+    const newTask = this.prepareCreateTaskData();
+    this.taskService.duplicateTask(newTask).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Erfolg', detail: 'Task dupliziert!' });
+        this.goBack();
+      },
+      error: (err) => {
+        console.error('Fehler beim Duplizieren:', err);
+        this.messageService.add({ severity: 'error', summary: 'Fehler', detail: 'Duplizieren fehlgeschlagen.' });
+      }
+    });
+  }
+
 
   updateTask(): void {
     if (this.taskForm.invalid) return;

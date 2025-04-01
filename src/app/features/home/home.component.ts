@@ -68,14 +68,15 @@ export class HomeComponent implements OnInit {
     const baseOptions = {
       plugins: {
         legend: {
-          position: 'right',
+          position: 'right', // Keep consistent for all charts
           align: 'center',
           labels: {
             usePointStyle: true,
             font: {
               size: 12
             },
-            padding: 10
+            padding: 10,
+            boxWidth: 10 // Fixed box width for legends
           }
         },
         tooltip: {
@@ -86,7 +87,7 @@ export class HomeComponent implements OnInit {
       responsive: false, // Disable responsiveness to force fixed size
       maintainAspectRatio: false,
       aspectRatio: 1,
-      cutout: '66%'
+      cutout: '60%'
     };
 
     this.completionChartOptions = { ...baseOptions };
