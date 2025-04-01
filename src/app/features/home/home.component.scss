@@ -220,17 +220,19 @@
 .reward-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  background-color: #ffd700;
-  color: #333;
+  gap: 1rem;
+  background-color: #0c5460 ;
+  color: #ffd700;
   font-weight: 500;
-  padding: 0.2rem 0.4rem;
+  padding: 0.3rem 0.6rem;
   border-radius: 1rem;
   font-size: 0.875rem;
+  text-align: right;
 
   i {
     color: #ff9800;
-    font-size: 0.875rem;
+    font-size: 1rem;
+    text-align: right;
   }
 }
 

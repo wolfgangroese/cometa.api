@@ -71,14 +71,14 @@ export class HomeComponent implements OnInit {
           labels: {
             usePointStyle: true,
             font: {
-              size: 11
+              size: 12
             },
             padding: 10
           }
         },
         tooltip: {
           mode: 'index',
-          intersect: false
+          intersect: true
         }
       },
       responsive: false, // Disable responsiveness to force fixed size

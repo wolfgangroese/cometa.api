@@ -6,7 +6,7 @@
     <div class="dashboard-tile">
       <p-card styleClass="h-full" header="Task Completion">
         <div class="chart-container">
-          <p-chart #completionChart type="doughnut" [data]="completionChartData" [options]="completionChartOptions" width="170" height="170"></p-chart>
+          <p-chart #completionChart type="doughnut" [data]="completionChartData" [options]="completionChartOptions" width="200" height="200"></p-chart>
         </div>
       </p-card>
     </div>
@@ -15,16 +15,16 @@
     <div class="dashboard-tile">
       <p-card styleClass="h-full" header="Tasks by Status">
         <div class="chart-container">
-          <p-chart #statusChart type="doughnut" [data]="statusChartData" [options]="statusChartOptions" width="170" height="170"></p-chart>
+          <p-chart #statusChart type="doughnut" [data]="statusChartData" [options]="statusChartOptions" width="200" height="200"></p-chart>
         </div>
       </p-card>
     </div>
 
     <!-- Tile C: Most Used Skills -->
     <div class="dashboard-tile">
-      <p-card styleClass="h-full" header="Top 5 Skills">
+      <p-card styleClass="h-full" header="Top 5 Tags">
         <div class="chart-container">
-          <p-chart #skillsChart type="doughnut" [data]="skillsChartData" [options]="skillsChartOptions" width="170" height="170"></p-chart>
+          <p-chart #skillsChart type="doughnut" [data]="skillsChartData" [options]="skillsChartOptions" width="200" height="200"></p-chart>
         </div>
       </p-card>
     </div>
@@ -38,7 +38,7 @@
         <!-- Skills Filter Section -->
         <div class="filter-section" *ngIf="availableSkills.length > 0">
           <div class="filter-header">
-            <h4>Filter by Skills:</h4>
+            <h4>Filter by Tags:</h4>
             <button class="reset-filter" (click)="resetFilters()" *ngIf="activeFilters.length > 0">
               Reset Filters
             </button>
@@ -96,8 +96,8 @@
               <td>{{ user.fullName || user.userName }}</td>
               <td>
                 <span class="reward-badge">
-                  <i class="pi pi-star-fill"></i>
                   {{ user.totalRewards || 0 }}
+                  <i class="pi pi-star-fill"></i>
                 </span>
               </td>
             </tr>
