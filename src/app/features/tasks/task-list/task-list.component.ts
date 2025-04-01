@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../../services/task.service';
 import { Task } from '../../../models/task.model';
@@ -20,12 +20,14 @@ import { InputTextModule } from "primeng/inputtext";
 import { MultiSelectModule } from "primeng/multiselect";
 import { CalendarModule } from "primeng/calendar";
 import { TooltipModule } from "primeng/tooltip";
+import {ChipModule} from "primeng/chip";
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,
     RouterLink,
@@ -42,6 +44,7 @@ import { TooltipModule } from "primeng/tooltip";
     MultiSelectModule,
     CalendarModule,
     TooltipModule,
+    ChipModule,
   ],
   providers: [MessageService, ConfirmationService, FilterService],
 })

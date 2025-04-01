@@ -1,43 +1,57 @@
-p-table {
-  width: 100%;
+.p-datatable-sm .p-datatable-thead > tr > th,
+.p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.5rem 0.5rem;
+  font-size: 0.85rem;
 }
 
-th {
-  background: #f4f4f4;
-  text-align: left;
-  padding: 10px;
-  font-size: 12px;
+.chip {
+  background-color: #d0d0d0;
+  color: #333;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-right: 0.25rem;
+  display: inline-block;
 }
 
-td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+.p-tag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  line-height: 1rem;
 }
 
-p-tag {
-  width: 60px;
-  display: flex;
-  justify-content: center;
-}
 .task-link {
-  color: #007ad9;  /* PrimeNG Blau */
   text-decoration: none;
-  font-weight: bold;
-  cursor: pointer;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 0.85rem;
+}
 
-  &:hover {
-    text-decoration: underline;
+.task-link:hover {
+  text-decoration: underline;
+}
+
+.global-search {
+  width: 200px;
+  font-size: 0.85rem;
+}
+
+.new-task-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem 0;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 1024px) {
+ .p-datatable-sm {
+    font-size: 0.8rem;
+  }
+
+.global-search {
+    width: 100%;
   }
 }
-.new-task-container {
-  margin-top: 20px;
-  text-align: center;
-}
-.global-search {
-  padding: 1rem;
-  font-size: 1.2rem;
-}
-.skills {
-  font-size: 0.9rem;
-  text-align: center;
-}
+

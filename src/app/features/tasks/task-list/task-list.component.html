@@ -1,7 +1,9 @@
-<div class="p-d-flex p-mb-4 p-p-3">
-  <span class="p-input-icon-left p-ml-auto"></span>
+<div class="p-d-flex p-jc-between p-ai-center p-mb-3 p-px-2">
+  <div class="p-input-icon-left">
     <i class="pi pi-search"></i>
-    <input pInputText type="text" (input)="dt.filterGlobal(($any($event.target)).value, 'contains')" placeholder="Search..."  class="global-search"/></div>
+    <input pInputText type="text" (input)="dt.filterGlobal(($any($event.target)).value, 'contains')" placeholder="Search..." class="global-search" />
+  </div>
+</div>
 
 <p-table #dt [value]="tasks"
          responsiveLayout="scroll"
@@ -9,79 +11,60 @@
          [rows]="25"
          [globalFilterFields]="['name', 'rewards', 'assigneeName', 'description', 'skills']"
          sortMode="multiple"
-         styleClass="p-datatable-sm">
+         styleClass="p-datatable-sm compact-table">
 
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-      <th pSortableColumn="skills">Skills <p-sortIcon field="skills"></p-sortIcon></th>
-      <th pSortableColumn="effortMin">Effort Min <p-sortIcon field="effortMin"></p-sortIcon></th>
-      <th pSortableColumn="effortMax">Max <p-sortIcon field="effortMax"></p-sortIcon></th>
-      <th pSortableColumn="rewards">Reward <p-sortIcon field="rewards"></p-sortIcon></th>
-      <th pSortableColumn="startDate">Start Date <p-sortIcon field="startDate"></p-sortIcon></th>
-      <th pSortableColumn="dueDate">Deadline <p-sortIcon field="dueDate"></p-sortIcon></th>
-      <th pSortableColumn="isCompleted">Completed <p-sortIcon field="isCompleted"></p-sortIcon></th>
-      <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-      <th pSortableColumn="assigneeName">Assignee <p-sortIcon field="assigneeName"></p-sortIcon></th>
-      <th>Actions</th>
+      <th pSortableColumn="name"><i class="pi pi-tag" pTooltip="Name"></i> <p-sortIcon field="name"></p-sortIcon></th>
+      <th pSortableColumn="skills"><i class="pi pi-users" pTooltip="Skills"></i> <p-sortIcon field="skills"></p-sortIcon></th>
+      <th pSortableColumn="effortMin"><i class="pi pi-clock" pTooltip="Min. Aufwand"></i> <p-sortIcon field="effortMin"></p-sortIcon></th>
+      <th pSortableColumn="effortMax"><i class="pi pi-angle-double-right" pTooltip="Max"></i> <p-sortIcon field="effortMax"></p-sortIcon></th>
+      <th pSortableColumn="rewards"><i class="pi pi-star" pTooltip="Reward"></i> <p-sortIcon field="rewards"></p-sortIcon></th>
+      <th pSortableColumn="startDate"><i class="pi pi-calendar-plus" pTooltip="Start Date"></i> <p-sortIcon field="startDate"></p-sortIcon></th>
+      <th pSortableColumn="dueDate"><i class="pi pi-calendar-times" pTooltip="Deadline"></i> <p-sortIcon field="dueDate"></p-sortIcon></th>
+      <th pSortableColumn="isCompleted"><i class="pi pi-check-square" pTooltip="Completed"></i> <p-sortIcon field="isCompleted"></p-sortIcon></th>
+      <th pSortableColumn="status"><i class="pi pi-info-circle" pTooltip="Status"></i> <p-sortIcon field="status"></p-sortIcon></th>
+      <th pSortableColumn="assigneeName"><i class="pi pi-user" pTooltip="Assignee"></i> <p-sortIcon field="assigneeName"></p-sortIcon></th>
+      <th><i class="pi pi-cog"></i></th>
     </tr>
     <tr>
-      <th>
-        <p-columnFilter type="text" field="name"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter type="text" field="skills"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter type="numeric" field="effortMin"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter type="numeric" field="effortMax"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter type="numeric" field="rewards"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter type="date" field="startDate"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter type="date" field="dueDate"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter type="boolean" field="isCompleted"></p-columnFilter>
-      </th>
+      <th><p-columnFilter type="text" field="name"></p-columnFilter></th>
+      <th><p-columnFilter type="text" field="skills"></p-columnFilter></th>
+      <th><p-columnFilter type="numeric" field="effortMin"></p-columnFilter></th>
+      <th><p-columnFilter type="numeric" field="effortMax"></p-columnFilter></th>
+      <th><p-columnFilter type="numeric" field="rewards"></p-columnFilter></th>
+      <th><p-columnFilter type="date" field="startDate"></p-columnFilter></th>
+      <th><p-columnFilter type="date" field="dueDate"></p-columnFilter></th>
+      <th><p-columnFilter type="boolean" field="isCompleted"></p-columnFilter></th>
       <th>
         <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-            <p-dropdown [options]="statusOptions" (onChange)="filter($event.value)" placeholder="Select Status">
-            </p-dropdown>
+            <p-dropdown [options]="statusOptions" (onChange)="filter($event.value)" placeholder="Status"></p-dropdown>
           </ng-template>
         </p-columnFilter>
       </th>
-      <th>
-        <p-columnFilter type="text" field="assigneeName"></p-columnFilter>
-      </th>
+      <th><p-columnFilter type="text" field="assigneeName"></p-columnFilter></th>
       <th></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-task>
     <tr>
+      <td><a [routerLink]="['/task', task.id]" class="task-link">{{ task.name }}</a></td>
       <td>
-        <a [routerLink]="['/task', task.id]" class="task-link">{{ task.name }}</a>
+        <ng-container *ngIf="task.skills?.length">
+          <span *ngFor="let skill of task.skills" class="chip">{{ skill }}</span>
+        </ng-container>
       </td>
-      <td class="skills">{{ task.skills }} </td>
-      <td>{{ task.effortMin }} </td>
-      <td>{{ task.effortMax }} </td>
-      <td>{{ task.rewards }} </td>
+      <td>{{ task.effortMin }}</td>
+      <td>{{ task.effortMax }}</td>
+      <td>{{ task.rewards }}</td>
       <td>{{ task.startDate | date:'yyyy-MM-dd' }}</td>
       <td>{{ task.dueDate | date:'yyyy-MM-dd' }}</td>
       <td>
-        <p-tag *ngIf="task.isCompleted" severity="success" value="Yes"></p-tag>
-        <p-tag *ngIf="!task.isCompleted" severity="warning" value="No"></p-tag>
+        <p-tag [value]="task.isCompleted ? 'Yes' : 'No'" [severity]="task.isCompleted ? 'success' : 'warning'"></p-tag>
       </td>
       <td>
-        <!-- Fix the severity attribute to use string literal type instead of dynamic value -->
         <ng-container [ngSwitch]="getStatusLabel(task.status)">
           <p-tag *ngSwitchCase="'Done'" severity="success" [value]="getStatusLabel(task.status)"></p-tag>
           <p-tag *ngSwitchCase="'InProgress'" severity="info" [value]="getStatusLabel(task.status)"></p-tag>
@@ -92,45 +75,21 @@
       </td>
       <td>{{ task.assigneeName || 'Unassigned' }}</td>
       <td>
-      <!-- Add delete icon only for incomplete tasks -->
-      <button *ngIf="!task.isCompleted && permissionService.canDeleteTasks()"
-              pButton
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-danger p-button-text"
-              (click)="deleteTask(task.id)"
-              pTooltip="Delete task"
-              aria-label="Delete task"></button>
+        <button *ngIf="!task.isCompleted && permissionService.canDeleteTasks()"
+                pButton icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-text"
+                (click)="deleteTask(task.id)"
+                pTooltip="Delete task"
+                aria-label="Delete task"></button>
       </td>
     </tr>
   </ng-template>
 </p-table>
 
-<!-- Show New Task button only for users with permission -->
-<div class="new-task-container" *ngIf="permissionService.canCreateTasks()">
-  <p-button
-    label="Neues Task"
-    icon="pi pi-plus"
-    severity="success"
-    [routerLink]="['/task/new']">
-  </p-button>
-</div>
-
-<!-- Show Quick Add button only for users with permission -->
-<div class="new-task-container" *ngIf="permissionService.canCreateTasks()">
-  <p-button
-    label="Schnelleingabe"
-    icon="pi pi-bolt"
-    severity="info"
-    [routerLink]="['/task/quick-add']"
-    [style]="{'margin-left': '10px'}">
-  </p-button>
+<div class="new-task-container p-mt-3" *ngIf="permissionService.canCreateTasks()">
+  <p-button label="Neues Task" icon="pi pi-plus" severity="success" [routerLink]="['/task/new']"></p-button>
+  <p-button label="Schnelleingabe" icon="pi pi-bolt" severity="info" [routerLink]="['/task/quick-add']" class="p-ml-2"></p-button>
 </div>
 
 <p-toast></p-toast>
-
-<p-toast></p-toast>
-
-<p-toast></p-toast>
-
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-
