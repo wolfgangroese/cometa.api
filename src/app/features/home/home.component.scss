@@ -1,56 +1,103 @@
-.home-container {
-  max-width: 800px;
+.dashboard-container {
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
-// Tasks Accordion Section
-.tasks-section {
-  margin-bottom: 2rem;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  overflow: hidden;
+.dashboard-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.tasks-accordion {
-  cursor: pointer;
-  background-color: #f8f9fa;
-  transition: background-color 0.2s;
+.dashboard-tile {
+  flex: 1 1 calc(33.333% - 1rem);
+  min-width: 200px; /* Slightly narrower to fit mobile better */
+  min-height: 250px; /* Shorter height */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem; /* Less margin */
 
-  &:hover {
-    background-color: #e9ecef;
+  &.double-width {
+    flex: 2 1 calc(66.666% - 1rem);
+    min-width: 560px;
+  }
+
+  &.double-height {
+    // Double height will be handled by the content inside
   }
 }
 
-.task-header {
+// Chart container to ensure proper sizing
+.chart-container {
+  height: 180px;
+  width: 100%;
+  position: relative;
+  margin: 0 auto 0.5rem auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 1rem;
-  font-weight: bold;
-  font-size: 1rem;
-  color: #2196F3;
+
+  // Force all charts to have identical dimensions
+  :host ::ng-deep & {
+    canvas {
+      width: 250px !important;
+      height: 250px !important;
+      max-width: 250px !important;
+      max-height: 250px !important;
+    }
+
+    .p-chart {
+      width: 250px !important;
+      height: 250px !important;
+    }
+  }
 }
 
-.task-count {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: olivedrab;
+// Make cards take full height of their container
+:host ::ng-deep .p-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Lighter shadow */
+  margin-bottom: 0.1rem; /* Less space after the card */
+
+  .p-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .p-card-content {
+    flex: 1;
+    padding: 0.75rem; /* Less padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+  }
+
+  .p-card-header {
+    padding: 1rem 1rem 0.5rem; /* Less padding in header */
+    font-size: 1.1rem; /* Slightly smaller text */
+    font-weight: 600;
+    text-align: center; /* Center title */
+  }
 }
 
+// Tasks list styles
 .tasks-list {
-  background-color: white;
-  padding: 0.5rem;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 300px;
 }
 
 .task-item {
-  font-family: 'Avenir Next', serif;
-  font-size: 1rem;
-  text-align: left;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
+  padding: 0.75rem;
   border-bottom: 1px solid #f0f0f0;
+  margin: 0;
 
   &:last-child {
     border-bottom: none;
@@ -58,86 +105,59 @@
 }
 
 .task-link {
-  color: inherit;
-  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  color: #333;
+  text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
-    color: #2f88e1;
+    color: #2196F3;
   }
 }
 
-.completed-icon {
-  color: green;
-  margin-left: 8px;
-  font-size: 1.2rem;
+.task-title {
+  font-weight: 500;
 }
 
 .task-skills {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 5px;
+  gap: 0.25rem;
+  margin-left: auto;
+  margin-right: 0.5rem;
 }
 
 .skill-chip {
   background-color: #e0f2f1;
   color: #00796b;
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 12px;
-  display: inline-block;
-}
-
-// Leaderboard Section
-.leaderboard-section {
-  margin-top: 3rem;
-
-  h3 {
-    font-size: 1.5rem;
-    color: #495057;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-}
-
-.reward-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #ffd700;
-  color: #333;
-  font-weight: bold;
-  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
   border-radius: 1rem;
+}
 
-  i {
-    color: #ff9800;
-  }
+.completed-icon {
+  color: #4caf50;
+  margin-left: 0.5rem;
 }
 
 // Filter section styles
 .filter-section {
-  margin-bottom: 20px;
-  padding: 15px;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
   background-color: #f7f9fa;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .filter-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 
   h4 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: #495057;
   }
 }
@@ -147,8 +167,8 @@
   color: #333;
   border: none;
   border-radius: 4px;
-  padding: 5px 10px;
-  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: background-color 0.2s;
 
@@ -160,17 +180,17 @@
 .skill-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .filter-chip {
   background-color: #e9ecef;
   color: #495057;
-  padding: 5px 10px;
-  border-radius: 16px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s;
 
@@ -179,8 +199,8 @@
   }
 
   i {
-    margin-left: 5px;
-    font-size: 0.8rem;
+    margin-left: 0.25rem;
+    font-size: 0.7rem;
   }
 
   &.active {
@@ -192,28 +212,53 @@
 .no-tasks-message {
   text-align: center;
   color: #6c757d;
-  padding: 20px;
+  padding: 1rem;
   font-style: italic;
 }
 
+// Leaderboard styling
+.reward-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: #ffd700;
+  color: #333;
+  font-weight: 500;
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
 
-// Additional styles for PrimeNG Table
-:host ::ng-deep {
-  .p-datatable .p-datatable-thead > tr > th {
-    background-color: #f8f9fa;
-    color: #495057;
-    font-weight: 600;
+  i {
+    color: #ff9800;
+    font-size: 0.875rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .dashboard-row {
+    flex-direction: column;
   }
 
-  .p-datatable .p-datatable-tbody > tr {
-    &:nth-child(1) {
-      background-color: #fff9c4; // Gold background for 1st place
+  .dashboard-tile {
+    flex: 1 1 100%;
+    min-width: 100%;
+    min-height: 350px; /* Keep the same height as desktop */
+
+    &.double-width {
+      flex: 1 1 100%;
+      min-width: 100%;
     }
-    &:nth-child(2) {
-      background-color: #f5f5f5; // Silver background for 2nd place
-    }
-    &:nth-child(3) {
-      background-color: #ffe0b2; // Bronze background for 3rd place
-    }
+  }
+
+  .chart-container {
+    height: 300px; /* Slightly smaller on mobile */
+    width: 3000px;
+    margin-bottom: 1rem;
+  }
+
+  // Add extra margin between chart tiles on mobile
+  .dashboard-tile:not(:last-child) {
+    margin-bottom: 1.5rem;
   }
 }

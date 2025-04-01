@@ -1,78 +1,109 @@
-<div class="home-container">
-
-  <!-- Tasks Section with Accordion - use filteredTasks here -->
-  <div class="tasks-section">
-    <div class="tasks-accordion" (click)="toggleTasksList()">
-      <div class="task-header">
-        <span class="task-count">{{ filteredTasks.length }} open Tasks</span>
-        <i class="pi" [ngClass]="expanded ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
-      </div>
+<!-- home.component.html -->
+<div class="dashboard-container">
+  <!-- First row: Charts -->
+  <div class="dashboard-row">
+    <!-- Tile A: Completed vs Not Completed -->
+    <div class="dashboard-tile">
+      <p-card styleClass="h-full" header="Task Completion">
+        <div class="chart-container">
+          <p-chart #completionChart type="doughnut" [data]="completionChartData" [options]="completionChartOptions" width="170" height="170"></p-chart>
+        </div>
+      </p-card>
     </div>
 
-    <div class="tasks-list" *ngIf="expanded">
-      <!-- Skills Filter Section -->
-      <div class="filter-section" *ngIf="availableSkills.length > 0">
-        <div class="filter-header">
-          <h4>Filter by Skills:</h4>
-          <button class="reset-filter" (click)="resetFilters()" *ngIf="activeFilters.length > 0">
-            Reset Filters
-          </button>
+    <!-- Tile B: Tasks by Status -->
+    <div class="dashboard-tile">
+      <p-card styleClass="h-full" header="Tasks by Status">
+        <div class="chart-container">
+          <p-chart #statusChart type="doughnut" [data]="statusChartData" [options]="statusChartOptions" width="170" height="170"></p-chart>
         </div>
+      </p-card>
+    </div>
 
-        <div class="skill-filters">
-          <div *ngFor="let skill of availableSkills"
-               class="filter-chip"
-               [class.active]="activeFilters.includes(skill)"
-               (click)="toggleSkillFilter(skill)">
-            {{ skill }}
-            <i class="pi pi-times" *ngIf="activeFilters.includes(skill)"></i>
-          </div>
+    <!-- Tile C: Most Used Skills -->
+    <div class="dashboard-tile">
+      <p-card styleClass="h-full" header="Top 5 Skills">
+        <div class="chart-container">
+          <p-chart #skillsChart type="doughnut" [data]="skillsChartData" [options]="skillsChartOptions" width="170" height="170"></p-chart>
         </div>
-      </div>
-      <p *ngFor="let task of filteredTasks" class="task-item">
-        <a [routerLink]="['/task', task.id]" class="task-link">
-          <span class="task-title">
-            {{ task.name }}
-          </span>
-          <span class="task-skills" *ngIf="task.skills && task.skills.length > 0">
-            <span *ngFor="let skill of task.skills" class="skill-chip">
-              {{ skill }}
-            </span>
-          </span>
-          <i *ngIf="task.isCompleted" class="pi pi-check-circle completed-icon"></i>
-        </a>
-      </p>
-
-      <!-- Show a message if no tasks match the filters -->
-      <p *ngIf="filteredTasks.length === 0" class="no-tasks-message">
-        No tasks match the selected filters.
-      </p>
+      </p-card>
     </div>
   </div>
 
-  <!-- Leaderboard Section -->
-  <div class="leaderboard-section">
-    <h4>Leaderboard</h4>
-    <p-table [value]="users" styleClass="p-datatable-sm">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>#</th>
-          <th>User</th>
-          <th>Rewards</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-user let-i="rowIndex">
-        <tr>
-          <td>{{ i + 1 }}</td>
-          <td>{{ user.fullName || user.userName }}</td>
-          <td>
-            <span class="reward-badge">
-              <i class="pi pi-star-fill"></i>
-              {{ user.totalRewards || 0 }}
-            </span>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+  <!-- Second row: Task list and leaderboard -->
+  <div class="dashboard-row">
+    <!-- Tile D: Open Tasks (double width) -->
+    <div class="dashboard-tile double-width">
+      <p-card styleClass="h-full" header="{{ filteredTasks.length }} Tasks waiting ">
+        <!-- Skills Filter Section -->
+        <div class="filter-section" *ngIf="availableSkills.length > 0">
+          <div class="filter-header">
+            <h4>Filter by Skills:</h4>
+            <button class="reset-filter" (click)="resetFilters()" *ngIf="activeFilters.length > 0">
+              Reset Filters
+            </button>
+          </div>
+
+          <div class="skill-filters">
+            <div *ngFor="let skill of availableSkills"
+                 class="filter-chip"
+                 [class.active]="activeFilters.includes(skill)"
+                 (click)="toggleSkillFilter(skill)">
+              {{ skill }}
+              <i class="pi pi-times" *ngIf="activeFilters.includes(skill)"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="tasks-list">
+          <p *ngFor="let task of filteredTasks" class="task-item">
+            <a [routerLink]="['/task', task.id]" class="task-link">
+              <span class="task-title">
+                {{ task.name }}
+              </span>
+              <span class="task-skills" *ngIf="task.skills && task.skills.length > 0">
+                <span *ngFor="let skill of task.skills" class="skill-chip">
+                  {{ skill }}
+                </span>
+              </span>
+              <i *ngIf="task.isCompleted" class="pi pi-check-circle completed-icon"></i>
+            </a>
+          </p>
+
+          <!-- Show a message if no tasks match the filters -->
+          <p *ngIf="filteredTasks.length === 0" class="no-tasks-message">
+            No tasks match the selected filters.
+          </p>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Tile E: Leaderboard (double height - handled via CSS) -->
+    <div class="dashboard-tile double-height">
+      <p-card styleClass="h-full" header="Leaderboard">
+        <p-table [value]="users" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>User</th>
+              <th>Rewards</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-user let-i="rowIndex">
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ user.fullName || user.userName }}</td>
+              <td>
+                <span class="reward-badge">
+                  <i class="pi pi-star-fill"></i>
+                  {{ user.totalRewards || 0 }}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
   </div>
 </div>

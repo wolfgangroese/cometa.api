@@ -32,9 +32,9 @@ export class FooterComponent implements OnInit {
       { label: 'Tasks', icon: 'pi pi-check-circle', routerLink: ['/tasks'] },
       { label: 'New Task', icon: 'pi pi-plus', routerLink: ['/task/new'] },
       { label: 'Quick Add', icon: 'pi pi-bolt', routerLink: ['/task/quick-add'] },
-      { label: 'News', icon: 'pi pi-envelope', routerLink: ['/news'] },
+      { label: 'News', icon: 'pi pi-bell', routerLink: ['/news'] },
       { label: 'Search', icon: 'pi pi-search', routerLink: ['/search'] },
-      { label: 'Account', icon: 'pi pi-user', routerLink: ['/account'] }
+      { label: 'Account', icon: 'pi pi-users', routerLink: ['/account'] }
     ];
   }
 }
