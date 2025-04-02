@@ -16,8 +16,8 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build -t cometa-api:latest .
-
+        run: docker build -t cometa-api:latest ./Cometa.Api
+      
       - name: Save Docker image to file
         run: docker save cometa-api:latest | gzip > cometa-api.tar.gz
 
