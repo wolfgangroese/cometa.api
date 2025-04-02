@@ -3,5 +3,4 @@ export const environment = {
   api: {
     baseUrl: 'https://cometa.loopus.it/api'
   }
-  // ... andere Konfigurationen
 };

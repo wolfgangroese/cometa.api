@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, ReplaySubject } from 'rxjs';
-import { environment } from '../../environments/environment.dev';
+import { environment } from '../../environments/environment';
 import { catchError, tap } from 'rxjs/operators';
 import { RegisterDto } from '../models/dtos/register.dto';
 import { LoginDto } from '../models/dtos/login.dto';
