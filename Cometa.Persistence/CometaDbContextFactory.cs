@@ -8,28 +8,24 @@ namespace Cometa.Persistence
     {
         public CometaDbContext CreateDbContext(string[] args)
         {
-            // Get the directory of the executing assembly (usually the API project)
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var currentDirectory = Directory.GetCurrentDirectory();
-            
-            // Build configuration from appsettings
+
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(currentDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.Development.json", optional: true)
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .AddEnvironmentVariables()
                 .Build();
 
-            var optionsBuilder = new DbContextOptionsBuilder<CometaDbContext>();
-            
-            // Use the correct connection string key
             var connectionString = configuration.GetConnectionString("CometaDbContext");
-            
-            // Handle case where connection string might not be found
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new InvalidOperationException(
-                    "Could not find connection string 'CometaDbContext' in the configuration.");
+                    $"Connection string 'CometaDbContext' not found for environment '{environment}'.");
             }
 
+            var optionsBuilder = new DbContextOptionsBuilder<CometaDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
 
             return new CometaDbContext(optionsBuilder.Options);
