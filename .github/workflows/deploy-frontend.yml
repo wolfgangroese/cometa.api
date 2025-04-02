@@ -36,8 +36,8 @@ jobs:
       - name: Kopiere Dateien nach /var/www/cometa via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          host: ${{ secrets.RASPI_HOST }}
+          username: ${{ secrets.RASPI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
