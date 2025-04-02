@@ -1,0 +1,48 @@
+name: Deploy Frontend to Raspberry Pi
+
+on:
+  push:
+    branches: [main] # oder master, je nach deinem Branch-Namen
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Anpassen an deine Node-Version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build --configuration=production
+
+      - name: Deploy to Raspberry Pi
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.RASPI_HOST }}
+          username: ${{ secrets.RASPI_USER }}
+          key: ${{ secrets.RASPI_SSH_KEY }}
+          source: "dist/cometa/browser/*" # Anpassen an deinen Build-Output-Pfad
+          target: "/tmp/cometa-frontend"
+          strip_components: 3 # Entfernt die Verzeichnisebenen im Pfad
+
+      - name: Move files and set permissions
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.RASPI_HOST }}
+          username: ${{ secrets.RASPI_USER }}
+          key: ${{ secrets.RASPI_SSH_KEY }}
+          script: |
+            sudo mkdir -p /var/www/cometa
+            sudo rm -rf /var/www/cometa/*
+            sudo cp -r /tmp/cometa-frontend/* /var/www/cometa/
+            sudo chown -R www-data:www-data /var/www/cometa
+            sudo chmod -R 755 /var/www/cometa
+            rm -rf /tmp/cometa-frontend
