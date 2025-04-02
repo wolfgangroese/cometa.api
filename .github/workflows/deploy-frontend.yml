@@ -33,16 +33,18 @@ jobs:
           target: "/tmp/cometa-frontend"
           strip_components: 3 # Entfernt die Verzeichnisebenen im Pfad
 
-      - name: Move files and set permissions
+      - name: Kopiere Dateien nach /var/www/cometa via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.RASPI_HOST }}
-          username: ${{ secrets.RASPI_USER }}
-          key: ${{ secrets.RASPI_SSH_KEY }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           script: |
-            sudo mkdir -p /var/www/cometa
-            sudo rm -rf /var/www/cometa/*
-            sudo cp -r /tmp/cometa-frontend/* /var/www/cometa/
-            sudo chown -R www-data:www-data /var/www/cometa
-            sudo chmod -R 755 /var/www/cometa
+            echo "${{ secrets.SSH_PASSWORD }}" | sudo -S mkdir -p /var/www/cometa
+            echo "${{ secrets.SSH_PASSWORD }}" | sudo -S rm -rf /var/www/cometa/*
+            echo "${{ secrets.SSH_PASSWORD }}" | sudo -S cp -r /tmp/cometa-frontend/* /var/www/cometa/
+            echo "${{ secrets.SSH_PASSWORD }}" | sudo -S chown -R www-data:www-data /var/www/cometa
+            echo "${{ secrets.SSH_PASSWORD }}" | sudo -S chmod -R 755 /var/www/cometa
             rm -rf /tmp/cometa-frontend
+
