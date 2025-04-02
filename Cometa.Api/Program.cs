@@ -80,6 +80,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Füge hier die Datenbank-Migration ein
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CometaDbContext>();
+    dbContext.Database.Migrate();
+    Console.WriteLine("Database migrations applied successfully");
+}
+
 // Initialisiere Rollen und Admin-Benutzer bei App-Start
 using (var scope = app.Services.CreateScope())
 {
