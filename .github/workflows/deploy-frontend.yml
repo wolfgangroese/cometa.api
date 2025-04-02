@@ -41,12 +41,14 @@ jobs:
           key: ${{ secrets.RASPI_SSH_KEY }}
           port: 22
           script: |
-            PASS="${{ secrets.SSH_PASSWORD }}"
             echo "$PASS" | sudo -S mkdir -p /var/www/cometa
             echo "$PASS" | sudo -S rm -rf /var/www/cometa/*
             echo "$PASS" | sudo -S cp -r /tmp/cometa-frontend/* /var/www/cometa/
             echo "$PASS" | sudo -S chown -R www-data:www-data /var/www/cometa
             echo "$PASS" | sudo -S chmod -R 755 /var/www/cometa
             rm -rf /tmp/cometa-frontend
+
+        env:
+          PASS: ${{ secrets.SSH_PASSWORD }} # Passwort für sudo, falls benötigt
 
 
