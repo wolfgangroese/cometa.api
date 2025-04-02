@@ -2,7 +2,7 @@ name: Deploy Frontend to Raspberry Pi
 
 on:
   push:
-    branches: [main] # oder master, je nach deinem Branch-Namen
+    branches: [ main ] # oder master, je nach Repo-Konfiguration
 
 jobs:
   build-and-deploy:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Anpassen an deine Node-Version
+          node-version: '18'  # Anpassen an deine Node-Version
 
       - name: Install dependencies
         run: npm ci
@@ -23,32 +23,27 @@ jobs:
       - name: Build
         run: npm run build --configuration=production
 
-      - name: Deploy to Raspberry Pi
+      # 1) Kopiere die lokalen Build-Artefakte auf den Raspi nach /tmp/cometa-frontend
+      - name: Upload build artifacts to Raspberry Pi
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.RASPI_HOST }}
-          username: ${{ secrets.RASPI_USER }}
+          username: ${{ secrets.RASPI_USER }}        # z.B. "wolf"
           key: ${{ secrets.RASPI_SSH_KEY }}
-          source: "dist/cometa/browser/*" # Anpassen an deinen Build-Output-Pfad
+          source: "dist/cometa/browser/*"           # Pfad anpassen, wenn dein Build-Ordner anders heißt
           target: "/tmp/cometa-frontend"
-          strip_components: 3 # Entfernt die Verzeichnisebenen im Pfad
+          strip_components: 3
 
-      - name: Kopiere Dateien nach /var/www/cometa via SSH
+      # 2) Verschiebe vom /tmp-Verzeichnis nach /var/www
+      - name: Move files to /var/www/cometa via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.RASPI_HOST }}
-          username: ${{ secrets.RASPI_USER }}
+          username: ${{ secrets.RASPI_USER }}        # z.B. "wolf"
           key: ${{ secrets.RASPI_SSH_KEY }}
           port: 22
           script: |
-            echo "$PASS" | sudo -S mkdir -p /var/www/cometa
-            echo "$PASS" | sudo -S rm -rf /var/www/cometa/*
-            echo "$PASS" | sudo -S cp -r /tmp/cometa-frontend/* /var/www/cometa/
-            echo "$PASS" | sudo -S chown -R www-data:www-data /var/www/cometa
-            echo "$PASS" | sudo -S chmod -R 755 /var/www/cometa
+            mkdir -p /var/www/cometa
+            rm -rf /var/www/cometa/*
+            cp -r /tmp/cometa-frontend/* /var/www/cometa/
             rm -rf /tmp/cometa-frontend
-
-        env:
-          PASS: ${{ secrets.SSH_PASSWORD }} # Passwort für sudo, falls benötigt
-
-
