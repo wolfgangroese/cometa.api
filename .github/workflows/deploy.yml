@@ -15,8 +15,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: docker build -t cometa-api:latest .
+      - name: Build ARM64 Docker image for Raspberry Pi
+        run: |
+          docker buildx create --use
+          docker buildx build --platform linux/arm64 \
+            -t cometa-api:latest \
+            --output type=docker .
       
       - name: Save Docker image to file
         run: docker save cometa-api:latest | gzip > cometa-api.tar.gz
