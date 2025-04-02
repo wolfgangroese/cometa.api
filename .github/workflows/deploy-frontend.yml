@@ -38,7 +38,7 @@ jobs:
         with:
           host: ${{ secrets.RASPI_HOST }}
           username: ${{ secrets.RASPI_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.RASPI_SSH_KEY }}
           port: 22
           script: |
             echo "${{ secrets.SSH_PASSWORD }}" | sudo -S mkdir -p /var/www/cometa
