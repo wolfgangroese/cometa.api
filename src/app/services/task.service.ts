@@ -3,7 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Task, CreateTaskDto, UpdateTaskDto, TaskStatus } from '../models/task.model';
 import {catchError, tap} from 'rxjs/operators';
-import { environment } from '../../environments/environment.dev';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
