@@ -42,8 +42,8 @@
 
     <div class="account-details" *ngIf="currentUser">
       <div class="user-email">
-        <span>{{ currentUser?.email }}</span>
-        <span *ngIf="currentUser?.role" class="role-badge">
+        <span>{{ currentUser.email }}</span>
+        <span *ngIf="currentUser.role" class="role-badge">
   {{ currentUser.role }}
 </span>
 
