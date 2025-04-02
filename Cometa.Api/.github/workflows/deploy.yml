@@ -1,0 +1,47 @@
+name: Deploy to Raspi
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t cometa-api:latest .
+
+      - name: Save Docker image to file
+        run: docker save cometa-api:latest | gzip > cometa-api.tar.gz
+
+      - name: Copy image to Raspberry Pi
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.RASPI_HOST }}
+          username: ${{ secrets.RASPI_USER }}
+          key: ${{ secrets.RASPI_SSH_KEY }}
+          source: "cometa-api.tar.gz"
+          target: "~/"
+
+      - name: Deploy on Raspberry Pi
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.RASPI_HOST }}
+          username: ${{ secrets.RASPI_USER }}
+          key: ${{ secrets.RASPI_SSH_KEY }}
+          script: |
+            docker stop cometa-api || true
+            docker rm cometa-api || true
+            gunzip -f ~/cometa-api.tar.gz
+            docker load < ~/cometa-api.tar
+            docker run -d --name cometa-api -p 5000:5000 \
+              --link cometa-postgres:postgres \
+              -e ASPNETCORE_ENVIRONMENT=Production \
+              cometa-api:latest

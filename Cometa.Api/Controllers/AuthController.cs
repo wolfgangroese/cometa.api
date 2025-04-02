@@ -83,6 +83,7 @@ namespace Cometa.Api.Controllers
             {
                 Id = user.Id,
                 UserName = user.UserName,
+                FullName = user.FullName,
                 Email = user.Email
             });
         }

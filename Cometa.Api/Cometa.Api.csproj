@@ -30,6 +30,10 @@
     <ProjectReference Include="..\Cometa.Domain\Cometa.Domain.csproj" />
     <ProjectReference Include="..\Cometa.Persistence\Cometa.Persistence.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include=".github\workflows\deploy.yml" />
+  </ItemGroup>
   <PropertyGroup>
     <RazorLangVersion>8.0</RazorLangVersion> 
   </PropertyGroup>
