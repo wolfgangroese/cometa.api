@@ -48,5 +48,4 @@ jobs:
             docker run -d --name cometa-api -p 5000:5000 \
               --link cometa-postgres:postgres \
               -e ASPNETCORE_ENVIRONMENT=Production \
-              -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
               cometa-api:latest
