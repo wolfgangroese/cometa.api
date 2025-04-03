@@ -42,4 +42,23 @@ export class UserService {
       })
     );
   }
+  // Get all users with detailed information
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/all`).pipe(
+      catchError(error => {
+        console.error('Error fetching all users:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+// Update a user's role
+  updateUserRole(userId: string, role: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${userId}/role`, { role }).pipe(
+      catchError(error => {
+        console.error('Error updating user role:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }

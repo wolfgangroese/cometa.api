@@ -1,0 +1,46 @@
+/* src/app/features/user-management/user-management.component.scss */
+.user-management-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.empty-message {
+  text-align: center;
+  color: #6c757d;
+  padding: 1rem;
+  font-style: italic;
+}
+
+:host ::ng-deep {
+  .p-datatable .p-datatable-thead > tr > th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f2f2f2;
+  }
+
+  .p-datatable .p-datatable-tbody > tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  .p-dropdown {
+    width: 100%;
+    min-width: 150px;
+  }
+}

@@ -12,6 +12,7 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { AuthTestComponent } from "./features/auth-test/auth-test.component";
 import { SkillsManagementComponent } from './features/skills-management/skills-management.component';
+import {UserManagementComponent} from "./features/user-management/user-management.component";
 
 
 export const routes: Routes = [
@@ -27,6 +28,7 @@ export const routes: Routes = [
   { path: 'account', component: AccountComponent },
   { path: 'auth-test', component: AuthTestComponent },
   { path: 'skills', component: SkillsManagementComponent },
+  { path: 'users', component: UserManagementComponent },
 
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];

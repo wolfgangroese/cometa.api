@@ -64,6 +64,20 @@
         </a>
       </div>
 
+      <!-- In your admin menu section in header.component.html -->
+      <div class="admin-menu" *ngIf="isAdminOrStaff()">
+        <h4 class="admin-menu-title">Admin Tools</h4>
+        <a [routerLink]="['/skills']" class="admin-menu-item" (click)="closeAccountMenu($event)">
+          <i class="pi pi-tag"></i>
+          Manage Tags
+        </a>
+        <!-- Add this link -->
+        <a [routerLink]="['/users']" class="admin-menu-item" (click)="closeAccountMenu($event)">
+          <i class="pi pi-users"></i>
+          Manage Users
+        </a>
+      </div>
+
       <button class="logout-button"
               (click)="logout()"
               aria-label="Logout from your account">
