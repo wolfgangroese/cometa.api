@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Cometa.Api.DTOs;
 using Cometa.Persistence;
 
 namespace Cometa.Api.Controllers
@@ -89,5 +90,59 @@ namespace Cometa.Api.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        
+        // Cometa.Api/Controllers/UsersController.cs
+// Add these endpoints to your existing UsersController
+
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+    
+            var result = new List<object>();
+            foreach (var user in users)
+            {
+                // Get roles for each user one by one
+                var roles = await _userManager.GetRolesAsync(user);
+        
+                result.Add(new
+                {
+                    id = user.Id,
+                    userName = user.UserName,
+                    email = user.Email,
+                    fullName = user.FullName,
+                    totalRewards = user.TotalRewards,
+                    roles = roles
+                });
+            }
+    
+            return Ok(result);
+        }
+        
+        [HttpPut("{id}/role")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateUserRole(Guid id, [FromBody] UpdateRoleDto model)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return NotFound("User not found");
+        
+            // Get existing roles
+            var userRoles = await _userManager.GetRolesAsync(user);
+    
+            // Remove existing roles
+            if (userRoles.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(user, userRoles);
+            }
+    
+            // Add new role
+            await _userManager.AddToRoleAsync(user, model.Role);
+    
+            return Ok(new { message = "Role updated successfully" });
+        }
     }
+    
+    
 }
