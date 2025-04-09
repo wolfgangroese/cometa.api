@@ -89,8 +89,8 @@ export class SkillsManagementComponent implements OnInit {
 
     this.loading = true;
     this.skillService.createSkill(skillData).subscribe({
-      next: (skill) => {
-        this.skills.push(skill);
+      next: () => {
+        this.loadSkills();
         this.skillForm.reset();
         this.messageService.add({
           severity: 'success',
@@ -248,9 +248,9 @@ export class SkillsManagementComponent implements OnInit {
   }
 
   // Navigate to task detail
-  navigateToTask(taskId: string): void {
+  async navigateToTask(taskId: string): Promise<void> {
     this.showTasksDialog = false; // Close dialog
-    this.router.navigate(['/task', taskId]);
+  await this.router.navigate(['/task', taskId]);
   }
 
   cancelEdit(): void {
