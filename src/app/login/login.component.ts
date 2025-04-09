@@ -51,7 +51,7 @@ export class LoginComponent {
     return this.loginForm.get('password');
   }
 
-  login(): void {
+  async login(): Promise<void> {
     if (this.loginForm.invalid) {
       return;
     }
@@ -60,11 +60,15 @@ export class LoginComponent {
     console.log('Attempting login with:', loginData.email);
 
     this.authService.login(loginData).subscribe({
-      next: (response: any) => {
-        this.authService.saveToken(response.token);
-        this.authService.loadUserFromToken();
-        this.router.navigate(['/home']);
+      next: async (response: unknown) => {
+        if (response && typeof response === 'object' && 'token' in response) {
+          const typedResponse = response as { token: string };
+          this.authService.saveToken(typedResponse.token);
+          this.authService.loadUserFromToken();
+          await this.router.navigate(['/home']);
+        }
       },
+
       error: (error) => {
         console.error('Login error:', error);
         this.messageService.add({
