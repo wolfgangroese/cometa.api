@@ -183,11 +183,6 @@ export class HeaderComponent implements OnInit {
     return this.authService.hasAnyRole(['Admin', 'Staff']);
   }
 
-  // Create new organization
-  createNewOrganization(): void {
-    this.router.navigate(['/organization/new']);
-    this.closeAccountMenu(new Event('click'));
-  }
 
   // Go to organization management
   manageOrganizations(): void {
