@@ -65,7 +65,7 @@ export class UserService {
 
   // NEW METHOD: Get members of an organization
   getOrganizationMembers(organizationId: string): Observable<User[]> {
-    return this.http.get<User[]>(`${environment.api.baseUrl}/organizations/${organizationId}/members`).pipe(
+    return this.http.get<User[]>(`${this.apiUrl}/organizations/${organizationId}/members`).pipe(
       catchError(error => {
         console.error(`Error fetching members for organization ${organizationId}:`, error);
         return throwError(() => error);
