@@ -14,6 +14,8 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
     public DbSet<TaskEntity> Tasks { get; set; }
     public DbSet<Skill> Skills { get; set; }
     public DbSet<TaskSkill> TaskSkills { get; set; } 
+    public DbSet<Organization> Organizations { get; set; }
+    public DbSet<OrganizationMember> OrganizationMembers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -71,6 +73,37 @@ public class CometaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
         modelBuilder.Entity<TaskSkill>()
             .HasIndex(ts => ts.TaskId)
             .HasDatabaseName("IX_TaskSkill_TaskId");
+        
+        modelBuilder.Entity<Organization>()
+            .HasOne(o => o.Owner)
+            .WithMany()
+            .HasForeignKey(o => o.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Konfiguration für OrganizationMember (Many-to-Many-Beziehung)
+        modelBuilder.Entity<OrganizationMember>()
+            .HasKey(om => new { om.OrganizationId, om.UserId });
+
+        modelBuilder.Entity<OrganizationMember>()
+            .HasOne(om => om.Organization)
+            .WithMany(o => o.Members)
+            .HasForeignKey(om => om.OrganizationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<OrganizationMember>()
+            .HasOne(om => om.User)
+            .WithMany(u => u.Organizations)
+            .HasForeignKey(om => om.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Ergänzung für TaskEntity: Beziehung zu Organization
+        modelBuilder.Entity<TaskEntity>()
+            .HasOne( t => t.Organization)
+            .WithMany()
+            .HasForeignKey(t => t.OrganizationId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+        
     }
 
     public override int SaveChanges()
