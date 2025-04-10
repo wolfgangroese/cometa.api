@@ -42,6 +42,7 @@ export class UserService {
       })
     );
   }
+
   // Get all users with detailed information
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/all`).pipe(
@@ -52,11 +53,21 @@ export class UserService {
     );
   }
 
-// Update a user's role
+  // Update a user's role
   updateUserRole(userId: string, role: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${userId}/role`, { role }).pipe(
       catchError(error => {
         console.error('Error updating user role:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // NEW METHOD: Get members of an organization
+  getOrganizationMembers(organizationId: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/organizations/${organizationId}/members`).pipe(
+      catchError(error => {
+        console.error(`Error fetching members for organization ${organizationId}:`, error);
         return throwError(() => error);
       })
     );

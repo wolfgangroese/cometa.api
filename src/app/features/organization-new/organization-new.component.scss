@@ -1,0 +1,67 @@
+.organization-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #495057;
+  }
+
+  .p-error {
+    display: block;
+    color: #f44336;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+.slug-input-container {
+  position: relative;
+
+  .slug-hint {
+    display: block;
+    color: #6c757d;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+}
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  p-button {
+    margin-right: 0.5rem;
+  }
+}
+
+:host ::ng-deep {
+  .p-card {
+    .p-card-header {
+      font-size: 1.5rem;
+      font-weight: 600;
+      padding: 1.5rem 1.5rem 0;
+    }
+
+    .p-card-content {
+      padding: 1.5rem;
+    }
+  }
+
+  .p-inputtext {
+    padding: 0.75rem;
+  }
+}

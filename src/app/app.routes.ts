@@ -14,6 +14,8 @@ import { AuthTestComponent } from "./features/auth-test/auth-test.component";
 import { SkillsManagementComponent } from './features/skills-management/skills-management.component';
 import { UserManagementComponent } from "./features/user-management/user-management.component";
 import { AuthGuard } from './guards/auth.guard';
+import {OrganizationsListComponent} from "./features/organizations-list/organizations-list.component";
+import {OrganizationMembersComponent} from "./features/organization-members/organization-members.component";
 
 
 
@@ -31,7 +33,8 @@ export const routes: Routes = [
   { path: 'auth-test', component: AuthTestComponent },
   { path: 'skills', component: SkillsManagementComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UserManagementComponent, canActivate: [AuthGuard] },
-
+  { path: 'organizations', component: OrganizationsListComponent, canActivate: [AuthGuard] },
+  { path: 'members', component: OrganizationMembersComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home' }
 ];

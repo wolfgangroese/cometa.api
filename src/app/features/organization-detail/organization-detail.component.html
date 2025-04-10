@@ -1,0 +1,98 @@
+<div class="organization-detail-container">
+  <div class="breadcrumb">
+    <a (click)="goBack()">
+      <i class="pi pi-arrow-left"></i> Back to Organizations
+    </a>
+  </div>
+
+  <div *ngIf="organization" class="organization-header">
+    <div class="header-content">
+      <h2>{{ organization.name }}</h2>
+      <div class="organization-meta">
+        <span class="organization-slug">
+          <i class="pi pi-link"></i> {{ organization.slug }}
+        </span>
+        <span class="organization-role">
+          Your role: <span class="role-badge">{{ organization.role }}</span>
+        </span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <p-button label="Switch to this Organization"
+                icon="pi pi-check-circle"
+                styleClass="p-button-success"
+                (click)="switchToOrganization()"
+                [disabled]="loading">
+      </p-button>
+    </div>
+  </div>
+
+  <p-tabView [(activeIndex)]="activeTabIndex">
+    <!-- Settings Tab -->
+    <p-tabPanel header="Settings">
+      <form [formGroup]="editForm" *ngIf="organization" class="settings-form">
+        <div class="field">
+          <label for="name">Organization Name <span class="required-marker">*</span></label>
+          <input
+            id="name"
+            type="text"
+            pInputText
+            formControlName="name"
+            [disabled]="!canEdit() || loading"
+          />
+          <small class="p-error" *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched">
+            Name is required and must be at least 3 characters.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            pInputTextarea
+            [rows]="5"
+            formControlName="description"
+            [disabled]="!canEdit() || loading"
+          ></textarea>
+        </div>
+
+        <div class="field">
+          <label for="slug">Slug (cannot be changed)</label>
+          <input
+            id="slug"
+            type="text"
+            pInputText
+            formControlName="slug"
+            [disabled]="true"
+          />
+          <small class="slug-info">The slug is used in URLs and cannot be changed after creation.</small>
+        </div>
+
+        <div class="form-actions" *ngIf="canEdit()">
+          <p-button
+            label="Save Changes"
+            icon="pi pi-save"
+            (click)="updateOrganization()"
+            [disabled]="editForm.invalid || loading">
+          </p-button>
+        </div>
+
+        <div class="permission-notice" *ngIf="!canEdit()">
+          <i class="pi pi-info-circle"></i>
+          <span>Only organization owners and admins can edit settings.</span>
+        </div>
+      </form>
+    </p-tabPanel>
+
+    <!-- Members Tab -->
+    <p-tabPanel header="Members">
+      <app-organization-members
+        [organizationId]="organizationId"
+        [userRole]="organization?.role || ''"
+        [isOwner]="organization?.isOwner || false">
+      </app-organization-members>
+    </p-tabPanel>
+  </p-tabView>
+</div>
+
+<p-toast></p-toast>
