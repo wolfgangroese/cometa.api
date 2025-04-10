@@ -1,0 +1,130 @@
+<div class="organization-list-container">
+  <h2>My Organizations</h2>
+
+  <div class="actions-container">
+    <p-button label="Create New Organization" icon="pi pi-plus" (click)="openCreateDialog()" [disabled]="loading"></p-button>
+  </div>
+
+  <div class="card-container">
+    <p-card *ngFor="let org of organizations" styleClass="org-card">
+      <ng-template pTemplate="header">
+        <div class="org-header">
+          <h3>{{ org.name }}</h3>
+          <span class="org-role-badge">{{ org.role }}</span>
+        </div>
+      </ng-template>
+
+      <div class="org-content">
+        <p *ngIf="org.description">{{ org.description }}</p>
+        <p *ngIf="!org.description" class="no-description">No description provided</p>
+
+        <div class="org-stats">
+          <span class="org-stat">
+            <i class="pi pi-users"></i> {{ org.memberCount }} members
+          </span>
+          <span class="org-slug">
+            <i class="pi pi-link"></i> {{ org.slug }}
+          </span>
+        </div>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <div class="org-actions">
+          <p-button label="Switch to" icon="pi pi-check-circle" styleClass="p-button-success p-button-sm"
+                    (click)="switchToOrganization(org)"></p-button>
+
+          <p-button label="Manage" icon="pi pi-cog" styleClass="p-button-secondary p-button-sm"
+                    (click)="navigateToDetail(org)"></p-button>
+
+          <p-button *ngIf="org.isOwner" label="Delete" icon="pi pi-trash" styleClass="p-button-danger p-button-sm"
+                    (click)="confirmDelete(org)"></p-button>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- No organizations message -->
+    <div *ngIf="organizations.length === 0 && !loading" class="no-orgs-container">
+      <p-card>
+        <div class="no-orgs-message">
+          <i class="pi pi-building"></i>
+          <h3>No Organizations</h3>
+          <p>You don't have any organizations yet. Create one to get started.</p>
+          <p-button label="Create New Organization" icon="pi pi-plus" (click)="openCreateDialog()"></p-button>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Create Organization Dialog -->
+  <p-dialog
+    [(visible)]="displayCreateDialog"
+    [style]="{width: '500px'}"
+    header="Create New Organization"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false">
+
+    <form [formGroup]="createForm" class="p-fluid">
+      <div class="field">
+        <label for="name">Organization Name <span class="required-marker">*</span></label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          (blur)="generateSlug()"
+          [ngClass]="{'ng-invalid ng-dirty': createForm.get('name')?.invalid && createForm.get('name')?.touched}"
+        />
+        <small class="p-error" *ngIf="createForm.get('name')?.invalid && createForm.get('name')?.touched">
+          Name is required and must be at least 3 characters.
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          pInputTextarea
+          [rows]="3"
+          formControlName="description"
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label for="slug">Slug <span class="required-marker">*</span></label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">cometa.app/</span>
+          <input
+            id="slug"
+            type="text"
+            pInputText
+            formControlName="slug"
+            [ngClass]="{'ng-invalid ng-dirty': createForm.get('slug')?.invalid && createForm.get('slug')?.touched}"
+          />
+        </div>
+        <small class="p-error" *ngIf="createForm.get('slug')?.invalid && createForm.get('slug')?.touched">
+          Slug is required, must be at least 3 characters, and can only contain lowercase letters, numbers, and hyphens.
+        </small>
+        <small class="p-text-secondary">This will be used in URLs and cannot be changed later.</small>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (click)="displayCreateDialog = false">
+      </p-button>
+      <p-button
+        label="Create"
+        icon="pi pi-check"
+        [disabled]="createForm.invalid || loading"
+        (click)="createOrganization()">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
