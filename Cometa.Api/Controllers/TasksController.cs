@@ -145,7 +145,8 @@ public class TasksController : ControllerBase
         {
             return BadRequest("Minimum effort cannot be greater than maximum effort.");
         }
-
+        var user = await _userManager.GetUserAsync(User);
+        
         var newTask = new TaskEntity
         {
             Name = newTaskDto.Name,
@@ -159,7 +160,8 @@ public class TasksController : ControllerBase
             TaskSkills = new List<TaskSkill>(),
             AssigneeId = newTaskDto.AssigneeId,
             EffortMin = newTaskDto.EffortMin,
-            EffortMax = newTaskDto.EffortMax
+            EffortMax = newTaskDto.EffortMax,
+            OrganizationId = user?.CurrentOrganizationId
         };
 
         // 🆕 Skills werden via SkillNames gesucht oder angelegt
