@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Cometa.Persistence.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cometa.Api.Controllers;
 
@@ -17,23 +18,35 @@ namespace Cometa.Api.Controllers;
 public class TasksController : ControllerBase
 {
     private readonly CometaDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public TasksController(CometaDbContext context)
+
+    public TasksController(CometaDbContext context,  UserManager<ApplicationUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     [HttpGet(Name = "Tasks")]
     [Authorize(Roles = "Admin,Staff,Performer")]
     public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasks()
     {
-        var tasks = await _context.Tasks
+        // Aktuelle Organisation des Benutzers ermitteln
+        var user = await _userManager.GetUserAsync(User);
+        if (user?.CurrentOrganizationId == null)
+        {
+            return BadRequest("Keine aktive Organisation ausgewählt");
+        }
+
+        // Nur Tasks der aktuellen Organisation zurückgeben
+        var orgTasks = await _context.Tasks
+            .Where(t => t.OrganizationId == user.CurrentOrganizationId)
             .Include(t => t.TaskSkills)
-                .ThenInclude(ts => ts.Skill)
+            .ThenInclude(ts => ts.Skill)
             .Include(t => t.Assignee)
             .ToListAsync();
 
-        var taskDtos = tasks.Select(task => new TaskDto
+        var taskDtos = orgTasks.Select(task => new TaskDto
         {
             Id = task.Id,
             Name = task.Name,

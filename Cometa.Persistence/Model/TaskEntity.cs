@@ -84,4 +84,7 @@ public class TaskEntity : BaseEntity
     [Range(0, int.MaxValue)]
     public int? EffortMax { get; set; }
     
+    // Organisationszugehörigkeit
+    public Guid? OrganizationId { get; set; }
+    public Organization? Organization { get; set; } = null!;
 }
