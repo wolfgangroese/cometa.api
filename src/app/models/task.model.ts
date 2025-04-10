@@ -18,6 +18,7 @@ export interface CreateTaskDto {
   skillNames: string [];
   effortMin?: number;
   effortMax?: number;
+  organizationId?: string;
 
 }
 

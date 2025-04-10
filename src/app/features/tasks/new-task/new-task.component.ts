@@ -16,8 +16,9 @@ import { DropdownModule } from "primeng/dropdown";
 import { FloatLabelModule } from "primeng/floatlabel";
 import { UserService } from '../../../services/user.service';
 import { User } from "../../../models/user.model";
-import {ChipsModule} from "primeng/chips";
-import {InputNumberModule} from "primeng/inputnumber";
+import { ChipsModule } from "primeng/chips";
+import { InputNumberModule } from "primeng/inputnumber";
+import { AuthService } from '../../../services/auth.service';
 
 enum TaskStatus {
   Done = 'Done',
@@ -66,7 +67,8 @@ export class NewTaskComponent implements OnInit {
     private router: Router,
     private taskService: TaskService,
     private messageService: MessageService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService
   ) {
     this.taskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -143,6 +145,11 @@ export class NewTaskComponent implements OnInit {
 
   private prepareTaskData(): Task {
     const formData = this.taskForm.value;
+
+    // Get current organization ID from user
+    const currentUser = this.authService.getCurrentUserSync();
+    const organizationId = currentUser?.currentOrganizationId;
+
     return {
       ...formData,
       startDate: this.convertDate(formData.startDate),
@@ -151,7 +158,8 @@ export class NewTaskComponent implements OnInit {
       assigneeId: formData.assigneeId,
       effortMin: formData.effortMin || 0,
       effortMax: formData.effortMax || 1,
-      skillNames: formData.skillNames || []
+      skillNames: formData.skillNames || [],
+      organizationId: organizationId
     };
   }
 

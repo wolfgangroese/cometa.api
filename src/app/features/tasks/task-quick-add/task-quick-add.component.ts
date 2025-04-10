@@ -7,6 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-task-quick-add',
@@ -38,7 +39,8 @@ export class TaskQuickAddComponent {
   constructor(
     private taskService: TaskService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   // Wird aufgerufen, wenn Enter gedrückt wird
@@ -78,6 +80,8 @@ export class TaskQuickAddComponent {
 
     // Erstelle jeden Task einzeln
     this.pendingTasks.forEach((taskName) => {
+      const currentUser = this.authService.getCurrentUserSync();
+      const organizationId = currentUser?.currentOrganizationId;
       // Erstelle die CreateTaskDto entsprechend dem API-Format
       const newTask = {
         name: taskName,
@@ -88,6 +92,7 @@ export class TaskQuickAddComponent {
         isCompleted: false,
         status: 3,  // Waiting
         skillNames: [],
+        organizationId: organizationId,
       };
 
       this.taskService.addTask(newTask).subscribe({

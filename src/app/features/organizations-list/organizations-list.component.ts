@@ -178,7 +178,7 @@ export class OrganizationsListComponent implements OnInit {
   }
 
   navigateToDetail(org: Organization): void {
-    this.router.navigate(['/organizations', org.id]);
+    this.router.navigate(['/members', org.id]);
   }
 
   // Helper function to auto-generate a slug from the name

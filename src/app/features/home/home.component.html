@@ -6,16 +6,7 @@
     <div class="dashboard-tile">
       <p-card class="p-card-header" header="Task Completion">
         <div class="chart-container">
-          <p-chart #completionChart type="doughnut" [data]="completionChartData" [options]="completionChartOptions" width="200" height="200"></p-chart>
-        </div>
-      </p-card>
-    </div>
-
-    <!-- Tile B: Tasks by Status -->
-    <div class="dashboard-tile">
-      <p-card styleClass="h-full" header="Tasks by Status">
-        <div class="chart-container">
-          <p-chart #statusChart type="doughnut" [data]="statusChartData" [options]="statusChartOptions" width="200" height="200"></p-chart>
+          <p-chart  type="doughnut" [data]="completionChartData" [options]="completionChartOptions" width="200" height="200"></p-chart>
         </div>
       </p-card>
     </div>
@@ -24,7 +15,15 @@
     <div class="dashboard-tile">
       <p-card styleClass="h-full" header="Top 5 Tags">
         <div class="chart-container">
-          <p-chart #skillsChart type="doughnut" [data]="skillsChartData" [options]="skillsChartOptions" width="200" height="200"></p-chart>
+          <p-chart  type="doughnut" [data]="skillsChartData" [options]="skillsChartOptions" width="200" height="200"></p-chart>
+        </div>
+      </p-card>
+    </div>
+    <!-- Tile B: Tasks by Status -->
+    <div class="dashboard-tile">
+      <p-card styleClass="h-full" header="Tasks by Status">
+        <div class="chart-container">
+          <p-chart  type="doughnut" [data]="statusChartData" [options]="statusChartOptions" width="200" height="200"></p-chart>
         </div>
       </p-card>
     </div>
@@ -43,7 +42,11 @@
             <button class="reset-filter" (click)="resetFilters()" *ngIf="activeFilters.length > 0">
               Reset Filters
             </button>
-            <button class="toggle-filter" (click)="showFilters = !showFilters">
+            <button class="toggle-filter"
+                    (click)="showFilters = !showFilters"
+                    (keydown.enter)="showFilters = !showFilters"
+                    (keydown.space)="showFilters = !showFilters"
+                    tabindex="0">
               {{ showFilters ? 'Hide' : 'Show' }} Tag Filters
             </button>
           </div>
@@ -53,7 +56,10 @@
               <div *ngFor="let skill of availableSkills"
                    class="filter-chip"
                    [class.active]="activeFilters.includes(skill)"
-                   (click)="toggleSkillFilter(skill)">
+                   (click)="toggleSkillFilter(skill)"
+                  (keydown.enter)="toggleSkillFilter(skill)"
+                  (keydown.space)="toggleSkillFilter(skill)"
+                  tabindex="0">
                 {{ skill }}
                 <i class="pi pi-times" *ngIf="activeFilters.includes(skill)"></i>
               </div>

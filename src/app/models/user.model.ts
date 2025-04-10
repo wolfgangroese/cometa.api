@@ -6,4 +6,5 @@ export interface User {
   totalRewards?: number;
   roles: string[];
   role?: string;
+  currentOrganizationId?: string;
 }
