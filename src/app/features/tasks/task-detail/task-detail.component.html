@@ -90,6 +90,26 @@
     </div>
   </div>
 
+  <!-- Min. Effort -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMin">Min. Effort (minutes)</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMin" formControlName="effortMin" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Max. Effort -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMax">Max. Effort (minutes)</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMax" formControlName="effortMax" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
   <!-- Status Dropdown -->
   <div class="form-row">
     <div class="label-column">

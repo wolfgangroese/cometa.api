@@ -1,5 +1,3 @@
-// Vollständige, bereinigte Version der TaskDetailComponent mit SkillNames für Backend
-
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -88,7 +86,9 @@ export class TaskDetailComponent implements OnInit {
       startDate: [null],
       dueDate: [null],
       isCompleted: [false],
-      assigneeId: [null]
+      assigneeId: [null],
+      effortMin: [0],
+      effortMax: [0]
     });
 
     this.taskId = this.route.snapshot.paramMap.get('id') || '';
@@ -124,6 +124,8 @@ export class TaskDetailComponent implements OnInit {
           isCompleted: task.isCompleted,
           status: statusValue,
           assigneeId: task.assigneeId || null,
+          effortMin: task.effortMin ?? 0,
+          effortMax: task.effortMax ?? 0
         });
 
         this.applyPermissionRestrictions();
@@ -177,6 +179,8 @@ export class TaskDetailComponent implements OnInit {
       dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
       status: this.mapValueToStatus(formData.status),
       assigneeId: formData.assigneeId || null,
+      effortMin: formData.effortMin,
+      effortMax: formData.effortMax
     };
   }
 
@@ -190,6 +194,8 @@ export class TaskDetailComponent implements OnInit {
       dueDate,
       status,
       assigneeId,
+      effortMin,
+      effortMax
     } = this.taskForm.value;
 
     return {
@@ -201,13 +207,27 @@ export class TaskDetailComponent implements OnInit {
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
       status: this.mapValueToStatus(status),
       assigneeId: assigneeId || null,
+      effortMin,
+      effortMax
     };
   }
-
 
   addTask(): void {
     if (!this.permissionService.canCreateTasks()) return;
     if (this.taskForm.invalid) return;
+
+    // Add validation check for effort fields
+    const effortMin = this.taskForm.get('effortMin')?.value;
+    const effortMax = this.taskForm.get('effortMax')?.value;
+
+    if (effortMin > effortMax) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Minimum effort cannot be greater than maximum effort.'
+      });
+      return;
+    }
 
     const newTask = this.prepareCreateTaskData();
     this.taskService.addTask(newTask).subscribe({
@@ -217,28 +237,41 @@ export class TaskDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erstellungsfehler:', err);
-        this.messageService.add({ severity: 'error', summary: 'Fehler', detail: 'Erstellung fehlgeschlagen.' });
+
+        // Extract specific error message if available
+        let errorMessage = 'Erstellung fehlgeschlagen.';
+        if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        } else if (err.error && typeof err.error === 'string') {
+          errorMessage = err.error;
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Fehler',
+          detail: errorMessage
+        });
       }
     });
   }
-
-  duplicateTask(): void {
-    const newTask = this.prepareCreateTaskData();
-    this.taskService.duplicateTask(newTask).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Erfolg', detail: 'Task dupliziert!' });
-        this.goBack();
-      },
-      error: (err) => {
-        console.error('Fehler beim Duplizieren:', err);
-        this.messageService.add({ severity: 'error', summary: 'Fehler', detail: 'Duplizieren fehlgeschlagen.' });
-      }
-    });
-  }
-
 
   updateTask(): void {
     if (this.taskForm.invalid) return;
+
+    // Add validation check for effort fields
+    const effortMin = this.taskForm.get('effortMin')?.value;
+    const effortMax = this.taskForm.get('effortMax')?.value;
+
+    if (effortMin > effortMax) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Minimum effort cannot be greater than maximum effort.'
+      });
+      return;
+    }
 
     const updatedTask = this.prepareUpdateTaskData();
     this.taskService.updateTask(this.taskId!, updatedTask).subscribe({
@@ -248,7 +281,22 @@ export class TaskDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Fehler beim Aktualisieren:', err);
-        this.messageService.add({ severity: 'error', summary: 'Fehler', detail: 'Aktualisierung fehlgeschlagen.' });
+
+        // Extract specific error message if available
+        let errorMessage = 'Aktualisierung fehlgeschlagen.';
+        if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        } else if (err.error && typeof err.error === 'string') {
+          errorMessage = err.error;
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Fehler',
+          detail: errorMessage
+        });
       }
     });
   }

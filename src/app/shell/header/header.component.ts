@@ -70,12 +70,19 @@ export class HeaderComponent implements OnInit {
         this.updateCurrentLabel(currentRoute);
       });
 
-    // Abonniere den aktuellen Benutzer vom AuthService
+    // Subscribe to the current user
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       if (user) {
         this.loadUserRewards();
         this.loadOrganizations();
+      }
+    });
+
+    // Subscribe to the current organization
+    this.orgService.currentOrganization$.subscribe(org => {
+      if (org) {
+        this.selectedOrganization = org;
       }
     });
   }
@@ -103,8 +110,13 @@ export class HeaderComponent implements OnInit {
     this.orgService.getOrganizations().subscribe({
       next: (orgs) => {
         this.organizations = orgs;
-        if (orgs.length > 0) {
-          this.selectedOrganization = orgs[0]; // Default to first org
+
+        // If no organization is selected yet, but we have the current user's org ID
+        if (!this.selectedOrganization && this.currentUser?.currentOrganizationId && orgs.length > 0) {
+          const currentOrg = orgs.find(org => org.id === this.currentUser?.currentOrganizationId);
+          if (currentOrg) {
+            this.selectedOrganization = currentOrg;
+          }
         }
       },
       error: (err) => {
@@ -136,16 +148,23 @@ export class HeaderComponent implements OnInit {
   switchOrganization(organization: Organization): void {
     this.orgService.switchOrganization(organization.id).subscribe({
       next: () => {
+        // The organization service now maintains the current organization
         this.selectedOrganization = organization;
         this.showOrgSelector = false;
+
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
           detail: `Switched to ${organization.name}`
         });
 
-        // Reload current page to refresh data with new organization
-        window.location.reload();
+        // Navigate to home and then reload page
+        this.router.navigate(['/home']).then(() => {
+          // Short delay before reload to let navigation complete
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
+        });
       },
       error: (err) => {
         console.error('Error switching organization:', err);
