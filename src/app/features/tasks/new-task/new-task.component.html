@@ -4,7 +4,7 @@
   <!-- Name -->
   <div class="form-row">
     <div class="label-column">
-      <label for="name">Name</label>
+      <label for="name">{{ 'TASK.NAME' | translate }}</label>
     </div>
     <div class="input-column">
       <input id="name" pInputText type="text" formControlName="name" />
@@ -17,7 +17,7 @@
   <!-- Description -->
   <div class="form-row">
     <div class="label-column">
-      <label for="description">Description</label>
+      <label for="description">{{ 'TASK.DESCRIPTION' | translate }}</label>
     </div>
     <div class="input-column">
       <textarea id="description" pInputTextarea formControlName="description" rows="3"></textarea>
@@ -27,7 +27,7 @@
   <!-- Skills -->
   <div class="form-row">
     <div class="label-column">
-      <label for="skillNames">Skills</label>
+      <label for="skillNames">{{ 'TASK.SKILLS' | translate }}</label>
     </div>
     <div class="input-column">
       <p-chips id="skillNames" formControlName="skillNames" [allowDuplicate]="false" [addOnBlur]="true"></p-chips>
@@ -37,7 +37,7 @@
   <!-- Start Date -->
   <div class="form-row">
     <div class="label-column">
-      <label for="startDate">Start Date</label>
+      <label for="startDate">{{ 'TASK.START_DATE' | translate }}</label>
     </div>
     <div class="input-column">
       <input id="startDate" type="date" pInputText formControlName="startDate" />
@@ -47,7 +47,7 @@
   <!-- Due Date -->
   <div class="form-row">
     <div class="label-column">
-      <label for="dueDate">Due Date</label>
+      <label for="dueDate">{{ 'TASK.DUE_DATE' | translate }}</label>
     </div>
     <div class="input-column">
       <input id="dueDate" type="date" pInputText formControlName="dueDate" />
@@ -57,7 +57,7 @@
   <!-- Rewards -->
   <div class="form-row">
     <div class="label-column">
-      <label for="rewards">Rewards</label>
+      <label for="rewards">{{ 'TASK.REWARDS' | translate }}</label>
     </div>
     <div class="input-column rewards-container">
       <p-inputNumber id="rewards" formControlName="rewards" [showButtons]="true" [min]="0"></p-inputNumber>
@@ -67,7 +67,7 @@
   <!-- Min. Effort -->
   <div class="form-row">
     <div class="label-column">
-      <label for="effortMin">Min. Effort (minutes)</label>
+      <label for="effortMin">{{ 'TASK.EFFORT_MIN' | translate }}</label>
     </div>
     <div class="input-column rewards-container">
       <p-inputNumber id="effortMin" formControlName="effortMin" [showButtons]="true" [min]="0"></p-inputNumber>
@@ -77,7 +77,7 @@
   <!-- Max. Effort -->
   <div class="form-row">
     <div class="label-column">
-      <label for="effortMax">Max. Effort (minutes)</label>
+      <label for="effortMax">{{ 'TASK.EFFORT_MAX' | translate }}</label>
     </div>
     <div class="input-column rewards-container">
       <p-inputNumber id="effortMax" formControlName="effortMax" [showButtons]="true" [min]="0"></p-inputNumber>
@@ -87,13 +87,13 @@
   <!-- Status Dropdown -->
   <div class="form-row">
     <div class="label-column">
-      <label [htmlFor]="statusOptions">Status</label>
+      <label [htmlFor]="'status'">{{ 'TASK.STATUS' | translate }}</label>
     </div>
     <div class="input-column">
       <p-dropdown
         inputId="status"
         formControlName="status"
-        [options]="statusOptions"
+        [options]="translatedStatusOptions"
         optionLabel="label"
         optionValue="value"
         appendTo="body"
@@ -106,7 +106,7 @@
   <!-- Assigned User -->
   <div class="form-row">
     <div class="label-column">
-      <label [htmlFor]="users">Assigned User</label>
+      <label [htmlFor]="users">{{ 'TASK.ASSIGNED_TO' | translate }}</label>
     </div>
     <div class="input-column">
       <p-dropdown
@@ -125,7 +125,7 @@
   <!-- Action Buttons -->
   <div class="button-container">
     <p-button
-      label="Create Task"
+      [label]=" 'COMMON.CREATE' | translate "
       icon="pi pi-plus"
       (click)="onSubmit()"
       severity="success"
@@ -134,7 +134,7 @@
     </p-button>
 
     <p-button
-      label="Back to List"
+      [label]=" 'COMMON.BACK_TO_LIST' | translate "
       icon="pi pi-list"
       (click)="goBack()"
       severity="secondary">

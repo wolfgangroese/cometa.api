@@ -1,0 +1,36 @@
+{
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "CREATE": "Create",
+    "BACK_TO_LIST": "Back to List"
+  },
+  "TASK": {
+    "TITLE": "Tasks",
+    "NEW": "New Task",
+    "STATUSOPTION": {
+      "DONE": "Done",
+      "IN_PROGRESS": "In Progress",
+      "BLOCKED": "Blocked",
+      "WAITING": "Waiting"
+    },
+    "NAME": "Name",
+    "DESCRIPTION": " Description",
+    "SKILLS": "Skills",
+    "REWARDS": "Rewards",
+    "EFFORT_MIN": "Minimal Effort",
+    "EFFORT_MAX": "Maximal Effort",
+    "STATUS": "Status",
+    "COMPLETED": "Completed",
+    "DUE_DATE": "Due until",
+    "START_DATE": "Earliest Start",
+    "END_DATE": "End Date",
+    "ASSIGNED_TO": "Assigned To",
+    "COMPLETION": "Task Completion",
+    "TASKS_WAITING": "{{count}} Tasks Waiting",
+    "TASKS_BY_STATUS": "Tasks by Status"
+  },
+  "SKILLS_MOST_USED": "Most Used Skills",
+  "LEADERBOARD": "Leaderboard"
+}

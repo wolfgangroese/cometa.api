@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ChartModule } from 'primeng/chart';
+import {TranslatePipe} from "@ngx-translate/core";
 
 interface SkillCount {
   skill: string;
@@ -25,7 +26,8 @@ interface SkillCount {
     CardModule,
     TableModule,
     ToastModule,
-    ChartModule
+    ChartModule,
+    TranslatePipe
   ],
   providers: [MessageService],
   templateUrl: './home.component.html',

@@ -10,7 +10,10 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import {Organization} from "../../models/organization.model";
+import { Organization } from "../../models/organization.model";
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 interface MenuItem {
   label: string;
@@ -26,7 +29,8 @@ interface MenuItem {
     RouterLink,
     ToastModule,
     DropdownModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ],
   providers: [MessageService],
   templateUrl: './header.component.html',
@@ -43,6 +47,13 @@ export class HeaderComponent implements OnInit {
   selectedOrganization?: Organization;
   showOrgSelector = false;
 
+  // Language related properties
+  currentLang: string;
+  availableLangs = [
+    { code: 'en', name: 'English' },
+    { code: 'de', name: 'Deutsch' }
+  ];
+
   items: MenuItem[] = [
     { label: 'Home', icon: 'pi pi-home', routerLink: ['/home'] },
     { label: 'List', icon: 'pi pi-check-circle', routerLink: ['/tasks'] },
@@ -57,8 +68,11 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private orgService: OrganizationService,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    private translate: TranslateService
+  ) {
+    this.currentLang = this.translate.currentLang || 'en';
+  }
 
   ngOnInit(): void {
     console.log('📣 Header currentUser:', this.currentUser);
@@ -84,6 +98,11 @@ export class HeaderComponent implements OnInit {
       if (org) {
         this.selectedOrganization = org;
       }
+    });
+
+    // Subscribe to language changes
+    this.translate.onLangChange.subscribe(event => {
+      this.currentLang = event.lang;
     });
   }
 
@@ -175,6 +194,12 @@ export class HeaderComponent implements OnInit {
         });
       }
     });
+  }
+
+  // Language switcher
+  switchLanguage(lang: string): void {
+    this.translate.use(lang);
+    localStorage.setItem('preferredLanguage', lang);
   }
 
   @HostListener('document:keydown.escape')

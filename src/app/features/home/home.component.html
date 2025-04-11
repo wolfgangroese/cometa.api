@@ -4,7 +4,7 @@
   <div class="dashboard-row">
     <!-- Tile A: Completed vs Not Completed -->
     <div class="dashboard-tile">
-      <p-card class="p-card-header" header="Task Completion">
+      <p-card class="p-card-header" [header]=" 'TASK.COMPLETION' | translate ">
         <div class="chart-container">
           <p-chart  type="doughnut" [data]="completionChartData" [options]="completionChartOptions" width="200" height="200"></p-chart>
         </div>
@@ -13,7 +13,7 @@
 
     <!-- Tile C: Most Used Skills -->
     <div class="dashboard-tile">
-      <p-card styleClass="h-full" header="Top 5 Tags">
+      <p-card styleClass="h-full" [header]=" 'SKILLS_MOST_USED' | translate ">
         <div class="chart-container">
           <p-chart  type="doughnut" [data]="skillsChartData" [options]="skillsChartOptions" width="200" height="200"></p-chart>
         </div>
@@ -21,7 +21,7 @@
     </div>
     <!-- Tile B: Tasks by Status -->
     <div class="dashboard-tile">
-      <p-card styleClass="h-full" header="Tasks by Status">
+      <p-card styleClass="h-full" [header]=" 'TASK.TASKS_BY_STATUS' | translate ">
         <div class="chart-container">
           <p-chart  type="doughnut" [data]="statusChartData" [options]="statusChartOptions" width="200" height="200"></p-chart>
         </div>
@@ -34,7 +34,7 @@
 
     <!-- Tile D: Open Tasks (double width) -->
     <div class="dashboard-tile double-width">
-      <p-card styleClass="h-full" header="{{ filteredTasks.length }} Tasks waiting ">
+      <p-card styleClass="h-full" [header]= " 'TASK.TASKS_WAITING' | translate:{count: filteredTasks.length} ">
 
         <!-- Skills Filter Section -->
         <div class="filter-section" *ngIf="availableSkills.length > 0">
@@ -94,7 +94,7 @@
 
     <!-- Tile E: Leaderboard (double height - handled via CSS) -->
     <div class="dashboard-tile double-height">
-      <p-card styleClass="h-full" header="Leaderboard">
+      <p-card styleClass="h-full" [header]=" 'LEADERBOARD' | translate ">
         <p-table [value]="users" styleClass="p-datatable-sm">
           <ng-template pTemplate="header">
             <tr>

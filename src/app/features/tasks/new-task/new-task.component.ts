@@ -19,6 +19,7 @@ import { User } from "../../../models/user.model";
 import { ChipsModule } from "primeng/chips";
 import { InputNumberModule } from "primeng/inputnumber";
 import { AuthService } from '../../../services/auth.service';
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 
 enum TaskStatus {
   Done = 'Done',
@@ -46,6 +47,7 @@ enum TaskStatus {
     FloatLabelModule,
     ChipsModule,
     InputNumberModule,
+    TranslatePipe,
   ],
   providers: [
     MessageService,
@@ -55,12 +57,14 @@ enum TaskStatus {
 export class NewTaskComponent implements OnInit {
   taskForm: FormGroup;
   statusOptions = [
-    { label: 'Done', value: 'Done' },
-    { label: 'In Progress', value: 'In Progress' },
-    { label: 'Blocked', value: 'Blocked' },
-    { label: 'Waiting', value: 'Waiting' }
+    { label: 'TASK.STATUSOPTION.DONE', value: 'Done' },
+    { label: 'TASK.STATUSOPTION.IN_PROGRESS', value: 'In Progress' },
+    { label: 'TASK.STATUSOPTION.BLOCKED', value: 'Blocked' },
+    { label: 'TASK.STATUSOPTION.WAITING', value: 'Waiting' }
   ];
   users: User[] = [];
+  translatedStatusOptions: any[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -68,7 +72,8 @@ export class NewTaskComponent implements OnInit {
     private taskService: TaskService,
     private messageService: MessageService,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private translateService: TranslateService
   ) {
     this.taskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -87,7 +92,13 @@ export class NewTaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+
+    this.translatedStatusOptions = this.statusOptions.map(option => ({
+      label: this.translateService.instant(option.label),
+      value: option.value
+    }));
   }
+
 
   loadUsers(): void {
     this.userService.getUsers().subscribe({
@@ -176,4 +187,6 @@ export class NewTaskComponent implements OnInit {
   private convertDate(date: any): string | null {
     return date ? new Date(date).toISOString() : null;
   }
+
+  protected readonly status = status;
 }

@@ -109,6 +109,20 @@
           <i class="pi pi-sign-out"></i>
           Logout
         </button>
+        <div class="lang-menu">
+          <!-- Language Selector -->
+          <div class="lang-selector">
+            <div class="lang-buttons">
+              <button
+                *ngFor="let lang of availableLangs"
+                (click)="switchLanguage(lang.code)"
+                [class.active]="currentLang === lang.code"
+                class="lang-button">
+                {{ lang.name }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
