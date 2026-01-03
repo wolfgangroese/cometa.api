@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../../services/task.service';
 import { Task } from '../../../models/task.model';
@@ -6,7 +6,7 @@ import { RouterLink } from "@angular/router";
 import { CheckboxModule } from "primeng/checkbox";
 import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
-import { ButtonModule } from "primeng/button"; // Changed from importing Button
+import { ButtonModule } from "primeng/button";
 import { DropdownModule } from "primeng/dropdown";
 import { PaginatorModule } from "primeng/paginator";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -20,8 +20,9 @@ import { InputTextModule } from "primeng/inputtext";
 import { MultiSelectModule } from "primeng/multiselect";
 import { CalendarModule } from "primeng/calendar";
 import { TooltipModule } from "primeng/tooltip";
-import {ChipModule} from "primeng/chip";
-import {OverlayPanelModule} from "primeng/overlaypanel";
+import { ChipModule } from "primeng/chip";
+import { OverlayPanelModule } from "primeng/overlaypanel";
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-list',
@@ -47,6 +48,7 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
     TooltipModule,
     ChipModule,
     OverlayPanelModule,
+    TranslateModule, // Make sure TranslateModule is imported
   ],
   providers: [MessageService, ConfirmationService, FilterService],
 })
@@ -54,36 +56,47 @@ export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
 
   statusOptions = [
-    { label: 'Done', value: 0 },
-    { label: 'In Progress', value: 1 },
-    { label: 'Blocked', value: 2 },
-    { label: 'Waiting', value: 3 }
+    { label: 'TASK.STATUSOPTION.DONE', value: 0 },
+    { label: 'TASK.STATUSOPTION.IN_PROGRESS', value: 1 },
+    { label: 'TASK.STATUSOPTION.BLOCKED', value: 2 },
+    { label: 'TASK.STATUSOPTION.WAITING', value: 3 }
   ];
+
   cols = [
-    { field: 'skills', header: 'Skills' },
-    { field: 'effortMin', header: 'Effort Min' },
-    { field: 'effortMax', header: 'Max' },
-    { field: 'rewards', header: 'Reward' },
-    { field: 'startDate', header: 'Start Date' },
-    { field: 'dueDate', header: 'Deadline' },
-    { field: 'isCompleted', header: 'Completed' },
-    { field: 'status', header: 'Status' },
-    { field: 'assigneeName', header: 'Assignee' }
+    { field: 'skills', header: 'TASK.SKILLS', translatedHeader: '' },
+    { field: 'effortMin', header: 'TASK.EFFORT_MIN', translatedHeader: '' },
+    { field: 'effortMax', header: 'TASK.EFFORT_MAX', translatedHeader: '' },
+    { field: 'rewards', header: 'TASK.REWARDS', translatedHeader: '' },
+    { field: 'startDate', header: 'TASK.START_DATE', translatedHeader: '' },
+    { field: 'dueDate', header: 'TASK.DUE_DATE', translatedHeader: '' },
+    { field: 'isCompleted', header: 'TASK.COMPLETED', translatedHeader: '' },
+    { field: 'status', header: 'TASK.STATUS', translatedHeader: '' },
+    { field: 'assigneeName', header: 'TASK.ASSIGNED_TO', translatedHeader: '' }
   ];
 
   selectedColumns = [...this.cols];
   private readonly columnStorageKey = 'cometa.taskList.selectedColumns'
 
-
   constructor(
     private taskService: TaskService,
     public permissionService: PermissionService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.loadTasks();
+    this.loadColumnHeaders();
+
+    // Translation for column headers
+    this.updateTranslatedHeaders();
+
+    // Subscribe to language changes
+    this.translateService.onLangChange.subscribe(() => {
+      this.updateTranslatedHeaders();
+    });
+
     const saved = localStorage.getItem(this.columnStorageKey);
     if (saved) {
       const savedFields = JSON.parse(saved);
@@ -93,6 +106,13 @@ export class TaskListComponent implements OnInit {
       this.selectedColumns = [...this.cols];
     }
   }
+
+  updateTranslatedHeaders(): void {
+    this.cols.forEach(col => {
+      col.translatedHeader = this.translateService.instant(col.header);
+    });
+  }
+
   onColumnChange(): void {
     const fields = this.selectedColumns.map(c => c.field);
     localStorage.setItem(this.columnStorageKey, JSON.stringify(fields));
@@ -101,12 +121,18 @@ export class TaskListComponent implements OnInit {
   loadTasks(): void {
     this.taskService.getTasks().subscribe({
       next: (tasks) => {
-        console.log('Tasks loaded successfully:', tasks);
         this.tasks = tasks;
       },
       error: (err) => {
         console.error('Error loading tasks:', err);
       }
+    });
+  }
+
+  loadColumnHeaders(): void {
+    // Initialize column headers with translations
+    this.cols.forEach(col => {
+      col.translatedHeader = this.translateService.instant(col.header);
     });
   }
 

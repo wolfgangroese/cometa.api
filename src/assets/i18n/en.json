@@ -4,11 +4,16 @@
     "CANCEL": "Cancel",
     "DELETE": "Delete",
     "CREATE": "Create",
-    "BACK_TO_LIST": "Back to List"
+    "BACK_TO_LIST": "Back to List",
+    "SEARCH": "Search...",
+    "ACTIONS": "Actions"
   },
   "TASK": {
     "TITLE": "Tasks",
     "NEW": "New Task",
+    "QUICK_ADD": "Quick Add",
+    "SELECT_COLUMNS": "Select columns",
+    "COLUMN_SELECT": "Column select",
     "STATUSOPTION": {
       "DONE": "Done",
       "IN_PROGRESS": "In Progress",

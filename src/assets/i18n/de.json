@@ -4,11 +4,16 @@
     "CANCEL": "Abbrechen",
     "DELETE": "Löschen",
     "CREATE": "Erstellen",
-    "BACK_TO_LIST": "Zurück zur Liste"
+    "BACK_TO_LIST": "Zurück zur Liste",
+    "SEARCH": "Suchen...",
+    "ACTIONS": "Aktionen"
   },
   "TASK": {
     "TITLE": "Aufgaben",
     "NEW": "Neue Aufgabe",
+    "QUICK_ADD": "Schnellerfassung",
+    "SELECT_COLUMNS": "Spalten wählen",
+    "COLUMN_SELECT": "Spaltenauswahl",
     "STATUSOPTION": {
       "DONE": "Erledigt",
       "IN_PROGRESS": "In Bearbeitung",

@@ -1,28 +1,27 @@
 <div class="p-d-flex p-flex-wrap p-jc-between p-ai-center p-mb-3 p-gap-2">
   <div class="new-task-container p-mt-3" *ngIf="permissionService.canCreateTasks()">
-    <p-button label="New Task" icon="pi pi-plus" severity="success" [routerLink]="['/task/new']"></p-button>
-    <p-button label="Quick-Add" icon="pi pi-bolt" severity="info" [routerLink]="['/task/quick-add']" class="p-ml-2"></p-button>
-  <div class="p-input-icon-left">
-    <i class="pi pi-search"></i>
-    <input pInputText type="text"
-           (input)="dt.filterGlobal(($any($event.target)).value, 'contains')"
-           placeholder="Search..."
-           class="global-search" />
-    <button pButton type="button" icon="pi pi-sliders-h" class="p-button-text"
-            (click)="columnPanel.toggle($event)" pTooltip="Spalten auswählen"></button>
+    <p-button label="{{ 'TASK.NEW' | translate }}" icon="pi pi-plus" severity="success" [routerLink]="['/task/new']"></p-button>
+    <p-button label="{{ 'TASK.QUICK_ADD' | translate }}" icon="pi pi-bolt" severity="info" [routerLink]="['/task/quick-add']" class="p-ml-2"></p-button>
+    <div class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text"
+             (input)="dt.filterGlobal(($any($event.target)).value, 'contains')"
+             placeholder="{{ 'COMMON.SEARCH' | translate }}"
+             class="global-search" />
+      <button pButton type="button" icon="pi pi-sliders-h" class="p-button-text"
+              (click)="columnPanel.toggle($event)" pTooltip="{{ 'TASK.SELECT_COLUMNS' | translate }}"></button>
+    </div>
   </div>
-  </div>
-
 
   <p-overlayPanel #columnPanel [showCloseIcon]="true">
     <p-multiSelect
       [options]="cols"
       [(ngModel)]="selectedColumns"
       (ngModelChange)="onColumnChange()"
-      optionLabel="header"
+      optionLabel="translatedHeader"
       [showToggleAll]="true"
       display="comma"
-      placeholder="Column select">
+      placeholder="{{ 'TASK.COLUMN_SELECT' | translate }}">
     </p-multiSelect>
   </p-overlayPanel>
 </div>
@@ -38,17 +37,15 @@
   <ng-template pTemplate="header">
     <tr>
       <th pSortableColumn="name">
-        Name
+        {{ 'TASK.NAME' | translate }}
         <p-sortIcon field="name"></p-sortIcon>
       </th>
       <th *ngFor="let col of selectedColumns" [pSortableColumn]="col.field">
-        {{ col.header }}
+        {{ col.translatedHeader | translate }}
         <p-sortIcon [field]="col.field"></p-sortIcon>
       </th>
-      <th>Actions</th>
+      <th>{{ 'COMMON.ACTIONS' | translate }}</th>
     </tr>
-
-
   </ng-template>
 
   <ng-template pTemplate="body" let-task>
@@ -102,8 +99,8 @@
 </p-table>
 
 <div class="new-task-container p-mt-3" *ngIf="permissionService.canCreateTasks()">
-  <p-button label="New Task" icon="pi pi-plus" severity="success" [routerLink]="['/task/new']"></p-button>
-  <p-button label="Quick-Add" icon="pi pi-bolt" severity="info" [routerLink]="['/task/quick-add']" class="p-ml-2"></p-button>
+  <p-button label="{{ 'TASK.NEW' | translate }}" icon="pi pi-plus" severity="success" [routerLink]="['/task/new']"></p-button>
+  <p-button label="{{ 'TASK.QUICK_ADD' | translate }}" icon="pi pi-bolt" severity="info" [routerLink]="['/task/quick-add']" class="p-ml-2"></p-button>
 </div>
 
 <p-toast></p-toast>

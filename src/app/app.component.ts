@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
   title = 'cometa';
 
   constructor(
-    private messageService: MessageService,
     private authService: AuthService,  // Remove extra curly brace
     private translate: TranslateService
   ) {
@@ -40,28 +39,25 @@ export class AppComponent implements OnInit {
     // Set default language
     this.translate.setDefaultLang('en');
 
-    // Try to use browser language if available, otherwise use default
-    const browserLang = this.translate.getBrowserLang();
-    this.translate.use(browserLang?.match(/en|de/) ? browserLang : 'en');
+    // Try to use language from localStorage first
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang && this.translate.getLangs().includes(savedLang)) {
+      this.translate.use(savedLang);
+    } else {
+      // Fall back to browser language
+      const browserLang = this.translate.getBrowserLang();
+      this.translate.use(browserLang?.match(/en|de/) ? browserLang : 'en');
+    }
   }
 
   ngOnInit(): void {
     this.authService.loadUserFromToken();
+    const savedLang = localStorage.getItem('lang');
+    if (savedLang) {
+      this.translate.use(savedLang);
+    }
   }
 
-  // Add method to switch languages
-  switchLanguage(lang: string) {
-    this.translate.use(lang);
-  }
-
-  showTestToast(): void {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Test',
-      detail: 'Das ist eine Testnachricht.',
-      life: 3000
-    });
-  }
 
   testAuthDirectly(): void {
     this.authService.testDirectAuth().subscribe({
