@@ -4,37 +4,43 @@ on:
   push:
     branches: [main]
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up QEMU for ARM64 emulation
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and export ARM64 Docker image
-        run: |
-          docker buildx build --platform linux/arm64 \
-            -t cometa-api:latest \
-            --output type=docker,dest=cometa-api.tar .
-
-      - name: Compress Docker image
-        run: gzip cometa-api.tar
-
-      - name: Copy image to Raspberry Pi
-        uses: appleboy/scp-action@v0.1.7
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          host: ${{ secrets.RASPI_HOST }}
-          username: ${{ secrets.RASPI_USER }}
-          key: ${{ secrets.RASPI_SSH_KEY }}
-          source: "cometa-api.tar.gz"
-          target: "~/"
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push ARM64 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Deploy on Raspberry Pi
         uses: appleboy/ssh-action@v1.0.3
@@ -43,11 +49,10 @@ jobs:
           username: ${{ secrets.RASPI_USER }}
           key: ${{ secrets.RASPI_SSH_KEY }}
           script: |
+            docker pull ghcr.io/wolfgangroese/cometa.api:latest
             docker stop cometa-api || true
             docker rm cometa-api || true
-            gunzip -f ~/cometa-api.tar.gz
-            docker load < ~/cometa-api.tar
             docker run -d --name cometa-api -p 5000:5000 \
               --link cometa-postgres:postgres \
               -e ASPNETCORE_ENVIRONMENT=Production \
-              cometa-api:latest
+              ghcr.io/wolfgangroese/cometa.api:latest
