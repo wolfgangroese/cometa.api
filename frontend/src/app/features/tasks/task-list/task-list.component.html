@@ -1,0 +1,107 @@
+<div class="p-d-flex p-flex-wrap p-jc-between p-ai-center p-mb-3 p-gap-2">
+  <div class="new-task-container p-mt-3" *ngIf="permissionService.canCreateTasks()">
+    <p-button label="{{ 'TASK.NEW' | translate }}" icon="pi pi-plus" severity="success" [routerLink]="['/task/new']"></p-button>
+    <p-button label="{{ 'TASK.QUICK_ADD' | translate }}" icon="pi pi-bolt" severity="info" [routerLink]="['/task/quick-add']" class="p-ml-2"></p-button>
+    <div class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text"
+             (input)="dt.filterGlobal(($any($event.target)).value, 'contains')"
+             placeholder="{{ 'COMMON.SEARCH' | translate }}"
+             class="global-search" />
+      <button pButton type="button" icon="pi pi-sliders-h" class="p-button-text"
+              (click)="columnPanel.toggle($event)" pTooltip="{{ 'TASK.SELECT_COLUMNS' | translate }}"></button>
+    </div>
+  </div>
+
+  <p-overlayPanel #columnPanel [showCloseIcon]="true">
+    <p-multiSelect
+      [options]="cols"
+      [(ngModel)]="selectedColumns"
+      (ngModelChange)="onColumnChange()"
+      optionLabel="translatedHeader"
+      [showToggleAll]="true"
+      display="comma"
+      placeholder="{{ 'TASK.COLUMN_SELECT' | translate }}">
+    </p-multiSelect>
+  </p-overlayPanel>
+</div>
+
+<p-table #dt [value]="tasks"
+         responsiveLayout="scroll"
+         [paginator]="true"
+         [rows]="25"
+         [globalFilterFields]="['name', 'rewards', 'assigneeName', 'description', 'skills']"
+         sortMode="multiple"
+         styleClass="p-datatable-sm compact-table">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="name">
+        {{ 'TASK.NAME' | translate }}
+        <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th *ngFor="let col of selectedColumns" [pSortableColumn]="col.field">
+        {{ col.translatedHeader | translate }}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+      <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-task>
+    <tr>
+      <td>
+        <a [routerLink]="['/task', task.id]" class="task-link">{{ task.name }}</a>
+      </td>
+      <td *ngFor="let col of selectedColumns">
+        <ng-container [ngSwitch]="col.field">
+          <ng-container *ngSwitchCase="'name'">
+            <a [routerLink]="['/task', task.id]" class="task-link">{{ task.name }}</a>
+          </ng-container>
+          <ng-container *ngSwitchCase="'skills'">
+            <ng-container *ngIf="task.skills?.length">
+              <span *ngFor="let skill of task.skills" class="chip">{{ skill }}</span>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'startDate'">
+            {{ task.startDate | date:'yyyy-MM-dd' }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'dueDate'">
+            {{ task.dueDate | date:'yyyy-MM-dd' }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'isCompleted'">
+            <p-tag [value]="task.isCompleted ? 'Yes' : 'No'" [severity]="task.isCompleted ? 'success' : 'warning'"></p-tag>
+          </ng-container>
+          <ng-container *ngSwitchCase="'status'">
+            <ng-container [ngSwitch]="getStatusLabel(task.status)">
+              <p-tag *ngSwitchCase="'Done'" severity="success" [value]="getStatusLabel(task.status)"></p-tag>
+              <p-tag *ngSwitchCase="'InProgress'" severity="info" [value]="getStatusLabel(task.status)"></p-tag>
+              <p-tag *ngSwitchCase="'Blocked'" severity="danger" [value]="getStatusLabel(task.status)"></p-tag>
+              <p-tag *ngSwitchCase="'Waiting'" severity="warning" [value]="getStatusLabel(task.status)"></p-tag>
+              <p-tag *ngSwitchDefault severity="info" [value]="getStatusLabel(task.status)"></p-tag>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ task[col.field] }}
+          </ng-container>
+        </ng-container>
+      </td>
+      <td>
+        <button *ngIf="!task.isCompleted && permissionService.canDeleteTasks()"
+                pButton icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-text"
+                (click)="deleteTask(task.id)"
+                pTooltip="Delete task"
+                aria-label="Delete task"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<div class="new-task-container p-mt-3" *ngIf="permissionService.canCreateTasks()">
+  <p-button label="{{ 'TASK.NEW' | translate }}" icon="pi pi-plus" severity="success" [routerLink]="['/task/new']"></p-button>
+  <p-button label="{{ 'TASK.QUICK_ADD' | translate }}" icon="pi pi-bolt" severity="info" [routerLink]="['/task/quick-add']" class="p-ml-2"></p-button>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

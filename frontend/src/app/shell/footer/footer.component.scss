@@ -1,0 +1,52 @@
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  background-color: #1565C0; /* Dunkleres Blau */
+  color: white;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0; /* Füge `right: 0` hinzu, um sicherzustellen, dass der Footer nicht abgeschnitten wird */
+  width: 100%; /* Breite über den gesamten Viewport */
+  z-index: 1000; /* Priorität über anderen Elementen */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between; /* Gleicher Abstand zwischen den Icons */
+  align-items: center;
+  width: 100%; /* Container über die gesamte Breite */
+  padding: 0 20px; /* Abstand zu den Bildschirmrändern */
+}
+
+.footer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px; /* Zusätzlicher Abstand für Icons */
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.footer-item i {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.footer-item span {
+  font-size: 12px;
+}
+
+.footer-container .footer-item:first-child {
+  margin-left: 10px; /* Abstand für das erste Icon */
+}
+
+.footer-container .footer-item:last-child {
+  margin-right: 10px; /* Abstand für das letzte Icon */
+}

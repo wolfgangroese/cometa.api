@@ -1,0 +1,42 @@
+{
+  "COMMON": {
+    "SAVE": "Speichern",
+    "CANCEL": "Abbrechen",
+    "DELETE": "Löschen",
+    "CREATE": "Erstellen",
+    "BACK_TO_LIST": "Zurück zur Liste",
+    "SEARCH": "Suchen...",
+    "ACTIONS": "Aktionen"
+  },
+  "TASK": {
+    "TITLE": "Aufgaben",
+    "NEW": "Neue Aufgabe",
+    "QUICK_ADD": "Schnellerfassung",
+    "SELECT_COLUMNS": "Spalten wählen",
+    "COLUMN_SELECT": "Spaltenauswahl",
+    "STATUSOPTION": {
+      "DONE": "Erledigt",
+      "IN_PROGRESS": "In Bearbeitung",
+      "BLOCKED": "Blockiert",
+      "WAITING": "Wartend"
+    },
+    "NAME": "Name",
+    "DESCRIPTION": " Beschreibung",
+    "SKILLS": "Fähigkeiten",
+    "REWARDS": "Belohnung",
+    "EFFORT_MIN": "Aufwand min",
+    "EFFORT_MAX": "Aufwand max",
+    "STATUS": "Stand",
+    "COMPLETED": "Abgeschlossen",
+    "DUE_DATE": "Fällig am",
+    "START_DATE": "Frühester Start",
+    "END_DATE": "Enddatum",
+    "ASSIGNED_TO": "Zugewiesen an",
+    "COMPLETION": "Aufgaben (un)erledigt",
+    "TASKS_WAITING": "{{count}} Aufgaben warten",
+    "TASKS_BY_STATUS": "Aufgaben nach Status"
+  },
+  "SKILLS_MOST_USED": "Gefragte Fähigkeiten",
+  "LEADERBOARD": "Rangliste"
+
+}

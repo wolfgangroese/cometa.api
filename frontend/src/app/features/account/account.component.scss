@@ -1,0 +1,57 @@
+.account-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.user-info, .login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.user-info h2 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.action-buttons {
+  margin-top: 2rem;
+}
+
+.login-prompt p {
+  margin-bottom: 1rem;
+  color: #666;
+}
+.rewards-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.reward-total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.reward-icon {
+  color: gold;
+  font-size: 2rem;
+}
+
+.reward-count {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.reward-label {
+  font-size: 1.2rem;
+  color: #666;
+}

@@ -1,0 +1,145 @@
+<div class="task-form" [formGroup]="taskForm">
+  <h4>Create New Task</h4>
+
+  <!-- Name -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="name">{{ 'TASK.NAME' | translate }}</label>
+    </div>
+    <div class="input-column">
+      <input id="name" pInputText type="text" formControlName="name" />
+      <small *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched" class="p-error">
+        Name is required
+      </small>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="description">{{ 'TASK.DESCRIPTION' | translate }}</label>
+    </div>
+    <div class="input-column">
+      <textarea id="description" pInputTextarea formControlName="description" rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="skillNames">{{ 'TASK.SKILLS' | translate }}</label>
+    </div>
+    <div class="input-column">
+      <p-chips id="skillNames" formControlName="skillNames" [allowDuplicate]="false" [addOnBlur]="true"></p-chips>
+    </div>
+  </div>
+
+  <!-- Start Date -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="startDate">{{ 'TASK.START_DATE' | translate }}</label>
+    </div>
+    <div class="input-column">
+      <input id="startDate" type="date" pInputText formControlName="startDate" />
+    </div>
+  </div>
+
+  <!-- Due Date -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="dueDate">{{ 'TASK.DUE_DATE' | translate }}</label>
+    </div>
+    <div class="input-column">
+      <input id="dueDate" type="date" pInputText formControlName="dueDate" />
+    </div>
+  </div>
+
+  <!-- Rewards -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="rewards">{{ 'TASK.REWARDS' | translate }}</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="rewards" formControlName="rewards" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Min. Effort -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMin">{{ 'TASK.EFFORT_MIN' | translate }}</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMin" formControlName="effortMin" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Max. Effort -->
+  <div class="form-row">
+    <div class="label-column">
+      <label for="effortMax">{{ 'TASK.EFFORT_MAX' | translate }}</label>
+    </div>
+    <div class="input-column rewards-container">
+      <p-inputNumber id="effortMax" formControlName="effortMax" [showButtons]="true" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+
+  <!-- Status Dropdown -->
+  <div class="form-row">
+    <div class="label-column">
+      <label [htmlFor]="'status'">{{ 'TASK.STATUS' | translate }}</label>
+    </div>
+    <div class="input-column">
+      <p-dropdown
+        inputId="status"
+        formControlName="status"
+        [options]="translatedStatusOptions"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        [showClear]="true"
+        [style]="{width: '100%'}">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <!-- Assigned User -->
+  <div class="form-row">
+    <div class="label-column">
+      <label [htmlFor]="users">{{ 'TASK.ASSIGNED_TO' | translate }}</label>
+    </div>
+    <div class="input-column">
+      <p-dropdown
+        inputId="assigneeId"
+        formControlName="assigneeId"
+        [options]="users"
+        optionLabel="userName"
+        optionValue="id"
+        appendTo="body"
+        [showClear]="true"
+        [style]="{width: '100%'}">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="button-container">
+    <p-button
+      [label]=" 'COMMON.CREATE' | translate "
+      icon="pi pi-plus"
+      (click)="onSubmit()"
+      severity="success"
+      [disabled]="taskForm.invalid"
+      class="mr-2">
+    </p-button>
+
+    <p-button
+      [label]=" 'COMMON.BACK_TO_LIST' | translate "
+      icon="pi pi-list"
+      (click)="goBack()"
+      severity="secondary">
+    </p-button>
+  </div>
+</div>
+
+<p-toast></p-toast>

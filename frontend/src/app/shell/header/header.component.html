@@ -1,0 +1,131 @@
+<div class="header">
+  <div class="header-left">
+    <span class="header-title">COMETA | {{ currentLabel }}</span>
+
+    <!-- Organization Selector -->
+    <div *ngIf="currentUser && organizations.length > 0" class="org-selector">
+      <div class="org-selector-trigger" (click)="toggleOrgSelector($event)">
+        <span class="org-name">{{ selectedOrganization?.name || 'Select Organization' }}</span>
+        <i class="pi pi-chevron-down"></i>
+      </div>
+
+      <div *ngIf="showOrgSelector" class="org-dropdown">
+        <div class="org-dropdown-header">
+          <h4>Organizations</h4>
+          <i class="pi pi-times close-icon" (click)="showOrgSelector = false"></i>
+        </div>
+        <div class="org-list">
+          <div *ngFor="let org of organizations"
+               class="org-item"
+               [class.active]="org.id === selectedOrganization?.id"
+               (click)="switchOrganization(org)">
+            <span>{{ org.name }}</span>
+            <span class="org-role">{{ org.role }}</span>
+          </div>
+        </div>
+        <div class="org-actions">
+          <button class="org-action-btn" (click)="manageOrganizations()">
+            <i class="pi pi-cog"></i> Manage Organizations
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="user-info">
+    <span *ngIf="currentUser" class="username">{{ currentUser.fullName }} ({{ currentUser.email}})</span>
+    <span *ngIf="currentUser?.role" class="role-badge">{{ currentUser?.role }}</span>
+    <span *ngIf="currentUser && totalRewards !== undefined" class="rewards-badge">
+      <i class="pi pi-star-fill"></i> {{ totalRewards }}
+    </span>
+    <div class="account-icon"
+         (click)="toggleAccountMenu($event)"
+         (keydown.enter)="toggleAccountMenu($event)"
+         (keydown.space)="toggleAccountMenu($event)"
+         tabindex="0"
+         role="button"
+         aria-label="Open account menu">
+      <i class="pi pi-user"></i>
+    </div>
+  </div>
+
+  <div *ngIf="showAccountMenu"
+       class="account-menu-overlay"
+       (click)="closeAccountMenu($event)"
+       (keydown.escape)="closeAccountMenu($event)"
+       tabindex="-1"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="accountMenuTitle">
+    <div class="account-menu"
+         (click)="$event.stopPropagation()"
+         (keydown)="$event.stopPropagation()"
+         tabindex="0">
+      <div class="account-header">
+        <h3 id="accountMenuTitle">Account</h3>
+        <i class="pi pi-times close-icon"
+           (click)="closeAccountMenu($event)"
+           (keydown.enter)="closeAccountMenu($event)"
+           (keydown.space)="closeAccountMenu($event)"
+           tabindex="0"
+           role="button"
+           aria-label="Close account menu"></i>
+      </div>
+
+      <div class="account-details" *ngIf="currentUser">
+        <div class="user-email">
+          <span>{{ currentUser.email }}</span>
+          <span *ngIf="currentUser.role" class="role-badge">
+            {{ currentUser.role }}
+          </span>
+        </div>
+
+        <div class="rewards-info">
+          <i class="pi pi-star-fill reward-icon"></i>
+          <span class="reward-count">{{ totalRewards }}</span>
+          <span class="reward-label">Coins</span>
+        </div>
+
+        <!-- Admin/Staff-only menu items -->
+        <div class="admin-menu" *ngIf="isAdminOrStaff()">
+          <h4 class="admin-menu-title">Admin Tools</h4>
+          <a [routerLink]="['/skills']" class="admin-menu-item" (click)="closeAccountMenu($event)">
+            <i class="pi pi-tag"></i>
+            Manage Tags
+          </a>
+          <a [routerLink]="['/users']" class="admin-menu-item" (click)="closeAccountMenu($event)">
+            <i class="pi pi-users"></i>
+            Manage Users
+          </a>
+          <a [routerLink]="['/organizations']" class="admin-menu-item" (click)="closeAccountMenu($event)">
+            <i class="pi pi-building"></i>
+            Manage Organizations
+          </a>
+        </div>
+
+        <button class="logout-button"
+                (click)="logout()"
+                aria-label="Logout from your account">
+          <i class="pi pi-sign-out"></i>
+          Logout
+        </button>
+        <div class="lang-menu">
+          <!-- Language Selector -->
+          <div class="lang-selector">
+            <div class="lang-buttons">
+              <button
+                *ngFor="let lang of availableLangs"
+                (click)="switchLanguage(lang.code)"
+                [class.active]="currentLang === lang.code"
+                class="lang-button">
+                {{ lang.name }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-toast></p-toast>

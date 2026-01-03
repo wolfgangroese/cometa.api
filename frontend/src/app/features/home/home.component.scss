@@ -1,0 +1,339 @@
+.dashboard-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.5rem;
+}
+
+.dashboard-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-tile {
+  flex: 1 1 calc(33.333% - 1rem);
+  min-width: 200px; /* Slightly narrower to fit mobile better */
+  min-height: 250px; /* Shorter height */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem; /* Less margin */
+  overflow: hidden;
+  max-width: 100%;
+
+  &.double-width {
+    flex: 2 1 calc(66.666% - 1rem);
+    min-width: 560px;
+  }
+
+  &.double-height {
+    // Double height will be handled by the content inside
+  }
+}
+
+// Chart container to ensure proper sizing
+.chart-container {
+  height: 300px;
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // Force ALL charts to have IDENTICAL dimensions
+  :host ::ng-deep & {
+    canvas {
+      width: 270px !important;
+      height: 270px !important;
+    }
+
+    // Force chart area to be consistent
+    .p-chart {
+      width: 270px !important;
+      height: 270px !important;
+      // This ensures the actual chart (not including legend) is consistent
+      margin: 0 auto !important;
+    }
+  }
+}
+
+// Make cards take full height of their container
+:host ::ng-deep .p-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Lighter shadow */
+  margin-bottom: 0.1rem; /* Less space after the card */
+
+  .p-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .p-card-content {
+    flex: 1;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; // oder einfach entfernen
+    justify-content: flex-start;
+  }
+
+  .p-card-header {
+    padding: 1rem 1rem 1rem; /* Less padding in header */
+    font-size: 0.9rem; /* Slightly smaller text */
+    font-weight: 100;
+    text-align: left !important; /* Center title */
+  }
+}
+
+// Tasks list styles
+.tasks-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.task-item {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.task-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #333;
+  text-decoration: none;
+
+  &:hover {
+    color: #2196F3;
+  }
+}
+
+.task-title {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.task-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
+.skill-chip {
+  background-color: #e0f2f1;
+  color: #00796b;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 1rem;
+}
+
+.completed-icon {
+  color: #4caf50;
+  margin-left: 0.5rem;
+}
+
+// Filter section styles
+.filter-section {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background-color: #f7f9fa;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box; // Ensure padding is included in width calculation
+  overflow: hidden;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  h4 {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #495057;
+  }
+}
+
+.reset-filter {
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #d0d0d0;
+  }
+}
+
+.skill-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-chip {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #ffc107;
+  }
+
+  i {
+    margin-left: 0.25rem;
+    font-size: 0.7rem;
+  }
+
+  &.active {
+    background-color: #007bff;
+    color: white;
+  }
+}
+
+.no-tasks-message {
+  text-align: center;
+  color: #6c757d;
+  padding: 1rem;
+  font-style: italic;
+}
+
+// Leaderboard styling
+.reward-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #0c5460;
+  color: #ffd700;
+  font-weight: 500;
+  padding: 0.3rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  text-align: right;
+
+  i {
+    color: #ff9800;
+    font-size: 1rem;
+    text-align: right;
+  }
+}
+
+.skill-filters-container {
+  height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  transition: height 0.3s ease;
+
+  &.visible {
+    height: auto;
+    max-height: 150px;
+    border-color: #ddd;
+    margin-top: 0.5rem;
+    overflow-y: auto;
+  }
+}
+
+.skill-filters-scrollable {
+  display: flex;
+  flex-wrap: wrap; // Ensure chips wrap to next line
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-chip {
+  max-width: 100%;
+  background-color: #eee;
+  padding: 0.3rem 0.6rem;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.filter-chip.active {
+  background-color: #2196f3;
+  color: white;
+}
+
+.toggle-filter {
+  background: none;
+  border: solid 1px #007ad9;
+  padding: 0.3rem 0.6rem;
+  color: #007ad9;
+  cursor: pointer;
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .dashboard-row {
+    flex-direction: column;
+    gap: 0; // Remove gaps between tiles
+  }
+
+  .dashboard-tile {
+    flex: 1 1 100%;
+    min-width: 100%;
+    min-height: 250px; // Reduced from 350px
+
+    &.double-width {
+      flex: 1 1 100%;
+      min-width: 100%;
+    }
+  }
+
+  .chart-container {
+    height: 220px; // Reduced from 300px
+    width: 100%;
+    margin-bottom: 0.5rem; // Reduced from 1rem
+  }
+
+  // Add extra margin between chart tiles on mobile
+  .dashboard-tile:not(:last-child) {
+    margin-bottom: 0.5rem; // Reduced from 1rem
+  }
+
+  // Additional card styling for mobile
+  :host ::ng-deep .p-card {
+    .p-card-header {
+      padding: 0.75rem 1rem 0.25rem;  // Reduced padding
+      margin-bottom: 0;
+    }
+
+    .p-card-content {
+      padding: 0.5rem;  // Less padding
+    }
+  }
+
+  // Remove horizontal dividers between chart sections
+  .dashboard-row:first-child {
+    margin-bottom: 0;  // Remove margin between chart rows
+  }
+
+}

@@ -1,0 +1,74 @@
+<div class="quick-add-container">
+  <h2>Task-Quick-Add</h2>
+  <p class="instructions">Hit Enter for a new task</p>
+  <p class="instructions">Hit "Save all" when ready</p>
+
+  <div class="input-area">
+    <span class="p-input-icon-left">
+      <input
+        type="text"
+        pInputText
+        placeholder="Neue Aufgabe hinzufügen"
+        [(ngModel)]="currentTaskName"
+        (keydown.enter)="onEnterKey($event)"
+        [disabled]="isCreating"
+        class="quick-input"
+        aria-label="Task-Name eingeben"
+      />
+    </span>
+  </div>
+
+  <div class="tasks-list" *ngIf="pendingTasks.length > 0">
+    <h3>New added tasks ({{ pendingTasks.length }})</h3>
+    <ul>
+      <li *ngFor="let task of pendingTasks; let i = index" class="task-item">
+        <span class="task-name">{{ task }}</span>
+        <button
+          class="remove-button"
+          (click)="removeFromList(i)"
+          aria-label="Task entfernen">
+          <i class="pi pi-times remove-icon"></i>
+        </button>
+      </li>
+    </ul>
+
+    <div class="action-buttons">
+      <p-button
+        label="Save all"
+        icon="pi pi-save"
+        (click)="saveAllTasks()"
+        [disabled]="isCreating || pendingTasks.length === 0"
+        [loading]="isCreating"
+        styleClass="p-button-success"
+      ></p-button>
+
+      <p-button
+        label="Back to list"
+        icon="pi pi-list"
+        (click)="goToTaskList()"
+        styleClass="p-button-secondary"
+        [style]="{'margin-left': '10px'}"
+      ></p-button>
+    </div>
+  </div>
+
+  <div class="saved-tasks" *ngIf="savedTasks.length > 0">
+    <h3>Saved tasks</h3>
+    <ul>
+      <li *ngFor="let task of savedTasks" class="saved-task-item">
+        <i class="pi pi-check-circle"></i>
+        <span>{{ task.name }}</span>
+      </li>
+    </ul>
+  </div>
+  <div class="action-buttons">
+    <p-button
+      label="Back to list"
+      icon="pi pi-list"
+      (click)="goToTaskList()"
+      styleClass="p-button-secondary"
+    ></p-button>
+  </div>
+
+  <p-toast></p-toast>
+</div>

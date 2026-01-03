@@ -1,0 +1,132 @@
+.members-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.members-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin: 0;
+    color: #333;
+  }
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+
+  .member-name {
+    margin-right: 0.5rem;
+  }
+
+  .owner-badge {
+    background-color: #f1f8e9;
+    color: #558b2f;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.15rem 0.5rem;
+    border-radius: 1rem;
+  }
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+
+  &.owner {
+    background-color: #f1f8e9;
+    color: #558b2f;
+  }
+
+  &.admin {
+    background-color: #e8f5e9;
+    color: #388e3c;
+  }
+
+  &.member {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+}
+
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  color: #666;
+
+  i {
+    font-size: 2rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.permission-notice {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+
+  i {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+  }
+}
+
+:host ::ng-deep {
+  .p-datatable .p-datatable-header {
+    background-color: #f8f9fa;
+    padding: 1rem;
+  }
+
+  .p-dropdown {
+    min-width: 100%;
+  }
+
+  .field {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #495057;
+    }
+
+    .required-marker {
+      color: #e91e63;
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .members-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  :host ::ng-deep {
+    .p-datatable .p-datatable-tbody > tr > td .p-column-title {
+      font-weight: 600;
+    }
+  }
+}

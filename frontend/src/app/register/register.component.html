@@ -1,0 +1,65 @@
+<form class="register-form" [formGroup]="registerForm">
+<p-card header="Registrierung" class="p-mb-4">
+    <!-- E-Mail -->
+    <div class="form-group">
+      <div class="input-container">
+        <input
+          id="email"
+          type="email"
+          placeholder=" "
+          formControlName="email"
+          autocomplete="off"
+          required
+        />
+        <label for="email">E-Mail-Adresse</label>
+      </div>
+      <p class="error-message" *ngIf="email?.touched && email?.invalid">
+        Bitte eine gültige E-Mail-Adresse eingeben.
+      </p>
+    </div>
+
+    <!-- Passwort -->
+    <div class="form-group">
+      <div class="input-container">
+        <input
+          id="password"
+          type="password"
+          placeholder=" "
+          formControlName="password"
+          autocomplete="new-password"
+          required
+        />
+        <label for="password">Passwort</label>
+      </div>
+      <p class="error-message" *ngIf="password?.touched && password?.invalid">
+        Passwort muss mindestens 6 Zeichen enthalten.
+      </p>
+    </div>
+
+    <!-- Passwort bestätigen -->
+    <div class="form-group">
+      <div class="input-container">
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder=" "
+          formControlName="confirmPassword"
+        />
+        <label for="confirmPassword">Passwort bestätigen</label>
+      </div>
+      <p class="error-message" *ngIf="confirmPassword?.touched && confirmPassword?.invalid">
+        Passwörter stimmen nicht überein.
+      </p>
+    </div>
+
+    <button
+      (click)="register()"
+      class="submit-button"
+      [disabled]="registerForm.invalid"
+    >
+      Registrieren
+    </button>
+  </p-card>
+
+  <p-toast></p-toast>
+</form>

@@ -1,0 +1,75 @@
+<div class="organization-form-container">
+  <p-card header="Create New Organization">
+    <form [formGroup]="orgForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Organization Name*</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          class="w-full"
+          (blur)="generateSlug()"
+        />
+        <small class="p-error" *ngIf="orgForm.get('name')?.invalid && orgForm.get('name')?.touched">
+          <span *ngIf="orgForm.get('name')?.errors?.['required']">Name is required</span>
+          <span *ngIf="orgForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters</span>
+          <span *ngIf="orgForm.get('name')?.errors?.['maxlength']">Name cannot exceed 100 characters</span>
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          pInputTextarea
+          formControlName="description"
+          rows="4"
+          class="w-full"
+        ></textarea>
+        <small class="p-error" *ngIf="orgForm.get('description')?.invalid && orgForm.get('description')?.touched">
+          <span *ngIf="orgForm.get('description')?.errors?.['maxlength']">Description cannot exceed 500 characters</span>
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="slug">URL Identifier (Slug)*</label>
+        <div class="slug-input-container">
+          <input
+            id="slug"
+            type="text"
+            pInputText
+            formControlName="slug"
+            class="w-full"
+          />
+          <small class="slug-hint">Only lowercase letters, numbers, and hyphens allowed</small>
+        </div>
+        <small class="p-error" *ngIf="orgForm.get('slug')?.invalid && orgForm.get('slug')?.touched">
+          <span *ngIf="orgForm.get('slug')?.errors?.['required']">Slug is required</span>
+          <span *ngIf="orgForm.get('slug')?.errors?.['minlength']">Slug must be at least 3 characters</span>
+          <span *ngIf="orgForm.get('slug')?.errors?.['maxlength']">Slug cannot exceed 50 characters</span>
+          <span *ngIf="orgForm.get('slug')?.errors?.['pattern']">Slug can only contain lowercase letters, numbers, and hyphens</span>
+        </small>
+      </div>
+
+      <div class="button-container">
+        <p-button
+          label="Create Organization"
+          icon="pi pi-check"
+          type="submit"
+          [loading]="loading"
+          [disabled]="orgForm.invalid || loading"
+        ></p-button>
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          (onClick)="cancel()"
+          styleClass="p-button-secondary"
+          [disabled]="loading"
+        ></p-button>
+      </div>
+    </form>
+  </p-card>
+</div>
+
+<p-toast></p-toast>
