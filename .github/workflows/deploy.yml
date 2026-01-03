@@ -49,7 +49,6 @@ jobs:
           username: ${{ secrets.RASPI_USER }}
           key: ${{ secrets.RASPI_SSH_KEY }}
           script: |
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u wolfgangroese --password-stdin
             docker pull ghcr.io/wolfgangroese/cometa.api:latest
             docker stop cometa-api || true
             docker rm cometa-api || true
