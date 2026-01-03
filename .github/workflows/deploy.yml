@@ -53,6 +53,6 @@ jobs:
             docker stop cometa-api || true
             docker rm cometa-api || true
             docker run -d --name cometa-api -p 5000:5000 \
-              --link cometa-postgres:postgres \
+              --network cometa-network \
               -e ASPNETCORE_ENVIRONMENT=Production \
               ghcr.io/wolfgangroese/cometa.api:latest
