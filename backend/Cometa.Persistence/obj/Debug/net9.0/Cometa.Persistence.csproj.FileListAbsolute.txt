@@ -1,0 +1,15 @@
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.csproj.AssemblyReference.cache
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.GeneratedMSBuildEditorConfig.editorconfig
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.AssemblyInfoInputs.cache
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.AssemblyInfo.cs
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.csproj.CoreCompileInputs.cache
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.sourcelink.json
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/bin/Debug/net9.0/Cometa.Persistence.deps.json
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/bin/Debug/net9.0/Cometa.Persistence.runtimeconfig.json
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/bin/Debug/net9.0/Cometa.Persistence.dll
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/bin/Debug/net9.0/Cometa.Persistence.pdb
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.dll
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/refint/Cometa.Persistence.dll
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.pdb
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/Cometa.Persistence.genruntimeconfig.cache
+/Users/wolf/RiderProjects/cometa.api/Cometa.Persistence/obj/Debug/net9.0/ref/Cometa.Persistence.dll

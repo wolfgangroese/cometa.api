@@ -1,0 +1,12 @@
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/bin/Debug/net8.0/Cometa.Domain.deps.json
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/bin/Debug/net8.0/Cometa.Domain.dll
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/bin/Debug/net8.0/Cometa.Domain.pdb
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/Cometa.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/Cometa.Domain.AssemblyInfoInputs.cache
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/Cometa.Domain.AssemblyInfo.cs
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/Cometa.Domain.csproj.CoreCompileInputs.cache
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/Cometa.Domain.sourcelink.json
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/Cometa.Domain.dll
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/refint/Cometa.Domain.dll
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/Cometa.Domain.pdb
+/Users/wolf/RiderProjects/cometa.api/Cometa.Domain/obj/Debug/net8.0/ref/Cometa.Domain.dll

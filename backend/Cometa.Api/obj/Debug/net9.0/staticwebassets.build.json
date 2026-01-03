@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "9T78ZD19SQ5khaMHFAf5bY4CncJQnf77h5uyvKn1myE=",
+  "Source": "Cometa.Api",
+  "BasePath": "_content/Cometa.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
