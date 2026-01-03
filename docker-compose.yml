@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: cometa
+      POSTGRES_PASSWORD: cometa
+      POSTGRES_DB: cometa
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cometa-network
+
+  api:
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__CometaDbContext=Host=postgres;Database=cometa;User Id=cometa;Password=cometa
+    depends_on:
+      - postgres
+    networks:
+      - cometa-network
+
+networks:
+  cometa-network:
+
+volumes:
+  postgres_data:

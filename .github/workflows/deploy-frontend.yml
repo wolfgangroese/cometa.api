@@ -1,47 +1,50 @@
-name: Deploy Frontend to Raspberry Pi
+name: Deploy Frontend
 
 on:
   push:
-    branches: [ main ] # oder master, je nach Repo-Konfiguration
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'  # Anpassen an deine Node-Version
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
-        run: npm run build --configuration=production
+        run: npm run build -- --configuration=production
 
-      # 1) Kopiere die lokalen Build-Artefakte auf den Raspi nach /tmp/cometa-frontend
       - name: Upload build artifacts to Raspberry Pi
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.RASPI_HOST }}
-          username: ${{ secrets.RASPI_USER }}        # z.B. "wolf"
+          username: ${{ secrets.RASPI_USER }}
           key: ${{ secrets.RASPI_SSH_KEY }}
-          source: "dist/cometa/browser/*"           # Pfad anpassen, wenn dein Build-Ordner anders heißt
+          source: "frontend/dist/cometa/browser/*"
           target: "/tmp/cometa-frontend"
-          strip_components: 3
+          strip_components: 4
 
-      # 2) Verschiebe vom /tmp-Verzeichnis nach /var/www
-      - name: Move files to /var/www/cometa via SSH
+      - name: Deploy files to /var/www/cometa
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.RASPI_HOST }}
-          username: ${{ secrets.RASPI_USER }}        # z.B. "wolf"
+          username: ${{ secrets.RASPI_USER }}
           key: ${{ secrets.RASPI_SSH_KEY }}
-          port: 22
           script: |
             mkdir -p /var/www/cometa
             rm -rf /var/www/cometa/*

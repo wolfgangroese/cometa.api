@@ -1,12 +1,15 @@
-name: Deploy to Raspi
+name: Deploy Backend
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: wolfgangroese/cometa-api
 
 jobs:
   deploy:
@@ -35,7 +38,7 @@ jobs:
       - name: Build and push ARM64 image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./backend
           platforms: linux/arm64
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
@@ -49,10 +52,10 @@ jobs:
           username: ${{ secrets.RASPI_USER }}
           key: ${{ secrets.RASPI_SSH_KEY }}
           script: |
-            docker pull ghcr.io/wolfgangroese/cometa.api:latest
+            docker pull ghcr.io/wolfgangroese/cometa-api:latest
             docker stop cometa-api || true
             docker rm cometa-api || true
             docker run -d --name cometa-api -p 5000:5000 \
               --network cometa-network \
               -e ASPNETCORE_ENVIRONMENT=Production \
-              ghcr.io/wolfgangroese/cometa.api:latest
+              ghcr.io/wolfgangroese/cometa-api:latest
